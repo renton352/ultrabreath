@@ -1,0 +1,31 @@
+
+body {
+    font-family: sans-serif;
+    background: #f0f8ff;
+    text-align: center;
+    padding: 20px;
+}
+
+.container {
+    max-width: 400px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+button {
+    font-size: 1.2em;
+    margin: 10px;
+    padding: 10px 20px;
+}
+
+#character img {
+    width: 150px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+#speech {
+    font-weight: bold;
+}

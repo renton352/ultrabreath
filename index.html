@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ウルトラブレス トレーニング</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>ウルトラブレス トレーニング</h1>
+        <div id="genre-selection">
+            <p>ジャンルを選んでください：</p>
+            <button onclick="startTraining('トレーニング用')">トレーニング用</button>
+            <button onclick="startTraining('リラックス用')">リラックス用</button>
+        </div>
+
+        <div id="training-screen" style="display:none;">
+            <div id="character">
+                <img id="character-image" src="img/normal.png" alt="ブレス先生">
+                <p id="speech">はじめましょうか、深呼吸ですよ。</p>
+            </div>
+            <div>
+                <p>呼吸回数：<span id="breath-count">0</span> / 10</p>
+                <button id="breathe-button" onclick="countBreath()">吸った！（カウント）</button>
+            </div>
+            <div id="log">
+                <h2>記録</h2>
+                <p>合計呼吸回数：<span id="total-count">0</span></p>
+                <p>実施日数：<span id="total-days">0</span></p>
+                <p>最終実施日：<span id="last-date">なし</span></p>
+            </div>
+        </div>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>
