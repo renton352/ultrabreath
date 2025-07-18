@@ -52,3 +52,13 @@ function updateStats() {
     document.getElementById("total-days").textContent = totalDays;
     document.getElementById("last-date").textContent = lastDate;
 }
+document.getElementById("back-button").addEventListener("click", () => {
+    // 画面切り替え
+    document.getElementById("training-screen").style.display = "none";
+    document.getElementById("genre-selection").style.display = "block";
+
+    // カウント・セリフを初期化
+    count = 0;
+    document.getElementById("breath-count").textContent = count;
+    document.getElementById("speech").textContent = "はじめましょうか、深呼吸ですよ。";
+});
