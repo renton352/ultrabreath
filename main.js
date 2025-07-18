@@ -51,7 +51,10 @@ function updateStats() {
     document.getElementById("total-count").textContent = totalCount;
     document.getElementById("total-days").textContent = totalDays;
     document.getElementById("last-date").textContent = lastDate;
+
+    calculateStreak(logs);  // ← これを追加！
 }
+
 document.getElementById("back-button").addEventListener("click", () => {
     // 画面切り替え
     document.getElementById("training-screen").style.display = "none";
