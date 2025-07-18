@@ -1,56 +1,39 @@
+
 <!DOCTYPE html>
+
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ウルトラブレス トレーニング</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ウルトラブレス トレーニング</title>
+<link href="style.css" rel="stylesheet"/>
 </head>
 <body>
-    <div class="container">
-        <h1>ウルトラブレス トレーニング</h1>
-
-        <div id="genre-selection">
-            <p>ジャンルを選んでください：</p>
-            <button onclick="startTraining('トレーニング用')">トレーニング用</button>
-            <button onclick="startTraining('リラックス用')">リラックス用</button>
-        </div>
-
-        <div id="chart-area" style="margin-top: 30px;">
-            <h2>グラフで確認</h2>
-            <canvas id="breathChart" width="300" height="200"></canvas>
-        </div>
-
-        <div id="training-screen" style="display:none;">
-            <button id="retry-button" style="display:none;">もう一度トレーニングする</button>
-
-            <div id="character">
-                <!-- 表情画像の初期表示を rehab_normal に変更 -->
-                <img id="character-image" src="img/rehab_normal.png" alt="ブレス先生">
-                <p id="speech">はじめましょうか、深呼吸ですよ。</p>
-            </div>
-
-            <div>
-                <p>呼吸回数：<span id="breath-count">0</span> / 10</p>
-
-                <!-- ✅ 進捗バー追加 -->
-                <progress id="progress-bar" value="0" max="10" style="width: 100%; margin-bottom: 10px;"></progress>
-
-                <br>
-                <button id="breathe-button" onclick="countBreath()">吸った！（カウント）</button>
-                <button id="back-button">← ジャンル選択に戻る</button>
-            </div>
-
-            <div id="log">
-                <h2>記録</h2>
-                <p>合計呼吸回数：<span id="total-count">0</span></p>
-                <p>実施日数：<span id="total-days">0</span></p>
-                <p>最終実施日：<span id="last-date">なし</span></p>
-            </div>
-        </div>
-    </div>
-
-    <script src="main.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<div class="container">
+<h1>ウルトラブレス トレーニング</h1>
+<div id="genre-selection">
+<p>ジャンルを選んでください：</p>
+<button onclick="startTraining('トレーニング用')">トレーニング用</button>
+<button onclick="startTraining('リラックス用')">リラックス用</button>
+</div>
+<div id="training-screen" style="display:none;">
+<p id="streak-info">今日で0日連続です！</p><div id="character">
+<img alt="ブレス先生" id="character-image" src="img/normal.png"/>
+<p id="speech">はじめましょうか、深呼吸ですよ。</p>
+</div>
+<div>
+<p>呼吸回数：<span id="breath-count">0</span> / 10</p>
+<button id="breathe-button" onclick="countBreath()">吸った！（カウント）</button>
+<button id="back-button">← ジャンル選択に戻る</button>
+</div>
+<div id="log">
+<h2>記録</h2>
+<p>合計呼吸回数：<span id="total-count">0</span></p>
+<p>実施日数：<span id="total-days">0</span></p>
+<p>最終実施日：<span id="last-date">なし</span></p>
+</div>
+</div>
+</div>
+<script src="main.js"></script>
 </body>
 </html>
