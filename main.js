@@ -1,6 +1,6 @@
-
 let count = 0;
 let genre = "";
+
 const speechMap = {
     1: "いい呼吸ですねぇ、続けましょう",
     2: "焦らず、ゆっくりどうぞ",
@@ -31,6 +31,7 @@ function countBreath() {
     if (count === 10) {
         saveLog();
         updateStats();
+        document.getElementById("retry-button").style.display = "inline-block";
     }
 }
 
@@ -51,28 +52,39 @@ function updateStats() {
     document.getElementById("total-count").textContent = totalCount;
     document.getElementById("total-days").textContent = totalDays;
     document.getElementById("last-date").textContent = lastDate;
+
+    updateBreathChart(logs); // ← グラフ更新もここで行う
 }
+
+// ← 戻るボタン処理
 document.getElementById("back-button").addEventListener("click", () => {
-    // 画面切り替え
     document.getElementById("training-screen").style.display = "none";
     document.getElementById("genre-selection").style.display = "block";
-
-    // カウント・セリフを初期化
     count = 0;
     document.getElementById("breath-count").textContent = count;
     document.getElementById("speech").textContent = "はじめましょうか、深呼吸ですよ。";
+    document.getElementById("retry-button").style.display = "none";
 });
 
+// ← もう一度トレーニングボタン処理
+document.getElementById("retry-button").addEventListener("click", () => {
+    count = 0;
+    document.getElementById("breath-count").textContent = count;
+    document.getElementById("speech").textContent = "はじめましょうか、深呼吸ですよ。";
+    document.getElementById("retry-button").style.display = "none";
+});
+
+// ← グラフ描画
 let breathChart;
 
 function updateBreathChart(logs) {
-    const labels = Object.keys(logs).sort(); // 日付
-    const data = labels.map(date => logs[date]); // 呼吸回数
+    const labels = Object.keys(logs).sort();
+    const data = labels.map(date => logs[date]);
 
     const ctx = document.getElementById("breathChart").getContext("2d");
 
     if (breathChart) {
-        breathChart.destroy(); // 再描画のために削除
+        breathChart.destroy();
     }
 
     breathChart = new Chart(ctx, {
