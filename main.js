@@ -23,6 +23,7 @@ function countBreath() {
 
     count++;
     document.getElementById("breath-count").textContent = count;
+    updateCharacterImage(count);
 
     if (speechMap[count]) {
         document.getElementById("speech").textContent = speechMap[count];
@@ -52,7 +53,8 @@ function updateStats() {
     document.getElementById("total-days").textContent = totalDays;
     document.getElementById("last-date").textContent = lastDate;
 
-    calculateStreak(logs);  // ← これを追加！
+    calculateStreak(logs);
+    updateBreathChart(logs);
 }
 
 document.getElementById("back-button").addEventListener("click", () => {
@@ -96,4 +98,50 @@ function getLast7DaysData(logs) {
         data.push(logs[dateStr] || 0);
     }
     return { labels, data };
+}
+
+
+function updateCharacterImage(count) {
+    let imagePath = "img/rehab_normal.png";
+    if (count >= 3 && count <= 5) {
+        imagePath = "img/rehab_focus.png";
+    } else if (count >= 6 && count <= 9) {
+        imagePath = "img/rehab_tired.png";
+    } else if (count === 10) {
+        imagePath = "img/rehab_smile.png";
+    }
+    document.getElementById("character-image").src = imagePath;
+}
+
+function updateBreathChart(logs) {
+    const { labels, data } = getLast7DaysData(logs);
+    const ctx = document.getElementById("breathChart").getContext("2d");
+
+    if (window.breathChart) {
+        window.breathChart.destroy();
+    }
+
+    window.breathChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: '日別呼吸回数',
+                data: data,
+                borderColor: '#36a2eb',
+                backgroundColor: 'rgba(54,162,235,0.2)',
+                tension: 0.3,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { stepSize: 10 }
+                }
+            }
+        }
+    });
 }
