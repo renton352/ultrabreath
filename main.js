@@ -62,3 +62,42 @@ document.getElementById("back-button").addEventListener("click", () => {
     document.getElementById("breath-count").textContent = count;
     document.getElementById("speech").textContent = "はじめましょうか、深呼吸ですよ。";
 });
+
+let breathChart;
+
+function updateBreathChart(logs) {
+    const labels = Object.keys(logs).sort(); // 日付
+    const data = labels.map(date => logs[date]); // 呼吸回数
+
+    const ctx = document.getElementById("breathChart").getContext("2d");
+
+    if (breathChart) {
+        breathChart.destroy(); // 再描画のために削除
+    }
+
+    breathChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: '日別呼吸回数',
+                data: data,
+                borderColor: '#36a2eb',
+                backgroundColor: 'rgba(54,162,235,0.2)',
+                tension: 0.3,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 10
+                    }
+                }
+            }
+        }
+    });
+}
