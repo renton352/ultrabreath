@@ -15,6 +15,8 @@ function startTraining(selectedGenre) {
     genre = selectedGenre;
     document.getElementById("genre-selection").style.display = "none";
     document.getElementById("training-screen").style.display = "block";
+    document.getElementById("progress-bar").value = 0;
+    document.getElementById("character-image").src = "img/rehab_normal.png";
     updateStats();
 }
 
@@ -23,6 +25,8 @@ function countBreath() {
 
     count++;
     document.getElementById("breath-count").textContent = count;
+    document.getElementById("progress-bar").value = count;
+    updateCharacterImage(count);
 
     if (speechMap[count]) {
         document.getElementById("speech").textContent = speechMap[count];
@@ -33,6 +37,18 @@ function countBreath() {
         updateStats();
         document.getElementById("retry-button").style.display = "inline-block";
     }
+}
+
+function updateCharacterImage(count) {
+    let imagePath = "img/rehab_normal.png";
+    if (count >= 3 && count <= 5) {
+        imagePath = "img/rehab_focus.png";
+    } else if (count >= 6 && count <= 9) {
+        imagePath = "img/rehab_tired.png";
+    } else if (count === 10) {
+        imagePath = "img/rehab_smile.png";
+    }
+    document.getElementById("character-image").src = imagePath;
 }
 
 function saveLog() {
@@ -53,28 +69,29 @@ function updateStats() {
     document.getElementById("total-days").textContent = totalDays;
     document.getElementById("last-date").textContent = lastDate;
 
-    updateBreathChart(logs); // ← グラフ更新もここで行う
+    updateBreathChart(logs);
 }
 
-// ← 戻るボタン処理
 document.getElementById("back-button").addEventListener("click", () => {
     document.getElementById("training-screen").style.display = "none";
     document.getElementById("genre-selection").style.display = "block";
     count = 0;
     document.getElementById("breath-count").textContent = count;
     document.getElementById("speech").textContent = "はじめましょうか、深呼吸ですよ。";
+    document.getElementById("progress-bar").value = 0;
+    document.getElementById("character-image").src = "img/rehab_normal.png";
     document.getElementById("retry-button").style.display = "none";
 });
 
-// ← もう一度トレーニングボタン処理
 document.getElementById("retry-button").addEventListener("click", () => {
     count = 0;
     document.getElementById("breath-count").textContent = count;
     document.getElementById("speech").textContent = "はじめましょうか、深呼吸ですよ。";
+    document.getElementById("progress-bar").value = 0;
+    document.getElementById("character-image").src = "img/rehab_normal.png";
     document.getElementById("retry-button").style.display = "none";
 });
 
-// ← グラフ描画
 let breathChart;
 
 function updateBreathChart(logs) {
