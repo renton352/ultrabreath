@@ -1,0 +1,27 @@
+.calendar-container {
+  max-width: 400px;
+  margin: auto;
+  background: white;
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+}
+#calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-top: 20px;
+}
+.day {
+  padding: 8px;
+  border: 1px solid #ccc;
+  min-height: 40px;
+  font-size: 0.9em;
+}
+.day.today {
+  background-color: #def;
+  border-color: #36a2eb;
+}
+.day.muted {
+  color: #bbb;
+}
