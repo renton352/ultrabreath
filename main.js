@@ -108,7 +108,6 @@ function getThisWeekData(logs) {
         labels.push(dateStr);
         data.push(logs[dateStr] || 0);
     }
-
     return { labels, data };
 }
     return { labels, data };
