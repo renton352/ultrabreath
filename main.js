@@ -117,7 +117,7 @@ function updateBreathChart(logs) {
     const { labels, data } = getLast7DaysData(logs);
     const ctx = document.getElementById("breathChart").getContext("2d");
 
-    if (window.breathChart) instanceof Chart) {
+    if (window.breathChart instanceof Chart) {
         window.breathChart.destroy();
     }
 
