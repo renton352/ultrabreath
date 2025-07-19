@@ -92,17 +92,25 @@ function calculateStreak(logs) {
     document.getElementById("streak-info").textContent = `今日で${streak}日連続です！`;
 }
 
-function getLast7DaysData(logs) {
+function getThisWeekData(logs) {
     const today = new Date();
+    const dayOfWeek = today.getDay(); // 0(日)～6(土)
+    const monday = new Date(today);
+    monday.setDate(today.getDate() - ((dayOfWeek + 6) % 7)); // 今週の月曜
+
     const labels = [];
     const data = [];
-    for (let i = 6; i >= 0; i--) {
-        const d = new Date(today);
-        d.setDate(d.getDate() - i);
+
+    for (let i = 0; i < 7; i++) {
+        const d = new Date(monday);
+        d.setDate(monday.getDate() + i);
         const dateStr = d.toISOString().split('T')[0];
         labels.push(dateStr);
         data.push(logs[dateStr] || 0);
     }
+
+    return { labels, data };
+}
     return { labels, data };
 }
 
@@ -119,7 +127,7 @@ function updateCharacterImage(count) {
 }
 
 function updateBreathChart(logs) {
-    const { labels, data } = getLast7DaysData(logs);
+    const { labels, data } = getThisWeekData(logs);
     const ctx = document.getElementById("breathChart").getContext("2d");
 
     if (window.breathChart instanceof Chart) {
@@ -162,5 +170,5 @@ function showRetryButton() {
         document.getElementById("character-image").src = "img/normal.png";
         btn.remove();
     };
-    document.getElementById("breathe-button").insertAdjacentElement("afterend", btn);
+    document.getElementById("training-screen").appendChild(btn);
 }
