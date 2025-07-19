@@ -167,5 +167,5 @@ function showRetryButton() {
         document.getElementById("character-image").src = "img/normal.png";
         btn.remove();
     };
-    document.getElementById("breathe-button").insertAdjacentElement("afterend", btn);
+    document.getElementById("button-group").appendChild(btn);
 }
