@@ -37,14 +37,7 @@ button {
     font-size: 1em;
     border-radius: 8px;
 }
-#retry-button {
-    background-color: #def;
-    border: 1px solid #79a;
-    padding: 8px 16px;
-    margin-top: 10px;
-    font-size: 1em;
-    border-radius: 8px;
-}
+
 
 #streak-info {
     font-size: 1.1em;
@@ -53,18 +46,20 @@ button {
     margin-bottom: 10px;
 }
 
-#retry-button {
-    display: block;
-    margin: 20px auto 0 auto;
-    background-color: #def;
-    border: 1px solid #79a;
-    padding: 12px 24px;
-    font-size: 1.2em;
-    border-radius: 10px;
-    cursor: pointer;
-}
+
 
 #training-screen {
     min-height: 600px;
     position: relative;
+}
+
+#retry-button {
+    display: block;
+    margin: 10px auto;
+    background-color: #def;
+    border: 1px solid #79a;
+    padding: 10px 24px;
+    font-size: 1.2em;
+    border-radius: 10px;
+    cursor: pointer;
 }
