@@ -55,6 +55,10 @@ function updateStats() {
     document.getElementById("last-date").textContent = lastDate;
 
     calculateStreak(logs);
+
+    const todayStr = new Date().toISOString().split('T')[0];
+    const todayCount = logs[todayStr] || 0;
+    document.getElementById("today-count").textContent = todayCount;
     updateBreathChart(logs);
 }
 
@@ -158,5 +162,5 @@ function showRetryButton() {
         document.getElementById("character-image").src = "img/normal.png";
         btn.remove();
     };
-    document.getElementById("breathe-button").insertAdjacentElement("afterend", btn);
+    document.getElementById("training-screen").appendChild(btn);
 }
