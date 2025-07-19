@@ -110,8 +110,6 @@ function getThisWeekData(logs) {
     }
     return { labels, data };
 }
-    return { labels, data };
-}
 
 function updateCharacterImage(count) {
     let imagePath = "img/rehab_normal.png";
