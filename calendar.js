@@ -32,7 +32,7 @@ function renderCalendar() {
   for (let d = 1; d <= totalDays; d++) {
     const cell = document.createElement("div");
     const date = new Date(year, month, d);
-    const dateStr = date.toISOString().split("T")[0];
+    const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
     const count = logs[dateStr] || 0;
 
     cell.className = "day";

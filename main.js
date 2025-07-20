@@ -95,18 +95,23 @@ function calculateStreak(logs) {
 function getThisWeekData(logs) {
     const today = new Date();
     const dayOfWeek = today.getDay(); // 0(日)～6(土)
-    const monday = new Date(today);
-    monday.setDate(today.getDate() - ((dayOfWeek + 6) % 7)); // 今週の月曜
+    const sunday = new Date(today);
+    sunday.setDate(today.getDate() - dayOfWeek); // 日曜スタート
 
     const labels = [];
     const data = [];
 
     for (let i = 0; i < 7; i++) {
-        const d = new Date(monday);
-        d.setDate(monday.getDate() + i);
+        const d = new Date(sunday);
+        d.setDate(sunday.getDate() + i);
         const dateStr = d.toISOString().split('T')[0];
+
         labels.push(dateStr);
-        data.push(logs[dateStr] || 0);
+        if (d > today) {
+            data.push(0); // 未来のデータは表示しない
+        } else {
+            data.push(logs[dateStr] || 0);
+        }
     }
     return { labels, data };
 }
