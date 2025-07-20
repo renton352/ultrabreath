@@ -29,15 +29,36 @@ function renderCalendar() {
     calendar.appendChild(cell);
   }
 
+  // 値一覧の生成（対象月の日付だけ）
+  const valuesByDate = {};
+  for (let d = 1; d <= totalDays; d++) {
+    const date = new Date(year, month, d);
+    date.setHours(0, 0, 0, 0);
+    const key = date.toISOString().split("T")[0];
+    if (logs[key]) valuesByDate[key] = logs[key];
+  }
+  const allValues = Object.values(valuesByDate);
+  const max = Math.max(...allValues);
+  const min = Math.min(...allValues);
+
   for (let d = 1; d <= totalDays; d++) {
     const cell = document.createElement("div");
-    const date = new Date(year, month, d);
-    const dateStr = new Date(year, month, d).toLocaleDateString("sv-SE");
+
+    const dateObj = new Date(year, month, d);
+    dateObj.setHours(0, 0, 0, 0);
+    const dateStr = dateObj.toISOString().split("T")[0];
+
     const count = logs[dateStr] || 0;
 
     cell.className = "day";
     const today = new Date();
-    if (date.toDateString() === today.toDateString()) cell.classList.add("today");
+    today.setHours(0, 0, 0, 0);
+    if (dateObj.getTime() === today.getTime()) cell.classList.add("today");
+
+    if (count > 0) {
+      if (count === max) cell.classList.add("max-value");
+      else if (count === min) cell.classList.add("min-value");
+    }
 
     cell.innerHTML = `<strong>${d}</strong><br>${count > 0 ? count + "回" : "-"}`;
     calendar.appendChild(cell);

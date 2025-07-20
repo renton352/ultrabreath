@@ -32,3 +32,11 @@
 .day.muted {
   color: #bbb;
 }
+
+.max-value {
+  background-color: #ffcccc !important; /* 赤系ハイライト */
+}
+
+.min-value {
+  background-color: #cceeff !important; /* 青系ハイライト */
+}
