@@ -29,7 +29,6 @@ function renderCalendar() {
     calendar.appendChild(cell);
   }
 
-  // 値一覧の生成（対象月の日付だけ）
   const valuesByDate = {};
   for (let d = 1; d <= totalDays; d++) {
     const date = new Date(year, month, d);
@@ -37,9 +36,13 @@ function renderCalendar() {
     const key = date.toISOString().split("T")[0];
     if (logs[key]) valuesByDate[key] = logs[key];
   }
+
   const allValues = Object.values(valuesByDate);
   const max = Math.max(...allValues);
   const min = Math.min(...allValues);
+  const sum = allValues.reduce((a, b) => a + b, 0);
+  const average = allValues.length > 0 ? Math.floor(sum / allValues.length) : 0;
+  document.getElementById("average-label").textContent = `平均：${average}回／日`;
 
   for (let d = 1; d <= totalDays; d++) {
     const cell = document.createElement("div");
