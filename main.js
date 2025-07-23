@@ -63,7 +63,7 @@ function saveLog() {
   if (!Array.isArray(logs[today])) {
     logs[today] = [];
   }
-  logs[today].push(setCount); // 1セット分の呼吸回数を記録
+  logs[today].push(count); // 1セット分の呼吸回数を記録
   localStorage.setItem("logs", JSON.stringify(logs));
 }
 
