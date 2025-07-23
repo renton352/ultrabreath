@@ -3,10 +3,11 @@ body {
     background: #f0f8ff;
     text-align: center;
     padding: 20px;
+    font-size: 16px; /* iPhoneでも読みやすいサイズ */
 }
 
 .container {
-    max-width: 400px;
+    max-width: 90vw;
     margin: auto;
     background: white;
     padding: 20px;
@@ -15,8 +16,8 @@ body {
 
 button {
     font-size: 1.2em;
-    margin: 10px;
-    padding: 10px 20px;
+    margin: 12px;
+    padding: 14px 28px;
 }
 
 #character img {
@@ -26,18 +27,18 @@ button {
 }
 
 #speech {
+    font-size: 1.1em;
     font-weight: bold;
 }
 
 #back-button {
     background-color: #eee;
     border: 1px solid #aaa;
-    padding: 8px 16px;
+    padding: 10px 20px;
     margin-top: 20px;
     font-size: 1em;
     border-radius: 8px;
 }
-
 
 #streak-info {
     font-size: 1.1em;
@@ -45,8 +46,6 @@ button {
     color: #2d88ff;
     margin-bottom: 10px;
 }
-
-
 
 #training-screen {
     min-height: 600px;
@@ -62,4 +61,9 @@ button {
     font-size: 1.2em;
     border-radius: 10px;
     cursor: pointer;
+}
+
+canvas {
+    width: 100% !important;
+    height: auto !important;
 }
