@@ -16,10 +16,12 @@
       </div>
       <div>
         <p>呼吸回数：<span id="breath-count">0</span></p>
-        <div id="button-group">
-          <button class="main-button" id="breathe-button" onclick="countBreath()">吸った！（カウント）</button>
-          <button class="main-button" id="back-button">← ジャンル選択に戻る</button>
-        </div>
+		<div id="button-group">
+		  <button class="main-button" id="breathe-button" onclick="countBreath()">吸った！（カウント）</button>
+		  <button class="main-button" id="back-button">← ジャンル選択に戻る</button>
+		  <button class="main-button" id="retry-button" style="display: none;" onclick="resetTraining()">もう一度やる</button>
+		</div>
+
       </div>
       <div id="log">
         <h2>記録</h2>

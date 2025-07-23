@@ -1,185 +1,105 @@
-// main.js（目標25回1セット × 2セット/日 対応版）
-let count = 0;
-let genre = "";
-let setCount = parseInt(localStorage.getItem("setCount")) || 25;
-let setGoal = parseInt(localStorage.getItem("setGoal")) || 2;
-const speechMap = {
-    1: "いい呼吸ですねぇ、続けましょう",
-    2: "焦らず、ゆっくりどうぞ",
-    4: "その調子、その調子",
-    6: "いいですね、肺がよろこんでますよ",
-    8: "あと少しで終わりですよ、がんばって",
-    9: "もうひと息ですね"
-};
+// main.js（修正後）
 
-function startTraining(selectedGenre) {
-    genre = selectedGenre;
-    count = 0;
-    setCount = parseInt(localStorage.getItem("setCount")) || 25;
-    setGoal = parseInt(localStorage.getItem("setGoal")) || 2;
-    document.getElementById("breath-count").textContent = count;
-    document.getElementById("genre-selection").style.display = "none";
-    document.getElementById("training-screen").style.display = "block";
-    updateStats();
+let count = 0;
+let setCount = 25;
+let setGoal = 2;
+
+function startTraining(genre) {
+  document.getElementById("genre-selection").style.display = "none";
+  document.getElementById("training-screen").style.display = "block";
+  document.getElementById("speech").textContent = "はじめましょうか、深呼吸ですよ。";
+  document.getElementById("character-image").src = "img/normal.png";
+  count = 0;
+  document.getElementById("breath-count").textContent = `${count} / ${setCount}`;
+  document.getElementById("breathe-button").disabled = false;
+  document.getElementById("retry-button").style.display = "none";
 }
 
 function countBreath() {
-    if (count >= setCount) return;
+  count++;
+  document.getElementById("breath-count").textContent = `${count} / ${setCount}`;
 
-    count++;
-    document.getElementById("breath-count").textContent = `${count} / ${setCount}`;
-    updateCharacterImage(count);
+  if (count === Math.floor(setCount / 2)) {
+    document.getElementById("character-image").src = "img/encourage.png";
+    document.getElementById("speech").textContent = "あと半分です、ゆっくりいきましょう。";
+  }
 
-    if (speechMap[count]) {
-        document.getElementById("speech").textContent = speechMap[count];
-    }
-
-    if (count === setCount) {
-        document.getElementById("speech").textContent = "お疲れさまでした！セット完了です！";
-        saveLog();
-        updateStats();
-        showRetryButton();
-    }
-}
-
-function saveLog() {
-    const today = new Date().toISOString().split('T')[0];
-    const logs = JSON.parse(localStorage.getItem("ultrabreathLogs") || "{}");
-    logs[today] = (logs[today] || 0) + setCount;
-    localStorage.setItem("ultrabreathLogs", JSON.stringify(logs));
-    localStorage.setItem("lastDate", today);
-}
-
-function updateStats() {
-    const logs = JSON.parse(localStorage.getItem("ultrabreathLogs") || "{}");
-    const totalCount = Object.values(logs).reduce((sum, val) => sum + val, 0);
-    const totalDays = Object.keys(logs).length;
-    const lastDate = localStorage.getItem("lastDate") || "なし";
-
-    document.getElementById("total-count").textContent = totalCount;
-    document.getElementById("total-days").textContent = totalDays;
-    document.getElementById("last-date").textContent = lastDate;
-
-    calculateStreak(logs);
-
-    const todayStr = new Date().toISOString().split('T')[0];
-    const todayCount = logs[todayStr] || 0;
-    document.getElementById("today-count").textContent = todayCount;
-    updateBreathChart(logs);
-}
-
-document.getElementById("back-button").addEventListener("click", () => {
-    document.getElementById("training-screen").style.display = "none";
-    document.getElementById("genre-selection").style.display = "block";
-
-    count = 0;
-    document.getElementById("breath-count").textContent = `${count} / ${setCount}`;
-    document.getElementById("speech").textContent = "はじめましょうか、深呼吸ですよ。";
-    document.getElementById("character-image").src = "img/normal.png";
-
-    const retryBtn = document.getElementById("retry-button");
-    if (retryBtn) retryBtn.remove();
-});
-
-function calculateStreak(logs) {
-    const sortedDates = Object.keys(logs).sort().reverse();
-    let streak = 0;
-    let current = new Date();
-    for (const dateStr of sortedDates) {
-        const logDate = new Date(dateStr);
-        const diffDays = Math.floor((current - logDate) / (1000 * 60 * 60 * 24));
-        if (diffDays === 0 || diffDays === 1) {
-            streak++;
-            current.setDate(current.getDate() - 1);
-        } else {
-            break;
-        }
-    }
-    document.getElementById("streak-info").textContent = `今日で${streak}日連続です！`;
-}
-
-function getThisWeekData(logs) {
-    const today = new Date();
-    const dayOfWeek = today.getDay();
-    const sunday = new Date(today);
-    sunday.setDate(today.getDate() - dayOfWeek);
-
-    const labels = [];
-    const data = [];
-
-    for (let i = 0; i < 7; i++) {
-        const d = new Date(sunday);
-        d.setDate(sunday.getDate() + i);
-        const dateStr = d.toISOString().split('T')[0];
-
-        labels.push(dateStr);
-        if (d > today) {
-            data.push(0);
-        } else {
-            data.push(logs[dateStr] || 0);
-        }
-    }
-    return { labels, data };
-}
-
-function updateCharacterImage(count) {
-    let imagePath = "img/rehab_normal.png";
-    if (count >= setCount * 0.2 && count < setCount * 0.5) {
-        imagePath = "img/rehab_focus.png";
-    } else if (count >= setCount * 0.5 && count < setCount) {
-        imagePath = "img/rehab_tired.png";
-    } else if (count === setCount) {
-        imagePath = "img/rehab_smile.png";
-    }
-    document.getElementById("character-image").src = imagePath;
-}
-
-function updateBreathChart(logs) {
-    const { labels, data } = getThisWeekData(logs);
-    const ctx = document.getElementById("breathChart").getContext("2d");
-
-    if (window.breathChart instanceof Chart) {
-        window.breathChart.destroy();
-    }
-
-    window.breathChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: '日別呼吸回数',
-                data: data,
-                borderColor: '#36a2eb',
-                backgroundColor: 'rgba(54,162,235,0.2)',
-                tension: 0.3,
-                fill: true
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: { stepSize: 10 }
-                }
-            }
-        }
-    });
+  if (count === setCount) {
+    document.getElementById("character-image").src = "img/happy.png";
+    document.getElementById("speech").textContent = "お疲れさまでした！セット完了です！";
+    document.getElementById("breathe-button").disabled = true;
+    showRetryButton();
+    saveLog();
+    updateStats();
+  }
 }
 
 function showRetryButton() {
-    const btn = document.createElement("button");
-    btn.id = "retry-button";
-    btn.textContent = "もう一度やる";
-    btn.onclick = () => {
-        count = 0;
-        document.getElementById("breath-count").textContent = `${count} / ${setCount}`;
-        document.getElementById("speech").textContent = "はじめましょうか、深呼吸ですよ。";
-        document.getElementById("character-image").src = "img/normal.png";
-        btn.remove();
-    };
-
-    const breatheBtn = document.getElementById("breathe-button");
-    const parent = breatheBtn.parentElement;
-    parent.insertBefore(btn, breatheBtn.nextSibling);
+  const btn = document.getElementById("retry-button");
+  if (btn) {
+    btn.style.display = "inline-block";
+  }
 }
+
+function resetTraining() {
+  count = 0;
+  document.getElementById("breath-count").textContent = `${count} / ${setCount}`;
+  document.getElementById("speech").textContent = "はじめましょうか、深呼吸ですよ。";
+  document.getElementById("character-image").src = "img/normal.png";
+  document.getElementById("breathe-button").disabled = false;
+  const retryBtn = document.getElementById("retry-button");
+  if (retryBtn) retryBtn.style.display = "none";
+}
+
+function saveLog() {
+  const today = new Date().toISOString().slice(0, 10);
+  const logs = JSON.parse(localStorage.getItem("logs") || "{}");
+  logs[today] = (logs[today] || 0) + 1;
+  localStorage.setItem("logs", JSON.stringify(logs));
+}
+
+function updateStats() {
+  const logs = JSON.parse(localStorage.getItem("logs") || "{}");
+  const today = new Date().toISOString().slice(0, 10);
+  const todayCount = logs[today] || 0;
+  const totalCount = Object.values(logs).reduce((a, b) => a + b, 0);
+  const totalDays = Object.keys(logs).length;
+  const lastDate = Object.keys(logs).sort().reverse()[0] || "なし";
+
+  document.getElementById("today-count").textContent = todayCount;
+  document.getElementById("total-count").textContent = totalCount;
+  document.getElementById("total-days").textContent = totalDays;
+  document.getElementById("last-date").textContent = lastDate;
+
+  updateStreak(logs);
+}
+
+function updateStreak(logs) {
+  const today = new Date();
+  let streak = 0;
+
+  for (let i = 0; i < 365; i++) {
+    const date = new Date();
+    date.setDate(today.getDate() - i);
+    const dateStr = date.toISOString().slice(0, 10);
+    if (logs[dateStr]) {
+      streak++;
+    } else {
+      break;
+    }
+  }
+
+  document.getElementById("streak-info").textContent = `今日で${streak}日連続です！`;
+}
+
+document.getElementById("back-button").onclick = () => {
+  document.getElementById("training-screen").style.display = "none";
+  document.getElementById("genre-selection").style.display = "block";
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  setCount = parseInt(localStorage.getItem("setCount")) || 25;
+  setGoal = parseInt(localStorage.getItem("setGoal")) || 2;
+  updateStats();
+});
+
