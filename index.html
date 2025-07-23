@@ -1,46 +1,48 @@
-<!-- index.html に追加する設定モーダルとボタン -->
-<button id="settings-button">⚙️ 設定</button>
+<body>
+  <div class="container">
+    <button id="settings-button">⚙️ 設定</button>
 
-<div id="genre-selection">
-  <p>ジャンルを選んでください：</p>
-  <button onclick="startTraining('トレーニング用')">トレーニング用</button>
-  <button onclick="startTraining('リラックス用')">リラックス用</button>
-</div>
+    <div id="genre-selection">
+      <p>ジャンルを選んでください：</p>
+      <button onclick="startTraining('トレーニング用')">トレーニング用</button>
+      <button onclick="startTraining('リラックス用')">リラックス用</button>
+    </div>
 
-<div id="training-screen" style="display:none;">
-  <p id="streak-info">今日で0日連続です！</p>
-  <div id="character">
-    <img alt="ブレス先生" id="character-image" src="img/normal.png" />
-    <p id="speech">はじめましょうか、深呼吸ですよ。</p>
-  </div>
-  <div>
-    <p>呼吸回数：<span id="breath-count">0</span></p>
-    <div id="button-group">
-      <button id="breathe-button" onclick="countBreath()">吸った！（カウント）</button>
-      <button id="back-button">← ジャンル選択に戻る</button>
+    <div id="training-screen" style="display:none;">
+      <p id="streak-info">今日で0日連続です！</p>
+      <div id="character">
+        <img alt="ブレス先生" id="character-image" src="img/normal.png" />
+        <p id="speech">はじめましょうか、深呼吸ですよ。</p>
+      </div>
+      <div>
+        <p>呼吸回数：<span id="breath-count">0</span></p>
+        <div id="button-group">
+          <button id="breathe-button" onclick="countBreath()">吸った！（カウント）</button>
+          <button id="back-button">← ジャンル選択に戻る</button>
+        </div>
+      </div>
+      <div id="log">
+        <h2>記録</h2>
+        <p>合計呼吸回数：<span id="total-count">0</span></p>
+        <p>今日の呼吸回数：<span id="today-count">0</span></p>
+        <p>実施日数：<span id="total-days">0</span></p>
+        <p>最終実施日：<span id="last-date">なし</span></p>
+      </div>
+      <h2>グラフで確認</h2>
+      <button onclick="location.href='calendar.html'">📅 カレンダーを見る</button>
+      <canvas height="150" id="breathChart" style="margin-top: 20px;" width="300"></canvas>
+    </div>
+
+    <div id="settings-modal" class="settings-modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:1000;">
+      <h2>設定</h2>
+      <label>ニックネーム:<br><input type="text" id="nickname-input" style="width: 100%; margin-bottom: 10px;" /></label><br/>
+      <label>1セットの回数:<br><input type="number" id="set-count-input" min="1" style="width: 100%; margin-bottom: 10px;" /></label><br/>
+      <label>1日のセット目標数:<br><input type="number" id="set-goal-input" min="1" style="width: 100%; margin-bottom: 10px;" /></label><br/>
+      <label>カレンダー背景画像:<br><input type="file" id="calendar-bg-input" accept="image/*" style="margin-bottom: 10px;"/></label><br/>
+      <button id="save-settings">保存</button>
+      <button id="close-settings">閉じる</button>
     </div>
   </div>
-  <div id="log">
-    <h2>記録</h2>
-    <p>合計呼吸回数：<span id="total-count">0</span></p>
-    <p>今日の呼吸回数：<span id="today-count">0</span></p>
-    <p>実施日数：<span id="total-days">0</span></p>
-    <p>最終実施日：<span id="last-date">なし</span></p>
-  </div>
-  <h2>グラフで確認</h2>
-  <button onclick="location.href='calendar.html'">📅 カレンダーを見る</button>
-  <canvas height="150" id="breathChart" style="margin-top: 20px;" width="300"></canvas>
-</div>
-
-<div id="settings-modal" class="settings-modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:1000;">
-  <h2>設定</h2>
-  <label>ニックネーム:<br><input type="text" id="nickname-input" style="width: 100%; margin-bottom: 10px;" /></label><br/>
-  <label>1セットの回数:<br><input type="number" id="set-count-input" min="1" style="width: 100%; margin-bottom: 10px;" /></label><br/>
-  <label>1日のセット目標数:<br><input type="number" id="set-goal-input" min="1" style="width: 100%; margin-bottom: 10px;" /></label><br/>
-  <label>カレンダー背景画像:<br><input type="file" id="calendar-bg-input" accept="image/*" style="margin-bottom: 10px;"/></label><br/>
-  <button id="save-settings">保存</button>
-  <button id="close-settings">閉じる</button>
-</div>
 
 <script>
   document.getElementById("settings-button").onclick = () => {
@@ -89,3 +91,4 @@
 <!-- スクリプトの読み込み -->
 <script src="main.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
