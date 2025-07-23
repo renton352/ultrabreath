@@ -2,36 +2,37 @@ body {
     font-family: sans-serif;
     background: #f0f8ff;
     text-align: center;
-    padding: 20px;
-    font-size: 20px;
+    padding: 10px;
+    font-size: 24px;
     line-height: 1.6;
     margin: 0;
 }
 
 .container {
-    max-width: 600px;
-    margin: auto;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0 10px;
     background: white;
-    padding: 24px;
-    border-radius: 12px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 0;
+    box-shadow: none;
 }
 
 button {
-    font-size: 1.3em;
+    font-size: 1.6em;
     margin: 14px;
-    padding: 14px 28px;
+    padding: 16px 32px;
     border-radius: 8px;
 }
 
 #character img {
-    width: 160px;
+    width: 180px;
     height: auto;
     margin-bottom: 12px;
 }
 
 #speech {
-    font-size: 1.2em;
+    font-size: 1.4em;
     font-weight: bold;
     margin-bottom: 20px;
 }
@@ -39,14 +40,14 @@ button {
 #back-button {
     background-color: #eee;
     border: 1px solid #aaa;
-    padding: 10px 24px;
+    padding: 12px 28px;
     margin-top: 20px;
-    font-size: 1.1em;
+    font-size: 1.4em;
     border-radius: 8px;
 }
 
 #streak-info {
-    font-size: 1.2em;
+    font-size: 1.4em;
     font-weight: bold;
     color: #2d88ff;
     margin-bottom: 12px;
@@ -62,8 +63,8 @@ button {
     margin: 12px auto;
     background-color: #def;
     border: 1px solid #79a;
-    padding: 12px 28px;
-    font-size: 1.3em;
+    padding: 16px 32px;
+    font-size: 1.6em;
     border-radius: 10px;
     cursor: pointer;
 }
@@ -78,26 +79,26 @@ canvas {
 /* モバイル用スタイル */
 @media screen and (max-width: 480px) {
   body {
-    font-size: 24px;
+    font-size: 26px;
   }
 
   button, .main-button {
-    font-size: 1.6em;
-    padding: 16px 32px;
+    font-size: 1.8em;
+    padding: 18px 36px;
   }
 
   #speech,
   #streak-info,
   #log p,
   #log h2 {
-    font-size: 1.4em;
+    font-size: 1.6em;
   }
 
   input, label {
-    font-size: 1.2em;
+    font-size: 1.4em;
   }
 
   #character img {
-    width: 180px;
+    width: 200px;
   }
 }
