@@ -53,15 +53,18 @@ function resetTraining() {
 function saveLog() {
   const today = new Date().toISOString().slice(0, 10);
   const logs = JSON.parse(localStorage.getItem("logs") || "{}");
-  logs[today] = logs[today] || [];
-  logs[today].push(setCount); // 1セットごとの呼吸回数を記録
+  if (!Array.isArray(logs[today])) {
+    logs[today] = [];
+  }
+  logs[today].push(setCount); // 1セット分の呼吸回数を記録
   localStorage.setItem("logs", JSON.stringify(logs));
 }
 
 function updateStats() {
   const logs = JSON.parse(localStorage.getItem("logs") || "{}");
   const today = new Date().toISOString().slice(0, 10);
-  const todayLogs = logs[today] || [];
+  const todayLogsRaw = logs[today];
+  const todayLogs = Array.isArray(todayLogsRaw) ? todayLogsRaw : [];
   const todayCount = todayLogs.reduce((sum, val) => sum + val, 0);
   const todaySets = todayLogs.length;
 
@@ -76,7 +79,12 @@ function updateStats() {
 
   const totalCountEl = document.getElementById("total-count");
   if (totalCountEl) {
-    const total = Object.values(logs).flat().reduce((sum, val) => sum + val, 0);
+    let total = 0;
+    Object.values(logs).forEach(value => {
+      if (Array.isArray(value)) {
+        total += value.reduce((sum, v) => sum + v, 0);
+      }
+    });
     totalCountEl.textContent = total;
   }
 
@@ -97,7 +105,7 @@ function updateStreak(logs) {
     const date = new Date();
     date.setDate(today.getDate() - i);
     const dateStr = date.toISOString().slice(0, 10);
-    if (logs[dateStr] && logs[dateStr].length > 0) {
+    if (logs[dateStr] && Array.isArray(logs[dateStr]) && logs[dateStr].length > 0) {
       streak++;
     } else {
       break;
