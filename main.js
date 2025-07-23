@@ -3,7 +3,7 @@ let setCount = 25;
 let setGoal = 2;
 
 function startTraining(genre) {
-  setCount = parseInt(localStorage.getItem("setCount")) || 25; // ← 追加
+  setCount = parseInt(localStorage.getItem("setCount")) || 25;
   document.getElementById("genre-selection").style.display = "none";
   document.getElementById("training-screen").style.display = "block";
   document.getElementById("speech").textContent = "はじめましょうか、深呼吸ですよ。";
@@ -53,25 +53,32 @@ function resetTraining() {
 function saveLog() {
   const today = new Date().toISOString().slice(0, 10);
   const logs = JSON.parse(localStorage.getItem("logs") || "{}");
-  logs[today] = (logs[today] || 0) + 1;
+  logs[today] = logs[today] || [];
+  logs[today].push(setCount); // 1セットごとの呼吸回数を記録
   localStorage.setItem("logs", JSON.stringify(logs));
 }
 
 function updateStats() {
   const logs = JSON.parse(localStorage.getItem("logs") || "{}");
   const today = new Date().toISOString().slice(0, 10);
-  const todayCount = logs[today] || 0;
+  const todayLogs = logs[today] || [];
+  const todayCount = todayLogs.reduce((sum, val) => sum + val, 0);
+  const todaySets = todayLogs.length;
+
   const totalDays = Object.keys(logs).length;
   const lastDate = Object.keys(logs).sort().reverse()[0] || "なし";
 
   const todayCountEl = document.getElementById("today-count");
-  if (todayCountEl) todayCountEl.textContent = todayCount * setCount;
+  if (todayCountEl) todayCountEl.textContent = todayCount;
 
   const todaySetEl = document.getElementById("today-set");
-  if (todaySetEl) todaySetEl.textContent = todayCount;
+  if (todaySetEl) todaySetEl.textContent = todaySets;
 
   const totalCountEl = document.getElementById("total-count");
-  if (totalCountEl) totalCountEl.textContent = Object.values(logs).reduce((sum, val) => sum + val * setCount, 0);
+  if (totalCountEl) {
+    const total = Object.values(logs).flat().reduce((sum, val) => sum + val, 0);
+    totalCountEl.textContent = total;
+  }
 
   const totalDaysEl = document.getElementById("total-days");
   if (totalDaysEl) totalDaysEl.textContent = totalDays;
@@ -90,7 +97,7 @@ function updateStreak(logs) {
     const date = new Date();
     date.setDate(today.getDate() - i);
     const dateStr = date.toISOString().slice(0, 10);
-    if (logs[dateStr]) {
+    if (logs[dateStr] && logs[dateStr].length > 0) {
       streak++;
     } else {
       break;
