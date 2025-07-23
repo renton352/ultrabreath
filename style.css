@@ -3,48 +3,53 @@ body {
     background: #f0f8ff;
     text-align: center;
     padding: 20px;
-    font-size: 16px; /* iPhoneでも読みやすいサイズ */
+    font-size: 20px; /* iPhoneでも大きく見えるよう調整 */
+    line-height: 1.6;
+    margin: 0;
 }
 
 .container {
-    max-width: 90vw;
+    max-width: 600px;
     margin: auto;
     background: white;
-    padding: 20px;
-    border-radius: 10px;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
 button {
-    font-size: 1.2em;
-    margin: 12px;
+    font-size: 1.3em;
+    margin: 14px;
     padding: 14px 28px;
+    border-radius: 8px;
 }
 
 #character img {
-    width: 150px;
+    width: 160px;
     height: auto;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
 #speech {
-    font-size: 1.1em;
+    font-size: 1.2em;
     font-weight: bold;
+    margin-bottom: 20px;
 }
 
 #back-button {
     background-color: #eee;
     border: 1px solid #aaa;
-    padding: 10px 20px;
+    padding: 10px 24px;
     margin-top: 20px;
-    font-size: 1em;
+    font-size: 1.1em;
     border-radius: 8px;
 }
 
 #streak-info {
-    font-size: 1.1em;
+    font-size: 1.2em;
     font-weight: bold;
     color: #2d88ff;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
 #training-screen {
@@ -54,11 +59,11 @@ button {
 
 #retry-button {
     display: block;
-    margin: 10px auto;
+    margin: 12px auto;
     background-color: #def;
     border: 1px solid #79a;
-    padding: 10px 24px;
-    font-size: 1.2em;
+    padding: 12px 28px;
+    font-size: 1.3em;
     border-radius: 10px;
     cursor: pointer;
 }
@@ -66,4 +71,6 @@ button {
 canvas {
     width: 100% !important;
     height: auto !important;
+    max-width: 100%;
+    margin-top: 20px;
 }
