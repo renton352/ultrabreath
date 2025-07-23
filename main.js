@@ -1,35 +1,41 @@
-
+// main.js（目標25回1セット × 2セット/日 対応版）
 let count = 0;
 let genre = "";
+let setCount = parseInt(localStorage.getItem("setCount")) || 25;
+let setGoal = parseInt(localStorage.getItem("setGoal")) || 2;
 const speechMap = {
     1: "いい呼吸ですねぇ、続けましょう",
     2: "焦らず、ゆっくりどうぞ",
     4: "その調子、その調子",
     6: "いいですね、肺がよろこんでますよ",
     8: "あと少しで終わりですよ、がんばって",
-    9: "もうひと息ですね",
-    10: "お疲れさまでした！素晴らしい呼吸でしたよ"
+    9: "もうひと息ですね"
 };
 
 function startTraining(selectedGenre) {
     genre = selectedGenre;
+    count = 0;
+    setCount = parseInt(localStorage.getItem("setCount")) || 25;
+    setGoal = parseInt(localStorage.getItem("setGoal")) || 2;
+    document.getElementById("breath-count").textContent = count;
     document.getElementById("genre-selection").style.display = "none";
     document.getElementById("training-screen").style.display = "block";
     updateStats();
 }
 
 function countBreath() {
-    if (count >= 10) return;
+    if (count >= setCount) return;
 
     count++;
-    document.getElementById("breath-count").textContent = count;
+    document.getElementById("breath-count").textContent = `${count} / ${setCount}`;
     updateCharacterImage(count);
 
     if (speechMap[count]) {
         document.getElementById("speech").textContent = speechMap[count];
     }
 
-    if (count === 10) {
+    if (count === setCount) {
+        document.getElementById("speech").textContent = "お疲れさまでした！セット完了です！";
         saveLog();
         updateStats();
         showRetryButton();
@@ -39,7 +45,7 @@ function countBreath() {
 function saveLog() {
     const today = new Date().toISOString().split('T')[0];
     const logs = JSON.parse(localStorage.getItem("ultrabreathLogs") || "{}");
-    logs[today] = (logs[today] || 0) + 10;
+    logs[today] = (logs[today] || 0) + setCount;
     localStorage.setItem("ultrabreathLogs", JSON.stringify(logs));
     localStorage.setItem("lastDate", today);
 }
@@ -67,7 +73,7 @@ document.getElementById("back-button").addEventListener("click", () => {
     document.getElementById("genre-selection").style.display = "block";
 
     count = 0;
-    document.getElementById("breath-count").textContent = count;
+    document.getElementById("breath-count").textContent = `${count} / ${setCount}`;
     document.getElementById("speech").textContent = "はじめましょうか、深呼吸ですよ。";
     document.getElementById("character-image").src = "img/normal.png";
 
@@ -94,9 +100,9 @@ function calculateStreak(logs) {
 
 function getThisWeekData(logs) {
     const today = new Date();
-    const dayOfWeek = today.getDay(); // 0(日)～6(土)
+    const dayOfWeek = today.getDay();
     const sunday = new Date(today);
-    sunday.setDate(today.getDate() - dayOfWeek); // 日曜スタート
+    sunday.setDate(today.getDate() - dayOfWeek);
 
     const labels = [];
     const data = [];
@@ -108,7 +114,7 @@ function getThisWeekData(logs) {
 
         labels.push(dateStr);
         if (d > today) {
-            data.push(0); // 未来のデータは表示しない
+            data.push(0);
         } else {
             data.push(logs[dateStr] || 0);
         }
@@ -118,11 +124,11 @@ function getThisWeekData(logs) {
 
 function updateCharacterImage(count) {
     let imagePath = "img/rehab_normal.png";
-    if (count >= 3 && count <= 5) {
+    if (count >= setCount * 0.2 && count < setCount * 0.5) {
         imagePath = "img/rehab_focus.png";
-    } else if (count >= 6 && count <= 9) {
+    } else if (count >= setCount * 0.5 && count < setCount) {
         imagePath = "img/rehab_tired.png";
-    } else if (count === 10) {
+    } else if (count === setCount) {
         imagePath = "img/rehab_smile.png";
     }
     document.getElementById("character-image").src = imagePath;
@@ -167,7 +173,7 @@ function showRetryButton() {
     btn.textContent = "もう一度やる";
     btn.onclick = () => {
         count = 0;
-        document.getElementById("breath-count").textContent = count;
+        document.getElementById("breath-count").textContent = `${count} / ${setCount}`;
         document.getElementById("speech").textContent = "はじめましょうか、深呼吸ですよ。";
         document.getElementById("character-image").src = "img/normal.png";
         btn.remove();
