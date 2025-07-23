@@ -1,3 +1,5 @@
+// main.js（修正済み）
+
 let count = 0;
 let setCount = 25;
 let setGoal = 2;
@@ -63,11 +65,20 @@ function updateStats() {
   const totalDays = Object.keys(logs).length;
   const lastDate = Object.keys(logs).sort().reverse()[0] || "なし";
 
-  document.getElementById("today-count").textContent = todayCount * setCount;
-  document.getElementById("today-set").textContent = setCount;
-  document.getElementById("total-count").textContent = Object.values(logs).reduce((sum, val) => sum + val * setCount, 0);
-  document.getElementById("total-days").textContent = totalDays;
-  document.getElementById("last-date").textContent = lastDate;
+  const todayCountEl = document.getElementById("today-count");
+  if (todayCountEl) todayCountEl.textContent = todayCount * setCount;
+
+  const todaySetEl = document.getElementById("today-set");
+  if (todaySetEl) todaySetEl.textContent = todayCount;
+
+  const totalCountEl = document.getElementById("total-count");
+  if (totalCountEl) totalCountEl.textContent = Object.values(logs).reduce((sum, val) => sum + val * setCount, 0);
+
+  const totalDaysEl = document.getElementById("total-days");
+  if (totalDaysEl) totalDaysEl.textContent = totalDays;
+
+  const lastDateEl = document.getElementById("last-date");
+  if (lastDateEl) lastDateEl.textContent = lastDate;
 
   updateStreak(logs);
 }
