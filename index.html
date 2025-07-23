@@ -74,8 +74,10 @@
     localStorage.setItem("setCount", setCountValue);
     localStorage.setItem("setGoal", setGoalValue);
 
-    window.setCount = setCountValue;
-    window.setGoal = setGoalValue;
+	window.setCount = setCountValue;
+	window.setGoal = setGoalValue;
+	setCount = setCountValue;
+	setGoal = setGoalValue;
 
     if (document.getElementById("training-screen").style.display !== "none") {
       const countEl = document.getElementById("breath-count");
