@@ -41,6 +41,7 @@ function showRetryButton() {
 }
 
 function resetTraining() {
+  // 最新値を反映（ローカルストレージではなくグローバル setCount をそのまま使用）
   count = 0;
   document.getElementById("breath-count").textContent = `${count} / ${setCount}`;
   document.getElementById("speech").textContent = "はじめましょうか、深呼吸ですよ。";
