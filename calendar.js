@@ -6,7 +6,7 @@ function renderCalendar() {
 
   const year = current.getFullYear();
   const month = current.getMonth();
-  const logs = JSON.parse(localStorage.getItem("ultrabreathLogs") || "{}");
+  const logs = JSON.parse(localStorage.getItem("logs") || "{}"); // 修正
 
   document.getElementById("month-label").textContent = `${year}年${month + 1}月`;
 
@@ -15,7 +15,7 @@ function renderCalendar() {
   const startDay = firstDay.getDay();
   const totalDays = lastDay.getDate();
 
-  const weekdays = ["日","月","火","水","木","金","土"];
+  const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
   for (const day of weekdays) {
     const cell = document.createElement("div");
     cell.className = "day muted";
@@ -42,7 +42,7 @@ function renderCalendar() {
   const min = Math.min(...allValues);
   const sum = allValues.reduce((a, b) => a + b, 0);
   const average = allValues.length > 0 ? Math.floor(sum / allValues.length) : 0;
-  document.getElementById("average-label").textContent = `平均：${average}回／日`;
+  document.getElementById("average-label").textContent = `平均：${average}セット／日`; // 修正
 
   for (let d = 1; d <= totalDays; d++) {
     const cell = document.createElement("div");
@@ -63,7 +63,7 @@ function renderCalendar() {
       else if (count === min) cell.classList.add("min-value");
     }
 
-    cell.innerHTML = `<strong>${d}</strong><br>${count > 0 ? count + "回" : "-"}`;
+    cell.innerHTML = `<strong>${d}</strong><br>${count > 0 ? count + "セット" : "-"}`; // 修正
     calendar.appendChild(cell);
   }
 }
