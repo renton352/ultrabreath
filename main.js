@@ -62,12 +62,11 @@ function updateStats() {
   const logs = JSON.parse(localStorage.getItem("logs") || "{}");
   const today = new Date().toISOString().slice(0, 10);
   const todayCount = logs[today] || 0;
-  const totalCount = Object.values(logs).reduce((a, b) => a + b, 0);
   const totalDays = Object.keys(logs).length;
   const lastDate = Object.keys(logs).sort().reverse()[0] || "なし";
 
   document.getElementById("today-count").textContent = todayCount;
-  document.getElementById("total-count").textContent = totalCount;
+  document.getElementById("total-count").textContent = todayCount * setCount;
   document.getElementById("total-days").textContent = totalDays;
   document.getElementById("last-date").textContent = lastDate;
 
