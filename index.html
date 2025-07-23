@@ -35,10 +35,10 @@
 
     <div id="settings-modal" class="settings-modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:1000;">
       <h2>設定</h2>
-      <label>ニックネーム:<br><input type="text" id="nickname-input" style="width: 100%; margin-bottom: 10px; font-size: 18px;" /></label><br/>
-      <label>1セットの回数:<br><input type="number" id="set-count-input" min="1" style="width: 100%; margin-bottom: 10px; font-size: 18px;" /></label><br/>
-      <label>1日のセット目標数:<br><input type="number" id="set-goal-input" min="1" style="width: 100%; margin-bottom: 10px; font-size: 18px;" /></label><br/>
-      <label>カレンダー背景画像:<br><input type="file" id="calendar-bg-input" accept="image/*" style="margin-bottom: 10px; font-size: 18px;"/></label><br/>
+      <label>ニックネーム:<br><input type="text" id="nickname-input" style="width: 100%; margin-bottom: 10px; font-size: 20px;" /></label><br/>
+      <label>1セットの回数:<br><input type="number" id="set-count-input" min="1" style="width: 100%; margin-bottom: 10px; font-size: 20px;" /></label><br/>
+      <label>1日のセット目標数:<br><input type="number" id="set-goal-input" min="1" style="width: 100%; margin-bottom: 10px; font-size: 20px;" /></label><br/>
+      <label>カレンダー背景画像:<br><input type="file" id="calendar-bg-input" accept="image/*" style="margin-bottom: 10px; font-size: 20px;" /></label><br/>
       <button class="main-button" id="save-settings">保存</button>
       <button class="main-button" id="close-settings">閉じる</button>
     </div>
@@ -91,38 +91,53 @@
 <!-- スクリプトの読み込み -->
 <script src="main.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
-  body {
-    font-size: 20px;
+  html, body {
+    font-size: 24px;
     font-family: sans-serif;
     text-align: center;
     margin: 0;
-    padding: 0 10px;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
   }
+
   .container {
-    max-width: 600px;
-    margin: auto;
+    width: 100%;
+    max-width: none;
+    margin: 0 auto;
+    padding: 0;
   }
+
   button.main-button {
-    font-size: 1.3em;
-    padding: 14px 28px;
-    margin: 10px;
+    font-size: 1.6em;
+    padding: 16px 32px;
+    margin: 14px auto;
     border-radius: 8px;
+    display: block;
+    width: 90%;
+    max-width: 400px;
   }
+
   #character img {
-    width: 160px;
+    width: 180px;
   }
+
   #speech, #streak-info {
-    font-size: 1.2em;
+    font-size: 1.4em;
     font-weight: bold;
-    margin: 10px 0;
+    margin: 12px 0;
   }
+
   @media (max-width: 480px) {
     body {
-      font-size: 22px;
+      font-size: 26px;
     }
+
     button.main-button {
-      font-size: 1.4em;
+      font-size: 1.8em;
+      padding: 20px 36px;
     }
   }
 </style>
