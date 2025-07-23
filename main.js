@@ -3,6 +3,7 @@ let setCount = 25;
 let setGoal = 2;
 
 function startTraining(genre) {
+  toggleSettingsButton(false);
   setCount = parseInt(localStorage.getItem("setCount")) || 25;
   document.getElementById("genre-selection").style.display = "none";
   document.getElementById("training-screen").style.display = "block";
@@ -117,6 +118,7 @@ function updateStreak(logs) {
 }
 
 document.getElementById("back-button").onclick = () => {
+  toggleSettingsButton(true);
   document.getElementById("training-screen").style.display = "none";
   document.getElementById("genre-selection").style.display = "block";
 };
