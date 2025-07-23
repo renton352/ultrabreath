@@ -70,6 +70,7 @@
       const reader = new FileReader();
       reader.onload = (event) => {
         localStorage.setItem("calendarBackground", event.target.result);
+	sessionStorage.setItem("calendarBackground", dataUrl); 
       };
       reader.readAsDataURL(file);
     }

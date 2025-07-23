@@ -10,6 +10,7 @@
       background-size: cover;
       background-repeat: no-repeat;
       background-position: center;
+      background-attachment: fixed;
     }
   </style>
 </head>
@@ -28,7 +29,7 @@
   <script src="calendar.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      const bg = localStorage.getItem("calendarBackground");
+      const bg = sessionStorage.getItem("calendarBackground") || localStorage.getItem("calendarBackground");
       if (bg) {
         document.body.style.backgroundImage = `url('${bg}')`;
       }
