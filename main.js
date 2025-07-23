@@ -1,10 +1,9 @@
-// main.js（修正済み）
-
 let count = 0;
 let setCount = 25;
 let setGoal = 2;
 
 function startTraining(genre) {
+  setCount = parseInt(localStorage.getItem("setCount")) || 25; // ← 追加
   document.getElementById("genre-selection").style.display = "none";
   document.getElementById("training-screen").style.display = "block";
   document.getElementById("speech").textContent = "はじめましょうか、深呼吸ですよ。";
