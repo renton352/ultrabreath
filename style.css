@@ -8,6 +8,12 @@ body {
   margin: 0;
 }
 
+.settings-modal {
+  max-width: 90vw;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .container {
   width: 100%;
   max-width: 480px;
