@@ -64,6 +64,7 @@ function updateStats() {
   const lastDate = Object.keys(logs).sort().reverse()[0] || "なし";
 
   document.getElementById("today-count").textContent = todayCount * setCount;
+  document.getElementById("today-set").textContent = setCount;
   document.getElementById("total-count").textContent = Object.values(logs).reduce((sum, val) => sum + val * setCount, 0);
   document.getElementById("total-days").textContent = totalDays;
   document.getElementById("last-date").textContent = lastDate;
