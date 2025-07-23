@@ -4,8 +4,8 @@
 
     <div id="genre-selection">
       <p>ジャンルを選んでください：</p>
-      <button onclick="startTraining('トレーニング用')">トレーニング用</button>
-      <button onclick="startTraining('リラックス用')">リラックス用</button>
+      <button class="main-button" onclick="startTraining('トレーニング用')">トレーニング用</button>
+      <button class="main-button" onclick="startTraining('リラックス用')">リラックス用</button>
     </div>
 
     <div id="training-screen" style="display:none;">
@@ -17,8 +17,8 @@
       <div>
         <p>呼吸回数：<span id="breath-count">0</span></p>
         <div id="button-group">
-          <button id="breathe-button" onclick="countBreath()">吸った！（カウント）</button>
-          <button id="back-button">← ジャンル選択に戻る</button>
+          <button class="main-button" id="breathe-button" onclick="countBreath()">吸った！（カウント）</button>
+          <button class="main-button" id="back-button">← ジャンル選択に戻る</button>
         </div>
       </div>
       <div id="log">
@@ -29,18 +29,18 @@
         <p>最終実施日：<span id="last-date">なし</span></p>
       </div>
       <h2>グラフで確認</h2>
-      <button onclick="location.href='calendar.html'">📅 カレンダーを見る</button>
+      <button class="main-button" onclick="location.href='calendar.html'">📅 カレンダーを見る</button>
       <canvas height="150" id="breathChart" style="margin-top: 20px;" width="300"></canvas>
     </div>
 
     <div id="settings-modal" class="settings-modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:1000;">
       <h2>設定</h2>
-      <label>ニックネーム:<br><input type="text" id="nickname-input" style="width: 100%; margin-bottom: 10px;" /></label><br/>
-      <label>1セットの回数:<br><input type="number" id="set-count-input" min="1" style="width: 100%; margin-bottom: 10px;" /></label><br/>
-      <label>1日のセット目標数:<br><input type="number" id="set-goal-input" min="1" style="width: 100%; margin-bottom: 10px;" /></label><br/>
-      <label>カレンダー背景画像:<br><input type="file" id="calendar-bg-input" accept="image/*" style="margin-bottom: 10px;"/></label><br/>
-      <button id="save-settings">保存</button>
-      <button id="close-settings">閉じる</button>
+      <label>ニックネーム:<br><input type="text" id="nickname-input" style="width: 100%; margin-bottom: 10px; font-size: 18px;" /></label><br/>
+      <label>1セットの回数:<br><input type="number" id="set-count-input" min="1" style="width: 100%; margin-bottom: 10px; font-size: 18px;" /></label><br/>
+      <label>1日のセット目標数:<br><input type="number" id="set-goal-input" min="1" style="width: 100%; margin-bottom: 10px; font-size: 18px;" /></label><br/>
+      <label>カレンダー背景画像:<br><input type="file" id="calendar-bg-input" accept="image/*" style="margin-bottom: 10px; font-size: 18px;"/></label><br/>
+      <button class="main-button" id="save-settings">保存</button>
+      <button class="main-button" id="close-settings">閉じる</button>
     </div>
   </div>
 
@@ -91,4 +91,39 @@
 <!-- スクリプトの読み込み -->
 <script src="main.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  body {
+    font-size: 20px;
+    font-family: sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0 10px;
+  }
+  .container {
+    max-width: 600px;
+    margin: auto;
+  }
+  button.main-button {
+    font-size: 1.3em;
+    padding: 14px 28px;
+    margin: 10px;
+    border-radius: 8px;
+  }
+  #character img {
+    width: 160px;
+  }
+  #speech, #streak-info {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 10px 0;
+  }
+  @media (max-width: 480px) {
+    body {
+      font-size: 22px;
+    }
+    button.main-button {
+      font-size: 1.4em;
+    }
+  }
+</style>
 </body>
