@@ -1,3 +1,8 @@
+function toggleSettingsButton(show) {
+  const btn = document.getElementById("settings-button");
+  if (btn) btn.style.display = show ? "block" : "none";
+}
+
 let count = 0;
 let setCount = 25;
 let setGoal = 2;
