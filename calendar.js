@@ -62,7 +62,7 @@ function renderCalendar() {
 
     const dateObj = new Date(year, month, d);
     dateObj.setHours(0, 0, 0, 0);
-    const dateStr = dateObj.toISOString().split("T")[0];
+    const dateStr = getLocalDateString(dateObj);
 
     const count = Array.isArray(logs[dateStr]) ? logs[dateStr].reduce((sum, val) => sum + val, 0) : 0;  // ✅ セット→回数
 
