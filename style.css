@@ -3,7 +3,7 @@ body {
     background: #f0f8ff;
     text-align: center;
     padding: 10px;
-    font-size: 24px;
+    font-size: 20px;
     line-height: 1.6;
     margin: 0;
 }
@@ -19,53 +19,58 @@ body {
 }
 
 button {
-    font-size: 1.6em;
-    margin: 14px;
-    padding: 16px 32px;
-    border-radius: 8px;
+    font-size: 1.1em;
+    margin: 10px;
+    padding: 10px 20px;
+    border-radius: 6px;
+}
+
+button.main-button {
+    font-size: 1.2em;
+    padding: 12px 24px;
 }
 
 #character img {
-    width: 180px;
+    width: 140px;
     height: auto;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 
 #speech {
-    font-size: 1.4em;
+    font-size: 1.2em;
     font-weight: bold;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 
 #back-button {
     background-color: #eee;
     border: 1px solid #aaa;
-    padding: 12px 28px;
-    margin-top: 20px;
-    font-size: 1.4em;
-    border-radius: 8px;
+    padding: 10px 20px;
+    margin-top: 16px;
+    font-size: 1.1em;
+    border-radius: 6px;
 }
 
 #streak-info {
-    font-size: 1.4em;
+    font-size: 1.2em;
     font-weight: bold;
     color: #2d88ff;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 #training-screen {
-    min-height: 600px;
+    min-height: 500px;
     position: relative;
 }
 
 #retry-button {
     display: block;
-    margin: 12px auto;
+    margin: 10px auto;
     background-color: #def;
     border: 1px solid #79a;
-    padding: 16px 32px;
-    font-size: 1.6em;
-    border-radius: 10px;
+    padding: 12px 24px;
+    font-size: 1.2em;
+    border-radius: 8px;
     cursor: pointer;
 }
 
@@ -79,26 +84,26 @@ canvas {
 /* モバイル用スタイル */
 @media screen and (max-width: 480px) {
   body {
-    font-size: 26px;
+    font-size: 22px;
   }
 
   button, .main-button {
-    font-size: 1.4em;
-    padding: 14px 28px;
+    font-size: 1.2em;
+    padding: 12px 24px;
   }
 
   #speech,
   #streak-info,
   #log p,
   #log h2 {
-    font-size: 1.6em;
+    font-size: 1.3em;
   }
 
   input, label {
-    font-size: 1.4em;
+    font-size: 1.2em;
   }
 
   #character img {
-    width: 200px;
+    width: 160px;
   }
 }
