@@ -35,7 +35,10 @@ function renderCalendar() {
     const date = new Date(year, month, d);
     date.setHours(0, 0, 0, 0);
     const key = date.toISOString().split("T")[0];
-    if (logs[key]) valuesByDate[key] = logs[key] * setCount;  // ✅ セット数 → 回数
+    if (Array.isArray(logs[key])) {
+    const total = logs[key].reduce((sum, val) => sum + val, 0);
+    valuesByDate[key] = total;
+  }  // ✅ セット数 → 回数
   }
 
   const allValues = Object.values(valuesByDate);
@@ -52,7 +55,7 @@ function renderCalendar() {
     dateObj.setHours(0, 0, 0, 0);
     const dateStr = dateObj.toISOString().split("T")[0];
 
-    const count = logs[dateStr] ? logs[dateStr] * setCount : 0;  // ✅ セット→回数
+    const count = Array.isArray(logs[dateStr]) ? logs[dateStr].reduce((sum, val) => sum + val, 0) : 0;  // ✅ セット→回数
 
     cell.className = "day";
     const today = new Date();
