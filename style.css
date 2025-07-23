@@ -6,6 +6,8 @@ body {
     font-size: 24px;
     line-height: 1.6;
     margin: 0;
+    width: 100%;
+    overflow-x: hidden;
 }
 
 .container {
@@ -23,6 +25,8 @@ button {
     margin: 14px;
     padding: 16px 32px;
     border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
 }
 
 #character img {
@@ -67,6 +71,8 @@ button {
     font-size: 1.6em;
     border-radius: 10px;
     cursor: pointer;
+    width: 90%;
+    max-width: 400px;
 }
 
 canvas {
@@ -84,7 +90,8 @@ canvas {
 
   button, .main-button {
     font-size: 1.8em;
-    padding: 18px 36px;
+    padding: 20px 40px;
+    width: 95%;
   }
 
   #speech,
