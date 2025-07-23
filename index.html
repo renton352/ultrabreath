@@ -68,11 +68,15 @@
 
   document.getElementById("save-settings").onclick = () => {
     const nickname = document.getElementById("nickname-input").value;
-    const setCount = parseInt(document.getElementById("set-count-input").value);
-    const setGoal = parseInt(document.getElementById("set-goal-input").value);
+    const setCountValue = parseInt(document.getElementById("set-count-input").value);
+    const setGoalValue = parseInt(document.getElementById("set-goal-input").value);
     localStorage.setItem("nickname", nickname);
-    localStorage.setItem("setCount", setCount);
-    localStorage.setItem("setGoal", setGoal);
+    localStorage.setItem("setCount", setCountValue);
+    localStorage.setItem("setGoal", setGoalValue);
+
+    // ✅ 即時反映させる
+    window.setCount = setCountValue;
+    window.setGoal = setGoalValue;
 
     const bgInput = document.getElementById("calendar-bg-input");
     const file = bgInput.files[0];
