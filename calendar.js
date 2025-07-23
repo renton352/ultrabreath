@@ -6,7 +6,8 @@ function renderCalendar() {
 
   const year = current.getFullYear();
   const month = current.getMonth();
-  const logs = JSON.parse(localStorage.getItem("logs") || "{}"); // 修正
+  const logs = JSON.parse(localStorage.getItem("logs") || "{}");
+  const setCount = parseInt(localStorage.getItem("setCount")) || 25;  // ✅ 追加
 
   document.getElementById("month-label").textContent = `${year}年${month + 1}月`;
 
@@ -34,7 +35,7 @@ function renderCalendar() {
     const date = new Date(year, month, d);
     date.setHours(0, 0, 0, 0);
     const key = date.toISOString().split("T")[0];
-    if (logs[key]) valuesByDate[key] = logs[key];
+    if (logs[key]) valuesByDate[key] = logs[key] * setCount;  // ✅ セット数 → 回数
   }
 
   const allValues = Object.values(valuesByDate);
@@ -42,7 +43,7 @@ function renderCalendar() {
   const min = Math.min(...allValues);
   const sum = allValues.reduce((a, b) => a + b, 0);
   const average = allValues.length > 0 ? Math.floor(sum / allValues.length) : 0;
-  document.getElementById("average-label").textContent = `平均：${average}セット／日`; // 修正
+  document.getElementById("average-label").textContent = `平均：${average}回／日`;  // ✅ 表記修正
 
   for (let d = 1; d <= totalDays; d++) {
     const cell = document.createElement("div");
@@ -51,7 +52,7 @@ function renderCalendar() {
     dateObj.setHours(0, 0, 0, 0);
     const dateStr = dateObj.toISOString().split("T")[0];
 
-    const count = logs[dateStr] || 0;
+    const count = logs[dateStr] ? logs[dateStr] * setCount : 0;  // ✅ セット→回数
 
     cell.className = "day";
     const today = new Date();
@@ -63,7 +64,7 @@ function renderCalendar() {
       else if (count === min) cell.classList.add("min-value");
     }
 
-    cell.innerHTML = `<strong>${d}</strong><br>${count > 0 ? count + "セット" : "-"}`; // 修正
+    cell.innerHTML = `<strong>${d}</strong><br>${count > 0 ? count + "回" : "-"}`;  // ✅ 表示修正
     calendar.appendChild(cell);
   }
 }
