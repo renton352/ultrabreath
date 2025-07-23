@@ -1,3 +1,12 @@
+
+function getLocalDateString(date) {
+  const y = date.getFullYear();
+  const m = ("0" + (date.getMonth() + 1)).slice(-2);
+  const d = ("0" + date.getDate()).slice(-2);
+  return `${y}-${m}-${d}`;
+}
+
+
 let current = new Date();
 
 function renderCalendar() {
@@ -34,7 +43,7 @@ function renderCalendar() {
   for (let d = 1; d <= totalDays; d++) {
     const date = new Date(year, month, d);
     date.setHours(0, 0, 0, 0);
-    const key = date.toISOString().split("T")[0];
+    const key = getLocalDateString(date);
     if (Array.isArray(logs[key])) {
     const total = logs[key].reduce((sum, val) => sum + val, 0);
     valuesByDate[key] = total;
