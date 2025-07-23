@@ -74,9 +74,15 @@
     localStorage.setItem("setCount", setCountValue);
     localStorage.setItem("setGoal", setGoalValue);
 
-    // ✅ 即時反映させる
     window.setCount = setCountValue;
     window.setGoal = setGoalValue;
+
+    if (document.getElementById("training-screen").style.display !== "none") {
+      const countEl = document.getElementById("breath-count");
+      if (countEl) {
+        countEl.textContent = `0 / ${setCountValue}`;
+      }
+    }
 
     const bgInput = document.getElementById("calendar-bg-input");
     const file = bgInput.files[0];
