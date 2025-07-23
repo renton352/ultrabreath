@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>呼吸カレンダー</title>
   <link rel="stylesheet" href="calendar.css" />
+  <style>
+    body {
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  </style>
 </head>
 <body>
   <div class="calendar-container">
@@ -19,5 +26,13 @@
     <button onclick="location.href='index.html'">← トレーニングに戻る</button>
   </div>
   <script src="calendar.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const bg = localStorage.getItem("calendarBackground");
+      if (bg) {
+        document.body.style.backgroundImage = `url('${bg}')`;
+      }
+    });
+  </script>
 </body>
 </html>
