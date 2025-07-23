@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>呼吸トレーニング</title>
+  <link rel="stylesheet" href="style.css?v=1">
 </head>
 <body>
   <div class="container">
@@ -29,14 +30,15 @@
           <button class="main-button" id="retry-button" style="display: none;" onclick="resetTraining()">もう一度やる</button>
         </div>
       </div>
-	<div id="log">
-	  <h2>記録</h2>
 
-	  <p>今日の呼吸回数：<span id="today-count">0</span></p>
-	  <p>今日のセット回数：<span id="today-set">0</span> セット</p>
-	  <p>実施日数：<span id="total-days">0</span></p>
-	  <p>最終実施日：<span id="last-date">なし</span></p>
-	</div>
+      <div id="log">
+        <h2>記録</h2>
+        <p>今日の呼吸回数：<span id="today-count">0</span></p>
+        <p>今日のセット回数：<span id="today-set">0</span> セット</p>
+        <p>実施日数：<span id="total-days">0</span></p>
+        <p>最終実施日：<span id="last-date">なし</span></p>
+      </div>
+
       <h2>カレンダーで確認</h2>
       <button class="main-button" onclick="location.href='calendar.html'">📅 カレンダーを見る</button>
     </div>
@@ -59,6 +61,7 @@
     document.getElementById("set-count-input").value = localStorage.getItem("setCount") || 25;
     document.getElementById("set-goal-input").value = localStorage.getItem("setGoal") || 2;
   };
+
   document.getElementById("close-settings").onclick = () => {
     document.getElementById("settings-modal").style.display = "none";
   };
@@ -125,52 +128,5 @@
 </script>
 
 <script src="main.js"></script>
-
-<style>
-  body {
-    font-size: 28px;
-    font-family: sans-serif;
-    text-align: center;
-    margin: 0;
-    padding: 0 10px;
-  }
-
-  .container {
-    max-width: none;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-  }
-
-  button.main-button {
-    font-size: 2em;
-    padding: 20px 36px;
-    margin: 14px;
-    border-radius: 10px;
-    width: 90%;
-    max-width: 400px;
-  }
-
-  #character img {
-    width: 220px;
-  }
-
-  #speech, #streak-info {
-    font-size: 1.6em;
-    font-weight: bold;
-    margin: 16px 0;
-  }
-
-  @media (max-width: 480px) {
-    body {
-      font-size: 30px;
-    }
-
-    button.main-button {
-      font-size: 2.2em;
-      padding: 24px 36px;
-    }
-  }
-</style>
 </body>
 </html>
