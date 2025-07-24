@@ -94,3 +94,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderCalendar();
 });
+
+
+function resetBackground() {
+  localStorage.removeItem("calendarBackground");
+  sessionStorage.removeItem("calendarBackground");
+  document.body.style.backgroundImage = "";
+}
