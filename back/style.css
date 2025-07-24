@@ -142,3 +142,9 @@ canvas {
   display: block;
 }
 }
+
+
+.settings-button-wrapper {
+  text-align: center;
+  margin-top: 10px;
+}

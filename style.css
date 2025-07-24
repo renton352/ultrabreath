@@ -148,3 +148,10 @@ canvas {
   text-align: center;
   margin-top: 10px;
 }
+
+
+#top-title {
+  text-align: center;
+  font-size: 1.8em;
+  margin: 12px 0 4px;
+}

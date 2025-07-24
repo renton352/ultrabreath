@@ -16,6 +16,8 @@ function startTraining(genre) {
   document.getElementById("training-screen").style.display = "block";
   const logo = document.getElementById("logo-image");
   if (logo) logo.style.display = "none";
+  const title = document.getElementById("top-title");
+  if (title) title.style.display = "none";
   document.getElementById("speech").textContent = "はじめましょうか、深呼吸ですよ。";
   document.getElementById("character-image").src = "img/normal.png";
   count = 0;
@@ -135,6 +137,8 @@ document.getElementById("back-button").onclick = () => {
   document.getElementById("genre-selection").style.display = "block";
   const logo = document.getElementById("logo-image");
   if (logo) logo.style.display = "block";
+  const title = document.getElementById("top-title");
+  if (title) title.style.display = "block";
 };
 
 document.addEventListener("DOMContentLoaded", () => {
