@@ -14,7 +14,8 @@ function startTraining(genre) {
   setCount = parseInt(localStorage.getItem("setCount")) || 25;
   document.getElementById("genre-selection").style.display = "none";
   document.getElementById("training-screen").style.display = "block";
-  document.getElementById("logo-image").style.display = "none";
+  const logo = document.getElementById("logo-image");
+  if (logo) logo.style.display = "none";
   document.getElementById("speech").textContent = "はじめましょうか、深呼吸ですよ。";
   document.getElementById("character-image").src = "img/normal.png";
   count = 0;
@@ -40,6 +41,8 @@ function countBreath() {
     showRetryButton();
     saveLog();
     updateStats();
+  const logo = document.getElementById("logo-image");
+  if (logo && document.getElementById("training-screen").style.display !== "none") logo.style.display = "none";
   }
 }
 
@@ -130,13 +133,16 @@ document.getElementById("back-button").onclick = () => {
   toggleSettingsButton(true);
   document.getElementById("training-screen").style.display = "none";
   document.getElementById("genre-selection").style.display = "block";
-  document.getElementById("logo-image").style.display = "block";
+  const logo = document.getElementById("logo-image");
+  if (logo) logo.style.display = "block";
 };
 
 document.addEventListener("DOMContentLoaded", () => {
   setCount = parseInt(localStorage.getItem("setCount")) || 25;
   setGoal = parseInt(localStorage.getItem("setGoal")) || 2;
   updateStats();
+  const logo = document.getElementById("logo-image");
+  if (logo && document.getElementById("training-screen").style.display !== "none") logo.style.display = "none";
 });
 
 function updateNicknameDisplay() {

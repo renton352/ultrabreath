@@ -119,11 +119,15 @@ canvas {
   text-align: center;
   margin-bottom: 20px;
 }
-#logo-image {
-  max-width: 160px;
-  width: 60%;
-  height: auto;
-  margin: 16px auto;
-  display: block;
-  border-radius: 12px;
+#logo-image.hidden {
+  visibility: hidden;
+  height: 0;
+  margin: 0;
+}
+
+@media screen and (max-width: 420px) {
+  #logo-image {
+    max-width: 120px;
+    width: auto;
+  }
 }
