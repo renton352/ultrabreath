@@ -3,6 +3,7 @@ body {
   background-repeat: no-repeat;
   background-position: center;
   background-attachment: fixed;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .calendar-container {
