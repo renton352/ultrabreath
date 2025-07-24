@@ -10,11 +10,9 @@
   <div class="container">
     <button id="settings-button">⚙️ 設定</button>
 
-    <div id="genre-selection">
-      <p>ジャンルを選んでください：</p>
-      <button class="main-button" onclick="startTraining('トレーニング用')">トレーニング用</button>
-      <button class="main-button" onclick="startTraining('リラックス用')">リラックス用</button>
-    </div>
+	<div id="genre-selection">
+	  <button class="main-button" onclick="startTraining()">▶️ 呼吸トレーニングを開始</button>
+	</div>
 
     <div id="training-screen" style="display:none;">
       <p id="streak-info">今日で0日連続です！</p>
@@ -27,7 +25,7 @@
         <p>呼吸回数：<span id="breath-count">0</span></p>
         <div id="button-group">
           <button class="main-button" id="breathe-button" onclick="countBreath()">吸った！</button>
-          <button class="main-button" id="back-button">← ジャンル選択に戻る</button>
+          <button class="main-button" id="back-button">← トップ画面に戻る</button>
           <button class="main-button" id="retry-button" style="display: none;" onclick="resetTraining()">もう一度</button>
         </div>
       </div>
