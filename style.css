@@ -149,6 +149,10 @@ canvas {
   margin-top: 10px;
 }
 
+#settings-button {
+  display: block;
+  margin: 0 auto;
+}
 
 #top-title {
   text-align: center;
