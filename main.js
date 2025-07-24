@@ -2,6 +2,13 @@ let count = 0;
 let setCount = 25;
 let setGoal = 2;
 
+function toggleSettingsButton(show) {
+  const btn = document.getElementById("settings-button");
+  if (btn) {
+    btn.style.display = show ? "block" : "none";
+  }
+}
+
 function startTraining(genre) {
   toggleSettingsButton(false);
   setCount = parseInt(localStorage.getItem("setCount")) || 25;
@@ -42,7 +49,6 @@ function showRetryButton() {
 }
 
 function resetTraining() {
-  // 最新値を反映（ローカルストレージではなくグローバル setCount をそのまま使用）
   count = 0;
   document.getElementById("breath-count").textContent = `${count} / ${setCount}`;
   document.getElementById("speech").textContent = "はじめましょうか、深呼吸ですよ。";
@@ -58,7 +64,7 @@ function saveLog() {
   if (!Array.isArray(logs[today])) {
     logs[today] = [];
   }
-  logs[today].push(setCount); // 1セット分の呼吸回数を記録
+  logs[today].push(setCount);
   localStorage.setItem("logs", JSON.stringify(logs));
 }
 
