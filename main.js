@@ -20,6 +20,7 @@ function startTraining(genre) {
   document.getElementById("breath-count").textContent = `${count} / ${setCount}`;
   document.getElementById("breathe-button").disabled = false;
   document.getElementById("retry-button").style.display = "none";
+  updateNicknameDisplay();
 }
 
 function countBreath() {
@@ -66,6 +67,7 @@ function saveLog() {
   }
   logs[today].push(setCount);
   localStorage.setItem("logs", JSON.stringify(logs));
+  localStorage.setItem("nickname", "〇〇") 
 }
 
 function updateStats() {
@@ -134,3 +136,11 @@ document.addEventListener("DOMContentLoaded", () => {
   setGoal = parseInt(localStorage.getItem("setGoal")) || 2;
   updateStats();
 });
+
+function updateNicknameDisplay() {
+  const nickname = localStorage.getItem("nickname") || "";
+  const el = document.getElementById("nickname-display");
+  if (el && nickname) {
+    el.textContent = nickname + " さん";
+  }
+}
