@@ -1,3 +1,13 @@
+
+function getLocalDateString() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const y = today.getFullYear();
+  const m = ("0" + (today.getMonth() + 1)).slice(-2);
+  const d = ("0" + today.getDate()).slice(-2);
+  return `${y}-${m}-${d}`;
+}
+
 let count = 0;
 let setCount = 25;
 let setGoal = 2;
@@ -66,7 +76,7 @@ function resetTraining() {
 }
 
 function saveLog() {
-  const today = new Date().toISOString().slice(0, 10);
+  const today = getLocalDateString();
   const logs = JSON.parse(localStorage.getItem("logs") || "{}");
   if (!Array.isArray(logs[today])) {
     logs[today] = [];
@@ -78,7 +88,7 @@ function saveLog() {
 
 function updateStats() {
   const logs = JSON.parse(localStorage.getItem("logs") || "{}");
-  const today = new Date().toISOString().slice(0, 10);
+  const today = getLocalDateString();
   const todayLogsRaw = logs[today];
   const todayLogs = Array.isArray(todayLogsRaw) ? todayLogsRaw : [];
   const todayCount = todayLogs.reduce((sum, val) => sum + val, 0);
