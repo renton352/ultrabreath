@@ -14,7 +14,6 @@ function startTraining(genre) {
   setCount = parseInt(localStorage.getItem("setCount")) || 25;
   document.getElementById("genre-selection").style.display = "none";
   document.getElementById("training-screen").style.display = "block";
-  document.getElementById("top-screen").style.display = "none";
   document.getElementById("speech").textContent = "はじめましょうか、深呼吸ですよ。";
   document.getElementById("character-image").src = "img/normal.png";
   count = 0;
@@ -129,7 +128,6 @@ function updateStreak(logs) {
 document.getElementById("back-button").onclick = () => {
   toggleSettingsButton(true);
   document.getElementById("training-screen").style.display = "none";
-  document.getElementById("top-screen").style.display = "block";
   document.getElementById("genre-selection").style.display = "block";
 };
 
