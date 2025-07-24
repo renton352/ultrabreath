@@ -1,6 +1,6 @@
 
-function getLocalDateString() {
-  const today = new Date();
+function getLocalDateString(date = new Date()) {
+  date.setHours(0, 0, 0, 0);
   today.setHours(0, 0, 0, 0);
   const y = today.getFullYear();
   const m = ("0" + (today.getMonth() + 1)).slice(-2);
@@ -130,7 +130,7 @@ function updateStreak(logs) {
   for (let i = 0; i < 365; i++) {
     const date = new Date();
     date.setDate(today.getDate() - i);
-    const dateStr = date.toISOString().slice(0, 10);
+    const dateStr = getLocalDateString(date);
     if (logs[dateStr] && Array.isArray(logs[dateStr]) && logs[dateStr].length > 0) {
       streak++;
     } else {
