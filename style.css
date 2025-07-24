@@ -135,7 +135,7 @@ canvas {
 
 @media screen and (max-width: 300px) {
   #logo-image {
-  max-width: 100px;
+  max-width: 200px;
   width: 60%;
   height: auto;
   margin: 16px auto;
