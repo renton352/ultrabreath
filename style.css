@@ -115,9 +115,10 @@ canvas {
 }
 
 .logo-image {
-  max-width: 240px;
-  width: 80%;
+  max-width: 160px;     /* ← 小さめに */
+  width: 60%;           /* ← モバイルにも対応 */
   height: auto;
   margin: 16px auto;
   display: block;
+  border-radius: 12px;   /* （任意）少し角を丸めても可 */
 }
