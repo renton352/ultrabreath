@@ -99,5 +99,5 @@ document.addEventListener("DOMContentLoaded", () => {
 function resetBackground() {
   localStorage.removeItem("calendarBackground");
   sessionStorage.removeItem("calendarBackground");
-  document.body.style.backgroundImage = "";
+  document.body.style.setProperty("background-image", "none", "important");
 }
