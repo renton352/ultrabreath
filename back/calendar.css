@@ -1,0 +1,50 @@
+body {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.calendar-container {
+  max-width: 400px;
+  margin: 80px auto;
+  background: rgba(255, 255, 255, 0.7); /* 透明度のある白背景に変更 */
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+}
+.nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+#calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-top: 10px;
+}
+.day {
+  padding: 8px;
+  border: 1px solid #ccc;
+  min-height: 40px;
+  font-size: 0.9em;
+}
+.day.today {
+  background-color: #def;
+  border-color: #36a2eb;
+}
+.day.muted {
+  color: #bbb;
+}
+
+.max-value {
+  background-color: #ffcccc !important; /* 赤系ハイライト */
+}
+
+.min-value {
+  background-color: #cceeff !important; /* 青系ハイライト */
+}

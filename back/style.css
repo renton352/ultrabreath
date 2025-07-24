@@ -1,0 +1,115 @@
+body {
+  font-family: sans-serif;
+  background: #f0f8ff;
+  text-align: center;
+  padding: 8px;
+  font-size: 18px;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.settings-modal {
+  width: 90vw;
+  max-width: 400px;
+  padding: 16px;
+  box-sizing: border-box;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.container {
+  width: 100%;
+  max-width: 480px;
+  margin: auto;
+  padding: 0 10px;
+  background: white;
+}
+
+button {
+  font-size: 1em;
+  margin: 6px;
+  padding: 8px 16px;
+  border-radius: 6px;
+}
+
+button.main-button {
+  font-size: 1.1em;
+  padding: 10px 18px;
+  width: 90%;
+  max-width: 320px;
+}
+
+#character img {
+  width: 120px;
+  height: auto;
+  margin-bottom: 8px;
+}
+
+#speech {
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+#back-button {
+  background-color: #eee;
+  border: 1px solid #aaa;
+  padding: 8px 16px;
+  font-size: 1em;
+}
+
+#streak-info {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #2d88ff;
+  margin-bottom: 8px;
+}
+
+#training-screen {
+  min-height: 400px;
+}
+
+#retry-button {
+  display: block;
+  margin: 8px auto;
+  background-color: #def;
+  border: 1px solid #79a;
+  padding: 10px 20px;
+  font-size: 1.1em;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+canvas {
+  width: 100% !important;
+  height: auto !important;
+  max-width: 100%;
+  margin-top: 16px;
+}
+
+@media screen and (max-width: 480px) {
+  body {
+    font-size: 18px;
+  }
+
+  button, .main-button {
+    font-size: 1.1em;
+    padding: 10px 18px;
+  }
+
+  #speech,
+  #streak-info,
+  #log p,
+  #log h2 {
+    font-size: 1.1em;
+  }
+
+  input, label {
+    font-size: 1em;
+  }
+
+  #character img {
+    width: 120px;
+  }
+}
