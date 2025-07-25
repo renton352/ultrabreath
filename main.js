@@ -197,3 +197,26 @@ function updateGoalBar() {
       ? "linear-gradient(to right, gold, orange)"
       : "linear-gradient(to right, #4caf50, #8bc34a)";
 }
+
+
+
+document.getElementById("save-settings").onclick = () => {
+  const nickname = document.getElementById("nickname").value;
+  localStorage.setItem("nickname", nickname);
+
+  const setCountValue = parseInt(document.getElementById("set-count").value);
+  if (!isNaN(setCountValue)) {
+    setCount = setCountValue;
+    localStorage.setItem("setCount", setCountValue);
+  }
+
+  const goalValue = parseInt(document.getElementById("goal-count").value);
+  if (!isNaN(goalValue)) {
+    setGoal = goalValue;
+    localStorage.setItem("setGoal", goalValue);
+  }
+
+  updateNicknameDisplay();
+  updateStats();
+  closeSettings();
+};
