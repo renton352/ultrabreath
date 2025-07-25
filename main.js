@@ -155,6 +155,10 @@ document.getElementById("back-button").onclick = () => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
+  console.log("[DEBUG] DOMContentLoaded nickname:", localStorage.getItem("nickname"));
+  console.log("[DEBUG] DOMContentLoaded setCount:", localStorage.getItem("setCount"));
+  console.log("[DEBUG] DOMContentLoaded setGoal:", localStorage.getItem("setGoal"));
+  console.log("[DEBUG] DOMContentLoaded logs:", localStorage.getItem("logs"));
   setCount = parseInt(localStorage.getItem("setCount")) || 25;
   setGoal = parseInt(localStorage.getItem("setGoal")) || 2;
   updateStats();
@@ -163,6 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function updateNicknameDisplay() {
+  console.log("[DEBUG] updateNicknameDisplay nickname:", localStorage.getItem("nickname"));
   const nickname = localStorage.getItem("nickname") || "";
   const el = document.getElementById("nickname-display");
   if (el && nickname) {
