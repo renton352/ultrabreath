@@ -82,7 +82,11 @@ function saveLog() {
   }
   logs[today].push(setCount);
   localStorage.setItem("logs", JSON.stringify(logs));
-  localStorage.setItem("nickname", "〇〇") 
+  console.log("[DEBUG] nickname:", localStorage.getItem("nickname"));
+  console.log("[DEBUG] setCount:", localStorage.getItem("setCount"));
+  console.log("[DEBUG] setGoal:", localStorage.getItem("setGoal"));
+  console.log("[DEBUG] logs:", logs);
+   
 }
 
 function updateStats() {
