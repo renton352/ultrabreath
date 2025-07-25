@@ -177,19 +177,23 @@ function updateNicknameDisplay() {
 }
 
 
-function updateGoalBar(todaySets) {
+function updateGoalBar() {
+  const logs = JSON.parse(localStorage.getItem("logs") || "{}");
+  const today = getLocalDateString();
+  const todayLogs = Array.isArray(logs[today]) ? logs[today] : [];
+  const todaySets = todayLogs.length;
   const percent = Math.min(100, Math.floor((todaySets / setGoal) * 100));
+
   const bar = document.getElementById("goal-bar");
   const label = document.getElementById("goal-percent");
-  if (!bar || !label) {
-    console.warn("[WARN] goal-bar or goal-percent not found in DOM.");
-    return;
-  }
-  if (bar) bar.style.width = percent + "%";
-  if (label) label.textContent = percent + "%";
-  if (percent >= 100) {
-    bar.style.background = "linear-gradient(to right, gold, orange)";
-  } else {
-    bar.style.background = "linear-gradient(to right, #4caf50, #8bc34a)";
-  }
+
+  if (!bar || !label) return;
+
+  bar.style.width = percent + "%";
+  label.textContent = percent + "%";
+
+  bar.style.background =
+    percent >= 100
+      ? "linear-gradient(to right, gold, orange)"
+      : "linear-gradient(to right, #4caf50, #8bc34a)";
 }
