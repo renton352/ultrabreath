@@ -75,11 +75,12 @@ function resetTraining() {
 }
 
 function saveLog() {
+  
   const today = getLocalDateString();
   const logs = JSON.parse(localStorage.getItem("logs") || "{}");
   if (!Array.isArray(logs[today])) {
     logs[today] = [];
-  const goals = JSON.parse(localStorage.getItem("goals") || "{}");
+  
   }
   logs[today].push(setCount);
   localStorage.setItem("logs", JSON.stringify(logs));
