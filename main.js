@@ -1,10 +1,9 @@
 
 function getLocalDateString(date = new Date()) {
   date.setHours(0, 0, 0, 0);
-  today.setHours(0, 0, 0, 0);
-  const y = today.getFullYear();
-  const m = ("0" + (today.getMonth() + 1)).slice(-2);
-  const d = ("0" + today.getDate()).slice(-2);
+  const y = date.getFullYear();
+  const m = ("0" + (date.getMonth() + 1)).slice(-2);
+  const d = ("0" + date.getDate()).slice(-2);
   return `${y}-${m}-${d}`;
 }
 
