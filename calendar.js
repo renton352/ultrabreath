@@ -78,11 +78,17 @@ function renderCalendar() {
       else if (count === min) cell.classList.add("min-value");
     }
 
-        if (goal && count > 0) {
-      if (count >= goal) cell.classList.add("goal-success");
-      else cell.classList.add("goal-failed");
+        let icon = "";
+    if (goal !== null && count > 0) {
+      if (count >= goal) {
+        cell.classList.add("goal-success");
+        icon = '<span class="goal-icon">✅</span>';
+      } else {
+        cell.classList.add("goal-failed");
+        icon = '<span class="goal-icon">❌</span>';
+      }
     }
-    cell.innerHTML = `<strong>${d}</strong><br>${count > 0 ? count + "回" : "-"}`;  // ✅ 表示修正
+    cell.innerHTML = `<strong>${d}</strong><br>${count > 0 ? count + "回" : "-"}${icon}`;  // ✅ 表示修正
     calendar.appendChild(cell);
   }
 }
