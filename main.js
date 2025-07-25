@@ -181,6 +181,10 @@ function updateGoalBar(todaySets) {
   const percent = Math.min(100, Math.floor((todaySets / setGoal) * 100));
   const bar = document.getElementById("goal-bar");
   const label = document.getElementById("goal-percent");
+  if (!bar || !label) {
+    console.warn("[WARN] goal-bar or goal-percent not found in DOM.");
+    return;
+  }
   if (bar) bar.style.width = percent + "%";
   if (label) label.textContent = percent + "%";
   if (percent >= 100) {
