@@ -21,6 +21,7 @@ function toggleSettingsButton(show) {
 function startTraining(genre) {
   toggleSettingsButton(false);
   setCount = parseInt(localStorage.getItem("setCount")) || 25;
+  setGoal = parseInt(localStorage.getItem("setGoal")) || 2;
   document.getElementById("genre-selection").style.display = "none";
   document.getElementById("training-screen").style.display = "block";
   const logo = document.getElementById("logo-image");
@@ -75,6 +76,7 @@ function resetTraining() {
 }
 
 function saveLog() {
+  const goals = JSON.parse(localStorage.getItem("goals") || "{}");
   
   const today = getLocalDateString();
   const logs = JSON.parse(localStorage.getItem("logs") || "{}");
@@ -165,6 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("[DEBUG] DOMContentLoaded setGoal:", localStorage.getItem("setGoal"));
   console.log("[DEBUG] DOMContentLoaded logs:", localStorage.getItem("logs"));
   setCount = parseInt(localStorage.getItem("setCount")) || 25;
+  setGoal = parseInt(localStorage.getItem("setGoal")) || 2;
   setGoal = parseInt(localStorage.getItem("setGoal")) || 2;
   updateStats();
   const logo = document.getElementById("logo-image");
