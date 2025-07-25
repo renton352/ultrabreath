@@ -48,3 +48,10 @@ body {
 .min-value {
   background-color: #cceeff !important; /* 青系ハイライト */
 }
+
+.goal-success {
+  background-color: #c8e6c9 !important; /* 緑系達成 */
+}
+.goal-failed {
+  background-color: #ffe0e0 !important; /* 赤系未達成 */
+}

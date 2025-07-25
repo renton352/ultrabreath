@@ -79,9 +79,12 @@ function saveLog() {
   const logs = JSON.parse(localStorage.getItem("logs") || "{}");
   if (!Array.isArray(logs[today])) {
     logs[today] = [];
+  const goals = JSON.parse(localStorage.getItem("goals") || "{}");
   }
   logs[today].push(setCount);
   localStorage.setItem("logs", JSON.stringify(logs));
+  goals[today] = setGoal;
+  localStorage.setItem("goals", JSON.stringify(goals));
   console.log("[DEBUG] nickname:", localStorage.getItem("nickname"));
   console.log("[DEBUG] setCount:", localStorage.getItem("setCount"));
   console.log("[DEBUG] setGoal:", localStorage.getItem("setGoal"));

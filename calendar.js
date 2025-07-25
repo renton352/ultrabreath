@@ -16,6 +16,7 @@ function renderCalendar() {
   const year = current.getFullYear();
   const month = current.getMonth();
   const logs = JSON.parse(localStorage.getItem("logs") || "{}");
+  const goals = JSON.parse(localStorage.getItem("goals") || "{}");
   const setCount = parseInt(localStorage.getItem("setCount")) || 25;  // ✅ 追加
 
   document.getElementById("month-label").textContent = `${year}年${month + 1}月`;
@@ -65,6 +66,7 @@ function renderCalendar() {
     const dateStr = getLocalDateString(dateObj);
 
     const count = Array.isArray(logs[dateStr]) ? logs[dateStr].reduce((sum, val) => sum + val, 0) : 0;  // ✅ セット→回数
+    const goal = goals[dateStr] ? parseInt(goals[dateStr]) : null;
 
     cell.className = "day";
     const today = new Date();
@@ -76,6 +78,10 @@ function renderCalendar() {
       else if (count === min) cell.classList.add("min-value");
     }
 
+        if (goal && count > 0) {
+      if (count >= goal) cell.classList.add("goal-success");
+      else cell.classList.add("goal-failed");
+    }
     cell.innerHTML = `<strong>${d}</strong><br>${count > 0 ? count + "回" : "-"}`;  // ✅ 表示修正
     calendar.appendChild(cell);
   }
