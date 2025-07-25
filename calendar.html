@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>呼吸カレンダー</title>
-  <link rel="stylesheet" href="calendar.css" />
+  <link rel="stylesheet" href="calendar_with_icons.css">
   <style>
     body {
       background-size: cover;
@@ -27,7 +27,7 @@
     <button onclick="resetBackground()">背景をリセット</button>
     <button onclick="location.href='index.html'">← トップに戻る</button>
   </div>
-  <script src="calendar.js"></script>
+  <script src="calendar_with_icons.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const bg = sessionStorage.getItem("calendarBackground") || localStorage.getItem("calendarBackground");
