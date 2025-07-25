@@ -201,16 +201,16 @@ function updateGoalBar() {
 
 
 document.getElementById("save-settings").onclick = () => {
-  const nickname = document.getElementById("nickname").value;
+  const nickname = document.getElementById("nickname-input").value;
   localStorage.setItem("nickname", nickname);
 
-  const setCountValue = parseInt(document.getElementById("set-count").value);
+  const setCountValue = parseInt(document.getElementById("set-count-input").value);
   if (!isNaN(setCountValue)) {
     setCount = setCountValue;
     localStorage.setItem("setCount", setCountValue);
   }
 
-  const goalValue = parseInt(document.getElementById("goal-count").value);
+  const goalValue = parseInt(document.getElementById("set-goal-input").value);
   if (!isNaN(goalValue)) {
     setGoal = goalValue;
     localStorage.setItem("setGoal", goalValue);
@@ -218,5 +218,5 @@ document.getElementById("save-settings").onclick = () => {
 
   updateNicknameDisplay();
   updateStats();
-  closeSettings();
+  document.getElementById("settings-modal").style.display = "none";
 };
