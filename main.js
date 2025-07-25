@@ -124,6 +124,7 @@ function updateStats() {
   if (lastDateEl) lastDateEl.textContent = lastDate;
 
   updateStreak(logs);
+  updateGoalBar(todaySets);
 }
 
 function updateStreak(logs) {
@@ -172,5 +173,19 @@ function updateNicknameDisplay() {
   const el = document.getElementById("nickname-display");
   if (el && nickname) {
     el.textContent = nickname + " さん";
+  }
+}
+
+
+function updateGoalBar(todaySets) {
+  const percent = Math.min(100, Math.floor((todaySets / setGoal) * 100));
+  const bar = document.getElementById("goal-bar");
+  const label = document.getElementById("goal-percent");
+  if (bar) bar.style.width = percent + "%";
+  if (label) label.textContent = percent + "%";
+  if (percent >= 100) {
+    bar.style.background = "linear-gradient(to right, gold, orange)";
+  } else {
+    bar.style.background = "linear-gradient(to right, #4caf50, #8bc34a)";
   }
 }
