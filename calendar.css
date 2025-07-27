@@ -42,19 +42,15 @@ body {
 }
 
 .max-value {
-  background-color: #ffcccc !important; /* 赤系ハイライト */
+  background-color: #cfd8dc !important; /* 青系背景 */
 }
 
 .min-value {
-  background-color: #cceeff !important; /* 青系ハイライト */
+  background-color: #ffccbc !important; /* 赤系背景 */
 }
 
-.goal-success {
-  background-color: #c8e6c9 !important; /* 緑系達成 */
-}
-.goal-failed {
-  background-color: #ffe0e0 !important; /* 赤系未達成 */
-}
+.goal-success {}
+.goal-failed {}
 
 
 .goal-icon {
