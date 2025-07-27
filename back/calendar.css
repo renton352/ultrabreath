@@ -48,3 +48,24 @@ body {
 .min-value {
   background-color: #cceeff !important; /* 青系ハイライト */
 }
+
+.goal-success {
+  background-color: #c8e6c9 !important; /* 緑系達成 */
+}
+.goal-failed {
+  background-color: #ffe0e0 !important; /* 赤系未達成 */
+}
+
+
+.goal-icon {
+  display: block;
+  font-size: 18px;
+  margin-top: 2px;
+  line-height: 1;
+}
+.goal-success .goal-icon {
+  color: #2e7d32;
+}
+.goal-failed .goal-icon {
+  color: #c62828;
+}

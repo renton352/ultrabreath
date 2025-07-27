@@ -1,3 +1,12 @@
+
+function getLocalDateString(date = new Date()) {
+  date.setHours(0, 0, 0, 0);
+  const y = date.getFullYear();
+  const m = ("0" + (date.getMonth() + 1)).slice(-2);
+  const d = ("0" + date.getDate()).slice(-2);
+  return `${y}-${m}-${d}`;
+}
+
 let count = 0;
 let setCount = 25;
 let setGoal = 2;
@@ -12,10 +21,13 @@ function toggleSettingsButton(show) {
 function startTraining(genre) {
   toggleSettingsButton(false);
   setCount = parseInt(localStorage.getItem("setCount")) || 25;
+  setGoal = parseInt(localStorage.getItem("setGoal")) || 2;
   document.getElementById("genre-selection").style.display = "none";
   document.getElementById("training-screen").style.display = "block";
   const logo = document.getElementById("logo-image");
   if (logo) logo.style.display = "none";
+  const title = document.getElementById("top-title");
+  if (title) title.style.display = "none";
   document.getElementById("speech").textContent = "はじめましょうか、深呼吸ですよ。";
   document.getElementById("character-image").src = "img/normal.png";
   count = 0;
@@ -64,19 +76,28 @@ function resetTraining() {
 }
 
 function saveLog() {
-  const today = new Date().toISOString().slice(0, 10);
+  const goals = JSON.parse(localStorage.getItem("goals") || "{}");
+  
+  const today = getLocalDateString();
   const logs = JSON.parse(localStorage.getItem("logs") || "{}");
   if (!Array.isArray(logs[today])) {
     logs[today] = [];
+  
   }
   logs[today].push(setCount);
   localStorage.setItem("logs", JSON.stringify(logs));
-  localStorage.setItem("nickname", "〇〇") 
+  goals[today] = setGoal;
+  localStorage.setItem("goals", JSON.stringify(goals));
+  console.log("[DEBUG] nickname:", localStorage.getItem("nickname"));
+  console.log("[DEBUG] setCount:", localStorage.getItem("setCount"));
+  console.log("[DEBUG] setGoal:", localStorage.getItem("setGoal"));
+  console.log("[DEBUG] logs:", logs);
+   
 }
 
 function updateStats() {
   const logs = JSON.parse(localStorage.getItem("logs") || "{}");
-  const today = new Date().toISOString().slice(0, 10);
+  const today = getLocalDateString();
   const todayLogsRaw = logs[today];
   const todayLogs = Array.isArray(todayLogsRaw) ? todayLogsRaw : [];
   const todayCount = todayLogs.reduce((sum, val) => sum + val, 0);
@@ -109,6 +130,7 @@ function updateStats() {
   if (lastDateEl) lastDateEl.textContent = lastDate;
 
   updateStreak(logs);
+  updateGoalBar(todaySets);
 }
 
 function updateStreak(logs) {
@@ -118,7 +140,7 @@ function updateStreak(logs) {
   for (let i = 0; i < 365; i++) {
     const date = new Date();
     date.setDate(today.getDate() - i);
-    const dateStr = date.toISOString().slice(0, 10);
+    const dateStr = getLocalDateString(date);
     if (logs[dateStr] && Array.isArray(logs[dateStr]) && logs[dateStr].length > 0) {
       streak++;
     } else {
@@ -135,10 +157,17 @@ document.getElementById("back-button").onclick = () => {
   document.getElementById("genre-selection").style.display = "block";
   const logo = document.getElementById("logo-image");
   if (logo) logo.style.display = "block";
+  const title = document.getElementById("top-title");
+  if (title) title.style.display = "block";
 };
 
 document.addEventListener("DOMContentLoaded", () => {
+  console.log("[DEBUG] DOMContentLoaded nickname:", localStorage.getItem("nickname"));
+  console.log("[DEBUG] DOMContentLoaded setCount:", localStorage.getItem("setCount"));
+  console.log("[DEBUG] DOMContentLoaded setGoal:", localStorage.getItem("setGoal"));
+  console.log("[DEBUG] DOMContentLoaded logs:", localStorage.getItem("logs"));
   setCount = parseInt(localStorage.getItem("setCount")) || 25;
+  setGoal = parseInt(localStorage.getItem("setGoal")) || 2;
   setGoal = parseInt(localStorage.getItem("setGoal")) || 2;
   updateStats();
   const logo = document.getElementById("logo-image");
@@ -146,9 +175,55 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function updateNicknameDisplay() {
+  console.log("[DEBUG] updateNicknameDisplay nickname:", localStorage.getItem("nickname"));
   const nickname = localStorage.getItem("nickname") || "";
   const el = document.getElementById("nickname-display");
   if (el && nickname) {
     el.textContent = nickname + " さん";
   }
 }
+
+
+function updateGoalBar() {
+  const logs = JSON.parse(localStorage.getItem("logs") || "{}");
+  const today = getLocalDateString();
+  const todayLogs = Array.isArray(logs[today]) ? logs[today] : [];
+  const todaySets = todayLogs.length;
+  const percent = Math.min(100, Math.floor((todaySets / setGoal) * 100));
+
+  const bar = document.getElementById("goal-bar");
+  const label = document.getElementById("goal-percent");
+
+  if (!bar || !label) return;
+
+  bar.style.width = percent + "%";
+  label.textContent = percent + "%";
+
+  bar.style.background =
+    percent >= 100
+      ? "linear-gradient(to right, gold, orange)"
+      : "linear-gradient(to right, #4caf50, #8bc34a)";
+}
+
+
+
+document.getElementById("save-settings").onclick = () => {
+  const nickname = document.getElementById("nickname-input").value;
+  localStorage.setItem("nickname", nickname);
+
+  const setCountValue = parseInt(document.getElementById("set-count-input").value);
+  if (!isNaN(setCountValue)) {
+    setCount = setCountValue;
+    localStorage.setItem("setCount", setCountValue);
+  }
+
+  const goalValue = parseInt(document.getElementById("set-goal-input").value);
+  if (!isNaN(goalValue)) {
+    setGoal = goalValue;
+    localStorage.setItem("setGoal", goalValue);
+  }
+
+  updateNicknameDisplay();
+  updateStats();
+  document.getElementById("settings-modal").style.display = "none";
+};

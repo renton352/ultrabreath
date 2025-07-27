@@ -8,6 +8,7 @@
 </head>
 <body>
   <div class="container">
+    <h1 id="top-title">ウルトラブレス</h1>
     <img src="img/ultrabreath.jpg" alt="Ultrabreath ロゴ" id="logo-image" />
 
 	<div id="genre-selection">
@@ -37,10 +38,16 @@
         <h2>記録</h2>
         <p>今日の呼吸回数：<span id="today-count">0</span></p>
         <p>今日のセット回数：<span id="today-set">0</span> セット</p>
-        <p>実施日数：<span id="total-days">0</span></p>
         <p>最終実施日：<span id="last-date">なし</span></p>
       </div>
 
+	<div id="goal-progress-container" style="margin-top: 16px;">
+	  <p style="margin-bottom: 6px;">🎯 今日の目標達成度</p>
+	  <div id="goal-bar-bg" style="width: 100%; max-width: 320px; height: 20px; background: #ddd; border-radius: 10px; margin: auto;">
+	    <div id="goal-bar" style="height: 100%; width: 0%; background: linear-gradient(to right, #4caf50, #8bc34a); border-radius: 10px; transition: width 0.6s ease;"></div>
+	  </div>
+	  <p id="goal-percent" style="margin-top: 6px;">0%</p>
+	</div>
 
       <button class="main-button" onclick="location.href='calendar.html'">カレンダーを見る</button>
     </div>

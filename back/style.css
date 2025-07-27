@@ -148,3 +148,15 @@ canvas {
   text-align: center;
   margin-top: 10px;
 }
+
+#settings-button {
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+}
+
+#top-title {
+  text-align: center;
+  font-size: 1.8em;
+  margin: 12px 0 4px;
+}
