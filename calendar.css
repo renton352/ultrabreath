@@ -42,11 +42,11 @@ body {
 }
 
 .max-value {
-  background-color: #ffcccc !important; /* 赤系ハイライト */
+  background-color: #87cefa !important; /* 青系ハイライト */
 }
 
 .min-value {
-  background-color: #87cefa !important; /* 青系ハイライト */
+  background-color: #ffcccc !important; /* 赤系ハイライト */
 }
 
 }
