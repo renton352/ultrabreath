@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>呼吸アニメーションテスト</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>呼吸トレーニング</title>
+  <link rel="stylesheet" href="style.css?v=1">
   <style>
     #breath-circle-container {
       position: relative;
       height: 220px;
-      margin: 40px auto;
+      margin: 20px auto;
     }
     #breath-circle {
       width: 120px;
@@ -24,50 +26,72 @@
       margin-top: 12px;
       font-weight: bold;
     }
-    button {
-      display: block;
-      margin: 20px auto;
-      padding: 10px 20px;
-      font-size: 1.1em;
-    }
   </style>
 </head>
 <body>
-  <h1 style="text-align: center;">呼吸アニメーションデモ</h1>
-  <div id="breath-circle-container">
-    <div id="breath-circle"></div>
-    <div id="breath-label">準備中...</div>
+  <div class="container">
+    <h1 id="top-title">ウルトラブレス</h1>
+    <img src="img/ultrabreath.jpg" alt="Ultrabreath ロゴ" id="logo-image" />
+
+    <div id="genre-selection">
+      <button class="main-button" onclick="startTraining(); playBreathCycle();">▶️ 呼吸トレーニングを開始</button>
+      <div class="settings-button-wrapper">
+        <button id="settings-button">⚙️ 設定</button>
+      </div>
+    </div>
+
+    <div id="training-screen" style="display:none;">
+      <p id="streak-info">今日で0日連続です！</p>
+      <div id="character">
+        <img alt="ブレス先生" id="character-image" src="img/normal.png" />
+        <div id="nickname-display" style="font-weight: bold; font-size: 1.1em; margin: 6px;"></div>
+        <p id="speech">はじめましょうか、深呼吸ですよ。</p>
+      </div>
+      <div id="breath-circle-container" style="display: none;">
+        <div id="breath-circle"></div>
+        <div id="breath-label">準備中...</div>
+      </div>
+    </div>
+
+    <script>
+      async function delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+
+      async function playBreathCycle() {
+        const inhale = parseInt(localStorage.getItem("inhale")) || 4;
+        const hold = parseInt(localStorage.getItem("hold")) || 2;
+        const exhale = parseInt(localStorage.getItem("exhale")) || 4;
+
+        const label = document.getElementById("breath-label");
+        const circle = document.getElementById("breath-circle");
+        const container = document.getElementById("breath-circle-container");
+
+        container.style.display = "block";
+
+        label.textContent = "吸って...";
+        circle.style.transition = `transform ${inhale}s ease-in-out`;
+        circle.style.transform = "scale(1.5)";
+        await delay(inhale * 1000);
+
+        label.textContent = "止めて...";
+        await delay(hold * 1000);
+
+        label.textContent = "吐いて...";
+        circle.style.transition = `transform ${exhale}s ease-in-out`;
+        circle.style.transform = "scale(1)";
+        await delay(exhale * 1000);
+
+        label.textContent = "もう一度？";
+      }
+
+      function startTraining() {
+        document.getElementById("genre-selection").style.display = "none";
+        document.getElementById("training-screen").style.display = "block";
+        document.getElementById("logo-image").style.display = "none";
+        document.getElementById("top-title").style.display = "none";
+      }
+    </script>
   </div>
-  <button onclick="playBreathCycle()">▶️ 再生</button>
-
-  <script>
-    async function delay(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
-    async function playBreathCycle() {
-      const inhale = parseInt(localStorage.getItem("inhale")) || 4;
-      const hold = parseInt(localStorage.getItem("hold")) || 2;
-      const exhale = parseInt(localStorage.getItem("exhale")) || 4;
-
-      const label = document.getElementById("breath-label");
-      const circle = document.getElementById("breath-circle");
-
-      label.textContent = "吸って...";
-      circle.style.transition = `transform ${inhale}s ease-in-out`;
-      circle.style.transform = "scale(1.5)";
-      await delay(inhale * 1000);
-
-      label.textContent = "止めて...";
-      await delay(hold * 1000);
-
-      label.textContent = "吐いて...";
-      circle.style.transition = `transform ${exhale}s ease-in-out`;
-      circle.style.transform = "scale(1)";
-      await delay(exhale * 1000);
-
-      label.textContent = "もう一度？";
-    }
-  </script>
 </body>
 </html>
