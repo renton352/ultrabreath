@@ -11,8 +11,10 @@ let setCount = 25;
 let setGoal = 2;
 
 function startTraining() {
+  console.log("[DEBUG] training started");
   setCount = parseInt(localStorage.getItem("setCount")) || 25;
   setGoal = parseInt(localStorage.getItem("setGoal")) || 2;
+  console.log("[DEBUG] setCount:", setCount, "setGoal:", setGoal);
   document.getElementById("training-screen").style.display = "block";
   const logo = document.getElementById("logo-image");
   if (logo) logo.style.display = "none";
@@ -29,6 +31,7 @@ function startTraining() {
 }
 
 function countBreath() {
+  console.log("[DEBUG] countBreath:", count + 1);
   count++;
   document.getElementById("breath-count").textContent = `${count} / ${setCount}`;
 
@@ -65,6 +68,7 @@ function resetTraining() {
 }
 
 function saveLog() {
+  console.log("[DEBUG] saveLog() called");
   const goals = JSON.parse(localStorage.getItem("goals") || "{}");
   const today = getLocalDateString();
   const logs = JSON.parse(localStorage.getItem("logs") || "{}");
@@ -73,8 +77,10 @@ function saveLog() {
   }
   logs[today].push(setCount);
   localStorage.setItem("logs", JSON.stringify(logs));
+  console.log("[DEBUG] logs:", logs);
   goals[today] = setGoal;
   localStorage.setItem("goals", JSON.stringify(goals));
+  console.log("[DEBUG] goals:", goals);
 }
 
 function updateStats() {
