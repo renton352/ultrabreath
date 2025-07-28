@@ -5,40 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>呼吸トレーニング</title>
   <link rel="stylesheet" href="style.css?v=1">
-  <style>
-    #breath-circle-container {
-      position: relative;
-      height: 220px;
-      margin: 20px auto;
-    }
-    #breath-circle {
-      width: 120px;
-      height: 120px;
-      background: #aef;
-      border-radius: 50%;
-      margin: auto;
-      transform: scale(1);
-      transition: transform 1s ease-in-out;
-    }
-    #breath-label {
-      text-align: center;
-      font-size: 1.4em;
-      margin-top: 12px;
-      font-weight: bold;
-    }
-  </style>
 </head>
 <body>
   <div class="container">
     <h1 id="top-title">ウルトラブレス</h1>
     <img src="img/ultrabreath.jpg" alt="Ultrabreath ロゴ" id="logo-image" />
 
-    <div id="genre-selection">
-      <button class="main-button" onclick="startTraining(); playBreathCycle();">▶️ 呼吸トレーニングを開始</button>
-      <div class="settings-button-wrapper">
-        <button id="settings-button">⚙️ 設定</button>
-      </div>
+	<div id="genre-selection">
+	  <button class="main-button" onclick="startTraining()">▶️ 呼吸トレーニングを開始</button>
+    <div class="settings-button-wrapper">
+      <button id="settings-button">⚙️ 設定</button>
     </div>
+	</div>
 
     <div id="training-screen" style="display:none;">
       <p id="streak-info">今日で0日連続です！</p>
@@ -47,51 +25,131 @@
         <div id="nickname-display" style="font-weight: bold; font-size: 1.1em; margin: 6px;"></div>
         <p id="speech">はじめましょうか、深呼吸ですよ。</p>
       </div>
-      <div id="breath-circle-container" style="display: none;">
-        <div id="breath-circle"></div>
-        <div id="breath-label">準備中...</div>
+      <div>
+        <p>呼吸回数：<span id="breath-count">0</span></p>
+        <div id="button-group">
+          <button class="main-button" id="breathe-button" onclick="countBreath()">吸った！</button>
+          <button class="main-button" id="back-button">← トップ画面に戻る</button>
+          <button class="main-button" id="retry-button" style="display: none;" onclick="resetTraining()">もう一度</button>
+        </div>
       </div>
+
+      <div id="log">
+        <h2>記録</h2>
+        <p>今日の呼吸回数：<span id="today-count">0</span></p>
+        <p>今日のセット回数：<span id="today-set">0</span> セット</p>
+        <p>最終実施日：<span id="last-date">なし</span></p>
+      </div>
+
+	<div id="goal-progress-container" style="margin-top: 16px;">
+	  <p style="margin-bottom: 6px;">🎯 今日の目標達成度</p>
+	  <div id="goal-bar-bg" style="width: 100%; max-width: 320px; height: 20px; background: #ddd; border-radius: 10px; margin: auto;">
+	    <div id="goal-bar" style="height: 100%; width: 0%; background: linear-gradient(to right, #4caf50, #8bc34a); border-radius: 10px; transition: width 0.6s ease;"></div>
+	  </div>
+	  <p id="goal-percent" style="margin-top: 6px;">0%</p>
+	</div>
+
+      <button class="main-button" onclick="location.href='calendar.html'">カレンダーを見る</button>
     </div>
 
-    <script>
-      async function delay(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-      }
-
-      async function playBreathCycle() {
-        const inhale = parseInt(localStorage.getItem("inhale")) || 4;
-        const hold = parseInt(localStorage.getItem("hold")) || 2;
-        const exhale = parseInt(localStorage.getItem("exhale")) || 4;
-
-        const label = document.getElementById("breath-label");
-        const circle = document.getElementById("breath-circle");
-        const container = document.getElementById("breath-circle-container");
-
-        container.style.display = "block";
-
-        label.textContent = "吸って...";
-        circle.style.transition = `transform ${inhale}s ease-in-out`;
-        circle.style.transform = "scale(1.5)";
-        await delay(inhale * 1000);
-
-        label.textContent = "止めて...";
-        await delay(hold * 1000);
-
-        label.textContent = "吐いて...";
-        circle.style.transition = `transform ${exhale}s ease-in-out`;
-        circle.style.transform = "scale(1)";
-        await delay(exhale * 1000);
-
-        label.textContent = "もう一度？";
-      }
-
-      function startTraining() {
-        document.getElementById("genre-selection").style.display = "none";
-        document.getElementById("training-screen").style.display = "block";
-        document.getElementById("logo-image").style.display = "none";
-        document.getElementById("top-title").style.display = "none";
-      }
-    </script>
+    <div id="settings-modal" class="settings-modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:1000;">
+      <h2>設定</h2>
+      <label>ニックネーム:<br><input type="text" id="nickname-input" style="width: 100%; margin-bottom: 10px; font-size: 22px;" /></label><br/>
+      <label>1セットの回数:<br><input type="number" id="set-count-input" min="1" style="width: 100%; margin-bottom: 10px; font-size: 22px;" /></label><br/>
+      <label>1日のセット目標数:<br><input type="number" id="set-goal-input" min="1" style="width: 100%; margin-bottom: 10px; font-size: 22px;" /></label><br/>
+      <label>カレンダー背景画像:<br><input type="file" id="calendar-bg-input" accept="image/*" style="margin-bottom: 10px; font-size: 22px;"/></label><br/>
+      <button class="main-button" id="save-settings">保存</button>
+      <button class="main-button" id="close-settings">閉じる</button>
+    </div>
   </div>
+
+<script>
+  document.getElementById("settings-button").onclick = () => {
+    document.getElementById("settings-modal").style.display = "block";
+    document.getElementById("nickname-input").value = localStorage.getItem("nickname") || "";
+    document.getElementById("set-count-input").value = localStorage.getItem("setCount") || 25;
+    document.getElementById("set-goal-input").value = localStorage.getItem("setGoal") || 2;
+  };
+
+  document.getElementById("close-settings").onclick = () => {
+    document.getElementById("settings-modal").style.display = "none";
+  };
+
+  document.getElementById("save-settings").onclick = () => {
+    const nickname = document.getElementById("nickname-input").value;
+    const setCountValue = parseInt(document.getElementById("set-count-input").value);
+    const setGoalValue = parseInt(document.getElementById("set-goal-input").value);
+    localStorage.setItem("nickname", nickname);
+    localStorage.setItem("setCount", setCountValue);
+    localStorage.setItem("setGoal", setGoalValue);
+
+    window.setCount = setCountValue;
+    window.setGoal = setGoalValue;
+
+    if (document.getElementById("training-screen").style.display !== "none") {
+      const countEl = document.getElementById("breath-count");
+      if (countEl) {
+        countEl.textContent = `0 / ${setCountValue}`;
+      }
+    }
+
+    const bgInput = document.getElementById("calendar-bg-input");
+    const file = bgInput.files[0];
+    if (file) {
+      const img = new Image();
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        img.onload = function () {
+          const canvas = document.createElement("canvas");
+          const maxSize = 1280;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > maxSize) {
+              height *= maxSize / width;
+              width = maxSize;
+            }
+          } else {
+            if (height > maxSize) {
+              width *= maxSize / height;
+              height = maxSize;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, width, height);
+
+          const compressed = canvas.toDataURL("image/jpeg", 0.8);
+          localStorage.setItem("calendarBackground", compressed);
+          sessionStorage.setItem("calendarBackground", compressed);
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    alert("設定を保存しました");
+    document.getElementById("settings-modal").style.display = "none";
+  };
+
+  
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const nickname = localStorage.getItem("nickname");
+    if (nickname) {
+      const speech = document.getElementById("speech");
+      if (speech && speech.textContent.includes("はじめましょうか")) {
+        speech.textContent = `${nickname}さん、はじめましょうか、深呼吸ですよ。`;
+      }
+    }
+  });
+</script>
+
+<script src="main.js"></script>
 </body>
 </html>
