@@ -72,22 +72,12 @@ function saveLog() {
   const goals = JSON.parse(localStorage.getItem("goals") || "{}");
   const today = getLocalDateString();
   const logs = JSON.parse(localStorage.getItem("logs") || "{}");
-
   if (!Array.isArray(logs[today])) {
     logs[today] = [];
   }
-
-  // 新しいエントリ：日本時間タイムスタンプ付き
-  const jstTimestamp = new Date().toLocaleString("sv-SE", { timeZone: "Asia/Tokyo" }).replace(" ", "T");
-  const entry = {
-    count: setCount,
-    timestamp: jstTimestamp
-  };
-
-  logs[today].push(entry);
+  logs[today].push(setCount);
   localStorage.setItem("logs", JSON.stringify(logs));
   console.log("[DEBUG] logs:", logs);
-
   goals[today] = setGoal;
   localStorage.setItem("goals", JSON.stringify(goals));
   console.log("[DEBUG] goals:", goals);
