@@ -50,7 +50,27 @@ cell.addEventListener("click", () => {
           <li>目標達成率: ${percent}%</li>
           ${times.length ? `<li>実施時刻: ${times.join(", ")}</li>` : ""}
         </ul>`;
-      modal.showModal();
+      
+      const hours = times.map(t => parseInt(t.split(":")[0], 10));
+      const timeBuckets = { "早朝": 0, "朝": 0, "昼": 0, "夕方": 0, "夜": 0, "深夜": 0 };
+      hours.forEach(h => {
+        if (h >= 5 && h < 8) timeBuckets["早朝"]++;
+        else if (h >= 8 && h < 12) timeBuckets["朝"]++;
+        else if (h >= 12 && h < 16) timeBuckets["昼"]++;
+        else if (h >= 16 && h < 19) timeBuckets["夕方"]++;
+        else if (h >= 19 && h < 24) timeBuckets["夜"]++;
+        else timeBuckets["深夜"]++;
+      });
+      let timeDist = Object.entries(timeBuckets).map(([k, v]) => v > 0 ? `${k}: ${v}回` : null).filter(Boolean).join("<br>");
+      
+        <ul>
+          <li>合計呼吸回数: ${total}回</li>
+          <li>セット数: ${sets}</li>
+          <li>目標達成率: ${percent}%</li>
+          ${times.length ? `<li>実施時刻: ${times.join(", ")}</li>` : ""}
+          ${times.length ? `<li>時間帯別: <br>` + timeDist + `</li>` : ""}
+        </ul>`;
+
     });
   }
 
@@ -78,7 +98,27 @@ cell.addEventListener("click", () => {
           <li>目標達成率: ${percent}%</li>
           ${times.length ? `<li>実施時刻: ${times.join(", ")}</li>` : ""}
         </ul>`;
-      modal.showModal();
+      
+      const hours = times.map(t => parseInt(t.split(":")[0], 10));
+      const timeBuckets = { "早朝": 0, "朝": 0, "昼": 0, "夕方": 0, "夜": 0, "深夜": 0 };
+      hours.forEach(h => {
+        if (h >= 5 && h < 8) timeBuckets["早朝"]++;
+        else if (h >= 8 && h < 12) timeBuckets["朝"]++;
+        else if (h >= 12 && h < 16) timeBuckets["昼"]++;
+        else if (h >= 16 && h < 19) timeBuckets["夕方"]++;
+        else if (h >= 19 && h < 24) timeBuckets["夜"]++;
+        else timeBuckets["深夜"]++;
+      });
+      let timeDist = Object.entries(timeBuckets).map(([k, v]) => v > 0 ? `${k}: ${v}回` : null).filter(Boolean).join("<br>");
+      
+        <ul>
+          <li>合計呼吸回数: ${total}回</li>
+          <li>セット数: ${sets}</li>
+          <li>目標達成率: ${percent}%</li>
+          ${times.length ? `<li>実施時刻: ${times.join(", ")}</li>` : ""}
+          ${times.length ? `<li>時間帯別: <br>` + timeDist + `</li>` : ""}
+        </ul>`;
+
     });
   }
 
@@ -153,7 +193,27 @@ cell.addEventListener("click", () => {
           <li>目標達成率: ${percent}%</li>
           ${times.length ? `<li>実施時刻: ${times.join(", ")}</li>` : ""}
         </ul>`;
-      modal.showModal();
+      
+      const hours = times.map(t => parseInt(t.split(":")[0], 10));
+      const timeBuckets = { "早朝": 0, "朝": 0, "昼": 0, "夕方": 0, "夜": 0, "深夜": 0 };
+      hours.forEach(h => {
+        if (h >= 5 && h < 8) timeBuckets["早朝"]++;
+        else if (h >= 8 && h < 12) timeBuckets["朝"]++;
+        else if (h >= 12 && h < 16) timeBuckets["昼"]++;
+        else if (h >= 16 && h < 19) timeBuckets["夕方"]++;
+        else if (h >= 19 && h < 24) timeBuckets["夜"]++;
+        else timeBuckets["深夜"]++;
+      });
+      let timeDist = Object.entries(timeBuckets).map(([k, v]) => v > 0 ? `${k}: ${v}回` : null).filter(Boolean).join("<br>");
+      
+        <ul>
+          <li>合計呼吸回数: ${total}回</li>
+          <li>セット数: ${sets}</li>
+          <li>目標達成率: ${percent}%</li>
+          ${times.length ? `<li>実施時刻: ${times.join(", ")}</li>` : ""}
+          ${times.length ? `<li>時間帯別: <br>` + timeDist + `</li>` : ""}
+        </ul>`;
+
     });
   }
 }
