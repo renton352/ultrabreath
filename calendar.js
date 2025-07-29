@@ -96,12 +96,20 @@ function renderCalendar() {
       const label = document.getElementById("modal-date-label");
       const content = document.getElementById("modal-log-content");
       const entries = logs[dateStr];
-      const isNew = entries.length > 0 && typeof entries[0] === "object";
-      const times = isNew ? entries.map(e => e.timestamp.split("T")[1].slice(0, 5)) : [];
       const sets = entries.length;
       const total = entries.reduce((sum, val) => sum + (typeof val === 'number' ? val : val.count || 0), 0);
       const goal = goals[dateStr] ? parseInt(goals[dateStr]) : null;
       const percent = goal ? Math.floor((sets / goal) * 100) : "-";
+
+      const times = entries.map(e => {
+        if (typeof e === "object" && e.timestamp && e.timestamp.includes("T")) {
+          return e.timestamp.split("T")[1].slice(0, 5);
+        } else if (typeof e === "object" && e.timestamp) {
+          return e.timestamp.slice(11, 16);
+        } else {
+          return null;
+        }
+      }).filter(Boolean);
 
       const hours = times.map(t => parseInt(t.split(":")[0], 10));
       const timeBuckets = { "早朝": 0, "朝": 0, "昼": 0, "夕方": 0, "夜": 0, "深夜": 0 };
@@ -114,7 +122,6 @@ function renderCalendar() {
         else timeBuckets["深夜"]++;
       });
 
-      // 🔍 デバッグ出力
       console.log(`[DEBUG] 日付: ${dateStr}`);
       console.log(`[DEBUG] セット数: ${sets}`);
       console.log(`[DEBUG] 合計回数: ${total}`);
