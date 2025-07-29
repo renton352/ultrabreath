@@ -64,3 +64,13 @@ body {
 .goal-failed .goal-icon {
   color: #c62828;
 }
+
+
+dialog#log-modal {
+  width: 300px;
+  padding: 20px;
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}

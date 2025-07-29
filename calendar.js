@@ -30,12 +30,56 @@ function renderCalendar() {
     cell.className = "day muted";
     cell.textContent = day;
     calendar.appendChild(cell);
+cell.addEventListener("click", () => {
+      if (!logs[dateStr]) return;
+      const modal = document.getElementById("log-modal");
+      const label = document.getElementById("modal-date-label");
+      const content = document.getElementById("modal-log-content");
+      const entries = logs[dateStr];
+      const isNew = entries.length > 0 && typeof entries[0] === "object";
+      const times = isNew ? entries.map(e => e.timestamp.split("T")[1]) : [];
+      const sets = entries.length;
+      const total = entries.reduce((sum, val) => sum + (typeof val === 'number' ? val : val.count || 0), 0);
+      const goal = goals[dateStr] ? parseInt(goals[dateStr]) : null;
+      const percent = goal ? Math.floor((sets / goal) * 100) : "-";
+      label.textContent = `${dateStr} の詳細`;
+      content.innerHTML = `
+        <ul>
+          <li>合計呼吸回数: ${total}回</li>
+          <li>セット数: ${sets}</li>
+          <li>目標達成率: ${percent}%</li>
+          ${times.length ? `<li>実施時刻: ${times.join(", ")}</li>` : ""}
+        </ul>`;
+      modal.showModal();
+    });
   }
 
   for (let i = 0; i < startDay; i++) {
     const cell = document.createElement("div");
     cell.className = "day muted";
     calendar.appendChild(cell);
+cell.addEventListener("click", () => {
+      if (!logs[dateStr]) return;
+      const modal = document.getElementById("log-modal");
+      const label = document.getElementById("modal-date-label");
+      const content = document.getElementById("modal-log-content");
+      const entries = logs[dateStr];
+      const isNew = entries.length > 0 && typeof entries[0] === "object";
+      const times = isNew ? entries.map(e => e.timestamp.split("T")[1]) : [];
+      const sets = entries.length;
+      const total = entries.reduce((sum, val) => sum + (typeof val === 'number' ? val : val.count || 0), 0);
+      const goal = goals[dateStr] ? parseInt(goals[dateStr]) : null;
+      const percent = goal ? Math.floor((sets / goal) * 100) : "-";
+      label.textContent = `${dateStr} の詳細`;
+      content.innerHTML = `
+        <ul>
+          <li>合計呼吸回数: ${total}回</li>
+          <li>セット数: ${sets}</li>
+          <li>目標達成率: ${percent}%</li>
+          ${times.length ? `<li>実施時刻: ${times.join(", ")}</li>` : ""}
+        </ul>`;
+      modal.showModal();
+    });
   }
 
   const valuesByDate = {};
@@ -87,6 +131,28 @@ function renderCalendar() {
 
     cell.innerHTML = `<strong>${d}</strong><br>${count > 0 ? count + "回" : "-"}${icon}`;
     calendar.appendChild(cell);
+cell.addEventListener("click", () => {
+      if (!logs[dateStr]) return;
+      const modal = document.getElementById("log-modal");
+      const label = document.getElementById("modal-date-label");
+      const content = document.getElementById("modal-log-content");
+      const entries = logs[dateStr];
+      const isNew = entries.length > 0 && typeof entries[0] === "object";
+      const times = isNew ? entries.map(e => e.timestamp.split("T")[1]) : [];
+      const sets = entries.length;
+      const total = entries.reduce((sum, val) => sum + (typeof val === 'number' ? val : val.count || 0), 0);
+      const goal = goals[dateStr] ? parseInt(goals[dateStr]) : null;
+      const percent = goal ? Math.floor((sets / goal) * 100) : "-";
+      label.textContent = `${dateStr} の詳細`;
+      content.innerHTML = `
+        <ul>
+          <li>合計呼吸回数: ${total}回</li>
+          <li>セット数: ${sets}</li>
+          <li>目標達成率: ${percent}%</li>
+          ${times.length ? `<li>実施時刻: ${times.join(", ")}</li>` : ""}
+        </ul>`;
+      modal.showModal();
+    });
   }
 }
 
