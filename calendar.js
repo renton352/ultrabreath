@@ -122,7 +122,6 @@ cell.addEventListener("click", () => {
     let icon = "";
 const entries = Array.isArray(logs[dateStr]) ? logs[dateStr] : [];
 const sets = entries.length;
-const goal = goals[dateStr] ? parseInt(goals[dateStr]) : null;
 if (goal !== null && sets > 0) {
   if (sets >= goal) {
     cell.classList.add("goal-success");
