@@ -103,7 +103,6 @@ function renderCalendar() {
       const goal = goals[dateStr] ? parseInt(goals[dateStr]) : null;
       const percent = goal ? Math.floor((sets / goal) * 100) : "-";
 
-      // 時間帯分類
       const hours = times.map(t => parseInt(t.split(":")[0], 10));
       const timeBuckets = { "早朝": 0, "朝": 0, "昼": 0, "夕方": 0, "夜": 0, "深夜": 0 };
       hours.forEach(h => {
@@ -114,6 +113,13 @@ function renderCalendar() {
         else if (h >= 19 && h < 24) timeBuckets["夜"]++;
         else timeBuckets["深夜"]++;
       });
+
+      // 🔍 デバッグ出力
+      console.log(`[DEBUG] 日付: ${dateStr}`);
+      console.log(`[DEBUG] セット数: ${sets}`);
+      console.log(`[DEBUG] 合計回数: ${total}`);
+      console.log(`[DEBUG] 実施時刻:`, times);
+      console.log(`[DEBUG] 時間帯集計:`, timeBuckets);
 
       const timeDistText = Object.entries(timeBuckets)
         .filter(([_, v]) => v > 0)
