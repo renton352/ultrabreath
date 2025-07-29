@@ -72,12 +72,22 @@ function saveLog() {
   const goals = JSON.parse(localStorage.getItem("goals") || "{}");
   const today = getLocalDateString();
   const logs = JSON.parse(localStorage.getItem("logs") || "{}");
+
   if (!Array.isArray(logs[today])) {
     logs[today] = [];
   }
-  logs[today].push(setCount);
+
+  // 新しいエントリ：日本時間タイムスタンプ付き
+  const jstTimestamp = new Date().toLocaleString("sv-SE", { timeZone: "Asia/Tokyo" }).replace(" ", "T");
+  const entry = {
+    count: setCount,
+    timestamp: jstTimestamp
+  };
+
+  logs[today].push(entry);
   localStorage.setItem("logs", JSON.stringify(logs));
   console.log("[DEBUG] logs:", logs);
+
   goals[today] = setGoal;
   localStorage.setItem("goals", JSON.stringify(goals));
   console.log("[DEBUG] goals:", goals);
@@ -88,7 +98,7 @@ function updateStats() {
   const today = getLocalDateString();
   const todayLogsRaw = logs[today];
   const todayLogs = Array.isArray(todayLogsRaw) ? todayLogsRaw : [];
-  const todayCount = todayLogs.reduce((sum, val) => sum + val, 0);
+  const todayCount = todayLogs.reduce((sum, val) => sum + (typeof val === 'number' ? val : val.count || 0), 0);
   const todaySets = todayLogs.length;
 
   const todayCountEl = document.getElementById("today-count");
