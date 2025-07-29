@@ -50,10 +50,10 @@ function renderCalendar() {
   }
 
   const allValues = Object.values(valuesByDate);
-  const max = Math.max(...allValues);
-  const min = Math.min(...allValues);
   const sum = allValues.reduce((a, b) => a + b, 0);
   const average = allValues.length > 0 ? Math.floor(sum / allValues.length) : 0;
+  const max = allValues.length > 0 ? Math.max(...allValues) : 0;
+  const min = allValues.length > 0 ? Math.min(...allValues) : 0;
   document.getElementById("average-label").textContent = `平均：${average}回／日`;
 
   for (let d = 1; d <= totalDays; d++) {
@@ -76,8 +76,10 @@ function renderCalendar() {
     }
 
     let icon = "";
-    if (goal !== null && count > 0) {
-      if (count >= goal) {
+    const entries = Array.isArray(logs[dateStr]) ? logs[dateStr] : [];
+    const sets = entries.length;
+    if (goal !== null && sets > 0) {
+      if (sets >= goal) {
         cell.classList.add("goal-success");
         icon = '<span class="goal-icon">👑</span>';
       } else {
@@ -87,6 +89,47 @@ function renderCalendar() {
 
     cell.innerHTML = `<strong>${d}</strong><br>${count > 0 ? count + "回" : "-"}${icon}`;
     calendar.appendChild(cell);
+
+    cell.addEventListener("click", () => {
+      if (!logs[dateStr]) return;
+      const modal = document.getElementById("log-modal");
+      const label = document.getElementById("modal-date-label");
+      const content = document.getElementById("modal-log-content");
+      const entries = logs[dateStr];
+      const isNew = entries.length > 0 && typeof entries[0] === "object";
+      const times = isNew ? entries.map(e => e.timestamp.split("T")[1].slice(0, 5)) : [];
+      const sets = entries.length;
+      const total = entries.reduce((sum, val) => sum + (typeof val === 'number' ? val : val.count || 0), 0);
+      const goal = goals[dateStr] ? parseInt(goals[dateStr]) : null;
+      const percent = goal ? Math.floor((sets / goal) * 100) : "-";
+
+      const hours = times.map(t => parseInt(t.split(":")[0], 10));
+      const timeBuckets = { "早朝": 0, "朝": 0, "昼": 0, "夕方": 0, "夜": 0, "深夜": 0 };
+      hours.forEach(h => {
+        if (h >= 5 && h < 8) timeBuckets["早朝"]++;
+        else if (h >= 8 && h < 12) timeBuckets["朝"]++;
+        else if (h >= 12 && h < 16) timeBuckets["昼"]++;
+        else if (h >= 16 && h < 19) timeBuckets["夕方"]++;
+        else if (h >= 19 && h < 24) timeBuckets["夜"]++;
+        else timeBuckets["深夜"]++;
+      });
+      const timeDistText = Object.entries(timeBuckets)
+        .filter(([_, v]) => v > 0)
+        .map(([k, v]) => `${k}: ${v}回`)
+        .join("<br>");
+      const timeDistHTML = timeDistText ? `<li>時間帯別:<br>${timeDistText}</li>` : "";
+
+      label.textContent = `${dateStr} の詳細`;
+      content.innerHTML = `
+        <ul>
+          <li>合計呼吸回数: ${total}回</li>
+          <li>セット数: ${sets}</li>
+          <li>目標達成率: ${percent}%</li>
+          ${times.length ? `<li>実施時刻: ${times.join(", ")}</li>` : ""}
+          ${timeDistHTML}
+        </ul>`;
+      modal.showModal();
+    });
   }
 }
 
