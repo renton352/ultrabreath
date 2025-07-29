@@ -44,7 +44,7 @@ function renderCalendar() {
     date.setHours(0, 0, 0, 0);
     const key = getLocalDateString(date);
     if (Array.isArray(logs[key])) {
-      const total = logs[key].reduce((sum, val) => sum + val, 0);
+      const total = logs[key].reduce((sum, val) => sum + (typeof val === 'number' ? val : val.count || 0), 0);
       valuesByDate[key] = total;
     }
   }
@@ -62,7 +62,7 @@ function renderCalendar() {
     dateObj.setHours(0, 0, 0, 0);
     const dateStr = getLocalDateString(dateObj);
 
-    const count = Array.isArray(logs[dateStr]) ? logs[dateStr].reduce((sum, val) => sum + val, 0) : 0;
+    const count = Array.isArray(logs[dateStr]) ? logs[dateStr].reduce((sum, val) => sum + (typeof val === 'number' ? val : val.count || 0), 0) : 0;
     const goal = goals[dateStr] ? parseInt(goals[dateStr]) : null;
 
     cell.className = "day";
