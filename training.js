@@ -98,7 +98,7 @@ function updateStats() {
   const today = getLocalDateString();
   const todayLogsRaw = logs[today];
   const todayLogs = Array.isArray(todayLogsRaw) ? todayLogsRaw : [];
-  const todayCount = todayLogs.reduce((sum, val) => sum + val, 0);
+  const todayCount = todayLogs.reduce((sum, val) => sum + (typeof val === 'number' ? val : val.count || 0), 0);
   const todaySets = todayLogs.length;
 
   const todayCountEl = document.getElementById("today-count");
