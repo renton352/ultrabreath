@@ -122,9 +122,9 @@ cell.addEventListener("click", () => {
     let icon = "";
 const entries = Array.isArray(logs[dateStr]) ? logs[dateStr] : [];
 const sets = entries.length;
-const thisGoal = goals[dateStr] ? parseInt(goals[dateStr]) : null;
-if (thisGoal !== null && sets > 0) {
-  if (sets >= thisGoal) {
+const goal = goals[dateStr] ? parseInt(goals[dateStr]) : null;
+if (goal !== null && sets > 0) {
+  if (sets >= goal) {
     cell.classList.add("goal-success");
     icon = '<span class="goal-icon">👑</span>';
   } else {
