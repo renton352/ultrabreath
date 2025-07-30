@@ -1,3 +1,5 @@
+// main.js（修正版：すべてのイベントをDOMContentLoaded内で初期化）
+
 function getLocalDateString(date = new Date()) {
   date.setHours(0, 0, 0, 0);
   const y = date.getFullYear();
@@ -169,8 +171,7 @@ function updateGoalBar(todaySets) {
       : "linear-gradient(to right, #4caf50, #8bc34a)";
 }
 
-// ===== バックアップ＆復元機能 =====
-
+// ===== バックアップ＆復元機能（DOMContentLoadedで初期化！） =====
 document.addEventListener("DOMContentLoaded", function() {
   // 設定モーダルの開閉
   document.getElementById("settings-button").onclick = function() {
