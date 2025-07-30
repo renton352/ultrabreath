@@ -26,6 +26,16 @@
       <label>カレンダー背景画像:<br><input type="file" id="calendar-bg-input" accept="image/*" style="margin-bottom: 10px; font-size: 22px;"/></label><br/>
       <button class="main-button" id="save-settings">保存</button>
       <button class="main-button" id="close-settings">閉じる</button>
+
+      <!-- ▼ バックアップ・復元機能を追加 ▼ -->
+      <div style="margin-top:16px; border-top:1px solid #ddd; padding-top:12px;">
+        <button class="main-button" id="export-backup-btn">バックアップ（保存）</button>
+        <input id="import-backup-input" type="file" style="display:none" accept=".json" />
+        <button class="main-button" id="import-backup-btn">データ復元</button>
+        <span id="import-msg" style="font-size:0.9em; color: #2e7d32; margin-left: 8px;"></span>
+        <div style="font-size:0.85em; color:#666; margin-top:6px;">復元後はページの再読み込みをおすすめします。</div>
+      </div>
+      <!-- ▲ バックアップ・復元機能ここまで ▲ -->
     </div>
   </div>
 
@@ -85,6 +95,44 @@
 
     alert("設定を保存しました");
     document.getElementById("settings-modal").style.display = "none";
+  };
+
+  // ▼ バックアップ機能（エクスポート）
+  document.getElementById('export-backup-btn').onclick = function() {
+    const keys = ['logs', 'goals', 'memos', 'nickname', 'setCount', 'setGoal'];
+    const backup = {};
+    keys.forEach(key => backup[key] = localStorage.getItem(key));
+    const blob = new Blob([JSON.stringify(backup, null, 2)], {type: 'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'ultrabreath_backup_' + new Date().toISOString().slice(0,10) + '.json';
+    a.click();
+  };
+
+  // ▼ データ復元機能（インポート）
+  document.getElementById('import-backup-btn').onclick = function() {
+    document.getElementById('import-backup-input').click();
+  };
+  document.getElementById('import-backup-input').onchange = function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+      try {
+        const backup = JSON.parse(evt.target.result);
+        Object.keys(backup).forEach(key => {
+          if (backup[key] !== undefined && backup[key] !== null) {
+            localStorage.setItem(key, backup[key]);
+          }
+        });
+        document.getElementById('import-msg').textContent = 'データを復元しました！（再読み込み推奨）';
+        setTimeout(() => { document.getElementById('import-msg').textContent = ''; }, 3000);
+      } catch(e) {
+        document.getElementById('import-msg').textContent = '復元失敗：ファイルをご確認ください。';
+        setTimeout(() => { document.getElementById('import-msg').textContent = ''; }, 3000);
+      }
+    };
+    reader.readAsText(file);
   };
 </script>
 </body>
