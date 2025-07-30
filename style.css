@@ -160,3 +160,15 @@ canvas {
   font-size: 1.8em;
   margin: 12px 0 4px;
 }
+
+.settings-modal {
+  width: 90vw;
+  max-width: 400px;
+  max-height: 95vh;          /* 画面の高さの95%以内に制限 */
+  overflow-y: auto;          /* 必要に応じてスクロールバー表示 */
+  padding: 16px;
+  box-sizing: border-box;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
