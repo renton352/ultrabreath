@@ -27,15 +27,22 @@
       <button class="main-button" id="save-settings">保存</button>
       <button class="main-button" id="close-settings">閉じる</button>
 
-      <!-- ▼ バックアップ・復元機能を追加 ▼ -->
-      <div style="margin-top:16px; border-top:1px solid #ddd; padding-top:12px;">
-        <button class="main-button" id="export-backup-btn">バックアップ（保存）</button>
-        <input id="import-backup-input" type="file" style="display:none" accept=".json" />
-        <button class="main-button" id="import-backup-btn">データ復元</button>
-        <span id="import-msg" style="font-size:0.9em; color: #2e7d32; margin-left: 8px;"></span>
-        <div style="font-size:0.85em; color:#666; margin-top:6px;">復元後はページの再読み込みをおすすめします。</div>
+      <!-- ▼ クリップボード方式バックアップ＆復元機能のみ ▼ -->
+      <div style="margin-top:20px; border-top:1px solid #eee; padding-top:14px;">
+        <div style="margin-bottom:10px; font-weight:bold;">🔖 テキストでバックアップ・復元（ファイル不要！）</div>
+        <button class="main-button" id="show-backup-text">バックアップをコピー</button>
+        <textarea id="backup-textarea" style="width:100%;height:120px;display:none;margin-top:8px;" readonly></textarea>
+        <button id="copy-backup-btn" class="main-button" style="display:none;margin-bottom:8px;">コピー</button>
+        <div style="margin:8px 0;font-size:0.95em;">
+          ※「コピー」を押したらメモ帳アプリやLINEの自分トークなどに貼り付けて保存してください。
+        </div>
+        <button class="main-button" id="show-restore-text" style="margin-top:10px;">テキストで復元</button>
+        <textarea id="restore-textarea" style="width:100%;height:120px;display:none;margin-top:8px;" placeholder="ここにバックアップの内容を貼り付け"></textarea>
+        <button id="import-restore-btn" class="main-button" style="display:none;">データを復元</button>
+        <span id="restore-msg" style="font-size:0.92em;color:#2e7d32; margin-left:8px;"></span>
+        <div style="font-size:0.85em; color:#666; margin-top:6px;">※復元すると現在のデータが上書きされます。</div>
       </div>
-      <!-- ▲ バックアップ・復元機能ここまで ▲ -->
+      <!-- ▲ ここまで ▲ -->
     </div>
   </div>
 
@@ -97,42 +104,44 @@
     document.getElementById("settings-modal").style.display = "none";
   };
 
-  // ▼ バックアップ機能（エクスポート）
-  document.getElementById('export-backup-btn').onclick = function() {
+  // ▼ クリップボード方式バックアップ＆復元
+  document.getElementById('show-backup-text').onclick = function() {
     const keys = ['logs', 'goals', 'memos', 'nickname', 'setCount', 'setGoal'];
     const backup = {};
     keys.forEach(key => backup[key] = localStorage.getItem(key));
-    const blob = new Blob([JSON.stringify(backup, null, 2)], {type: 'application/json'});
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'ultrabreath_backup_' + new Date().toISOString().slice(0,10) + '.json';
-    a.click();
+    document.getElementById('backup-textarea').value = JSON.stringify(backup, null, 2);
+    document.getElementById('backup-textarea').style.display = '';
+    document.getElementById('copy-backup-btn').style.display = '';
   };
 
-  // ▼ データ復元機能（インポート）
-  document.getElementById('import-backup-btn').onclick = function() {
-    document.getElementById('import-backup-input').click();
+  document.getElementById('copy-backup-btn').onclick = function() {
+    const textarea = document.getElementById('backup-textarea');
+    textarea.select();
+    document.execCommand('copy');
+    alert('クリップボードにコピーしました！\nメモ帳などに貼り付けて保存してください。');
   };
-  document.getElementById('import-backup-input').onchange = function(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(evt) {
-      try {
-        const backup = JSON.parse(evt.target.result);
-        Object.keys(backup).forEach(key => {
-          if (backup[key] !== undefined && backup[key] !== null) {
-            localStorage.setItem(key, backup[key]);
-          }
-        });
-        document.getElementById('import-msg').textContent = 'データを復元しました！（再読み込み推奨）';
-        setTimeout(() => { document.getElementById('import-msg').textContent = ''; }, 3000);
-      } catch(e) {
-        document.getElementById('import-msg').textContent = '復元失敗：ファイルをご確認ください。';
-        setTimeout(() => { document.getElementById('import-msg').textContent = ''; }, 3000);
-      }
-    };
-    reader.readAsText(file);
+
+  document.getElementById('show-restore-text').onclick = function() {
+    document.getElementById('restore-textarea').style.display = '';
+    document.getElementById('import-restore-btn').style.display = '';
+  };
+
+  document.getElementById('import-restore-btn').onclick = function() {
+    const text = document.getElementById('restore-textarea').value;
+    try {
+      const backup = JSON.parse(text);
+      if (!window.confirm('現在のデータを上書きします。\n本当に復元してもよいですか？')) return;
+      Object.keys(backup).forEach(key => {
+        if (backup[key] !== undefined && backup[key] !== null) {
+          localStorage.setItem(key, backup[key]);
+        }
+      });
+      document.getElementById('restore-msg').textContent = 'データを復元しました！（再読み込み推奨）';
+      setTimeout(() => { document.getElementById('restore-msg').textContent = ''; }, 3000);
+    } catch(e) {
+      document.getElementById('restore-msg').textContent = '復元失敗：内容をご確認ください。';
+      setTimeout(() => { document.getElementById('restore-msg').textContent = ''; }, 3000);
+    }
   };
 </script>
 </body>
