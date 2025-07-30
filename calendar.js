@@ -140,7 +140,7 @@ function renderCalendar() {
           <li>合計呼吸回数: ${total}回</li>
           <li>セット数: ${sets}</li>
           <li>目標達成率: ${percent}%</li>
-          ${times.length ? `<li>実施時刻: ${times.join(", ")}</li>` : ""}
+
           ${timeDistHTML}
         </ul>`;
       modal.showModal();
