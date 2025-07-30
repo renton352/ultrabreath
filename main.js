@@ -147,28 +147,6 @@ function updateStreak(logs) {
   document.getElementById("streak-info").textContent = `今日で${streak}日連続です！`;
 }
 
-document.getElementById("back-button").onclick = () => {
-  toggleSettingsButton(true);
-  document.getElementById("training-screen").style.display = "none";
-  document.getElementById("genre-selection").style.display = "block";
-  const logo = document.getElementById("logo-image");
-  if (logo) logo.style.display = "block";
-  const title = document.getElementById("top-title");
-  if (title) title.style.display = "block";
-};
-
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("[DEBUG] DOMContentLoaded nickname:", localStorage.getItem("nickname"));
-  console.log("[DEBUG] DOMContentLoaded setCount:", localStorage.getItem("setCount"));
-  console.log("[DEBUG] DOMContentLoaded setGoal:", localStorage.getItem("setGoal"));
-  console.log("[DEBUG] DOMContentLoaded logs:", localStorage.getItem("logs"));
-  setCount = parseInt(localStorage.getItem("setCount")) || 25;
-  setGoal = parseInt(localStorage.getItem("setGoal")) || 2;
-  updateStats();
-  const logo = document.getElementById("logo-image");
-  if (logo && document.getElementById("training-screen").style.display !== "none") logo.style.display = "none";
-});
-
 function updateNicknameDisplay() {
   console.log("[DEBUG] updateNicknameDisplay nickname:", localStorage.getItem("nickname"));
   const nickname = localStorage.getItem("nickname") || "";
@@ -178,21 +156,13 @@ function updateNicknameDisplay() {
   }
 }
 
-function updateGoalBar() {
-  const logs = JSON.parse(localStorage.getItem("logs") || "{}");
-  const today = getLocalDateString();
-  const todayLogs = Array.isArray(logs[today]) ? logs[today] : [];
-  const todaySets = todayLogs.length;
+function updateGoalBar(todaySets) {
   const percent = Math.min(100, Math.floor((todaySets / setGoal) * 100));
-
   const bar = document.getElementById("goal-bar");
   const label = document.getElementById("goal-percent");
-
   if (!bar || !label) return;
-
   bar.style.width = percent + "%";
   label.textContent = percent + "%";
-
   bar.style.background =
     percent >= 100
       ? "linear-gradient(to right, gold, orange)"
@@ -201,37 +171,97 @@ function updateGoalBar() {
 
 // ===== バックアップ＆復元機能 =====
 
-// バックアップ（クリックでテキスト出力）
-document.getElementById('show-backup-text').onclick = function() {
-  const keys = ['logs', 'goals', 'memos', 'nickname', 'setCount', 'setGoal'];
-  const backup = {};
-  keys.forEach(key => backup[key] = localStorage.getItem(key));
-  document.getElementById('backup-textarea').value = JSON.stringify(backup, null, 2);
-};
+document.addEventListener("DOMContentLoaded", function() {
+  // 設定モーダルの開閉
+  document.getElementById("settings-button").onclick = function() {
+    document.getElementById("settings-modal").style.display = "block";
+    document.getElementById("nickname-input").value = localStorage.getItem("nickname") || "";
+    document.getElementById("set-count-input").value = localStorage.getItem("setCount") || 25;
+    document.getElementById("set-goal-input").value = localStorage.getItem("setGoal") || 2;
+  };
 
-// コピー
-document.getElementById('copy-backup-btn').onclick = function() {
-  const textarea = document.getElementById('backup-textarea');
-  textarea.select();
-  document.execCommand('copy');
-  alert('クリップボードにコピーしました！\nメモ帳などに貼り付けて保存してください。');
-};
+  document.getElementById("close-settings").onclick = function() {
+    document.getElementById("settings-modal").style.display = "none";
+  };
 
-// 復元
-document.getElementById('import-restore-btn').onclick = function() {
-  const text = document.getElementById('restore-textarea').value;
-  try {
-    const backup = JSON.parse(text);
-    if (!window.confirm('現在のデータを上書きします。\n本当に復元してもよいですか？')) return;
-    Object.keys(backup).forEach(key => {
-      if (backup[key] !== undefined && backup[key] !== null) {
-        localStorage.setItem(key, backup[key]);
-      }
-    });
-    document.getElementById('restore-msg').textContent = 'データを復元しました！（再読み込み推奨）';
-    setTimeout(() => { document.getElementById('restore-msg').textContent = ''; }, 3000);
-  } catch(e) {
-    document.getElementById('restore-msg').textContent = '復元失敗：内容をご確認ください。';
-    setTimeout(() => { document.getElementById('restore-msg').textContent = ''; }, 3000);
-  }
-};
+  document.getElementById("save-settings").onclick = function() {
+    const nickname = document.getElementById("nickname-input").value;
+    const setCountValue = parseInt(document.getElementById("set-count-input").value);
+    const setGoalValue = parseInt(document.getElementById("set-goal-input").value);
+    localStorage.setItem("nickname", nickname);
+    localStorage.setItem("setCount", setCountValue);
+    localStorage.setItem("setGoal", setGoalValue);
+
+    const bgInput = document.getElementById("calendar-bg-input");
+    const file = bgInput.files[0];
+    if (file) {
+      const img = new Image();
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        img.onload = function () {
+          const canvas = document.createElement("canvas");
+          const maxSize = 1280;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height && width > maxSize) {
+            height *= maxSize / width;
+            width = maxSize;
+          } else if (height > maxSize) {
+            width *= maxSize / height;
+            height = maxSize;
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, width, height);
+
+          const compressed = canvas.toDataURL("image/jpeg", 0.8);
+          localStorage.setItem("calendarBackground", compressed);
+          sessionStorage.setItem("calendarBackground", compressed);
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    alert("設定を保存しました");
+    document.getElementById("settings-modal").style.display = "none";
+  };
+
+  // バックアップ（クリックでテキスト出力）
+  document.getElementById('show-backup-text').onclick = function() {
+    const keys = ['logs', 'goals', 'memos', 'nickname', 'setCount', 'setGoal'];
+    const backup = {};
+    keys.forEach(key => backup[key] = localStorage.getItem(key));
+    document.getElementById('backup-textarea').value = JSON.stringify(backup, null, 2);
+  };
+
+  // コピー
+  document.getElementById('copy-backup-btn').onclick = function() {
+    const textarea = document.getElementById('backup-textarea');
+    textarea.select();
+    document.execCommand('copy');
+    alert('クリップボードにコピーしました！\nメモ帳などに貼り付けて保存してください。');
+  };
+
+  // 復元
+  document.getElementById('import-restore-btn').onclick = function() {
+    const text = document.getElementById('restore-textarea').value;
+    try {
+      const backup = JSON.parse(text);
+      if (!window.confirm('現在のデータを上書きします。\n本当に復元してもよいですか？')) return;
+      Object.keys(backup).forEach(key => {
+        if (backup[key] !== undefined && backup[key] !== null) {
+          localStorage.setItem(key, backup[key]);
+        }
+      });
+      document.getElementById('restore-msg').textContent = 'データを復元しました！（再読み込み推奨）';
+      setTimeout(() => { document.getElementById('restore-msg').textContent = ''; }, 3000);
+    } catch(e) {
+      document.getElementById('restore-msg').textContent = '復元失敗：内容をご確認ください。';
+      setTimeout(() => { document.getElementById('restore-msg').textContent = ''; }, 3000);
+    }
+  };
+});
