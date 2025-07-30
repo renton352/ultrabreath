@@ -1,5 +1,3 @@
-// main.js（修正版：すべてのイベントをDOMContentLoaded内で初期化）
-
 function getLocalDateString(date = new Date()) {
   date.setHours(0, 0, 0, 0);
   const y = date.getFullYear();
@@ -171,9 +169,10 @@ function updateGoalBar(todaySets) {
       : "linear-gradient(to right, #4caf50, #8bc34a)";
 }
 
-// ===== バックアップ＆復元機能（DOMContentLoadedで初期化！） =====
+// ===== データ管理モーダル用バックアップ＆復元機能 =====
+
 document.addEventListener("DOMContentLoaded", function() {
-  // 設定モーダルの開閉
+  // 設定モーダル開閉（既存）
   document.getElementById("settings-button").onclick = function() {
     document.getElementById("settings-modal").style.display = "block";
     document.getElementById("nickname-input").value = localStorage.getItem("nickname") || "";
@@ -231,15 +230,21 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("settings-modal").style.display = "none";
   };
 
-  // バックアップ（クリックでテキスト出力）
+  // データ管理モーダル開閉
+  document.getElementById('open-backup-modal').onclick = function() {
+    document.getElementById('backup-modal').style.display = 'block';
+  };
+  document.getElementById('close-backup-modal').onclick = function() {
+    document.getElementById('backup-modal').style.display = 'none';
+  };
+
+  // バックアップ処理
   document.getElementById('show-backup-text').onclick = function() {
     const keys = ['logs', 'goals', 'memos', 'nickname', 'setCount', 'setGoal'];
     const backup = {};
     keys.forEach(key => backup[key] = localStorage.getItem(key));
     document.getElementById('backup-textarea').value = JSON.stringify(backup, null, 2);
   };
-
-  // コピー
   document.getElementById('copy-backup-btn').onclick = function() {
     const textarea = document.getElementById('backup-textarea');
     textarea.select();
@@ -247,7 +252,7 @@ document.addEventListener("DOMContentLoaded", function() {
     alert('クリップボードにコピーしました！\nメモ帳などに貼り付けて保存してください。');
   };
 
-  // 復元
+  // 復元処理
   document.getElementById('import-restore-btn').onclick = function() {
     const text = document.getElementById('restore-textarea').value;
     try {
