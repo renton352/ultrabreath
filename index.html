@@ -30,8 +30,9 @@
     </div>
 
     <!-- データ管理モーダル -->
-    <div id="backup-modal" class="settings-modal" style="display:none;">
-      <h2>データ管理</h2>
+	<div id="backup-modal" class="settings-modal"
+	  style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:1000;">
+	  <h2>データ管理</h2>
       <div style="margin-bottom:14px;">
         <button class="main-button" id="show-backup-text">バックアップをコピー</button>
         <textarea id="backup-textarea" style="width:100%;height:120px;margin-top:8px;" readonly></textarea>
