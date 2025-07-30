@@ -1,4 +1,3 @@
-
 function getLocalDateString(date = new Date()) {
   date.setHours(0, 0, 0, 0);
   const y = date.getFullYear();
@@ -53,8 +52,8 @@ function countBreath() {
     showRetryButton();
     saveLog();
     updateStats();
-  const logo = document.getElementById("logo-image");
-  if (logo && document.getElementById("training-screen").style.display !== "none") logo.style.display = "none";
+    const logo = document.getElementById("logo-image");
+    if (logo && document.getElementById("training-screen").style.display !== "none") logo.style.display = "none";
   }
 }
 
@@ -77,12 +76,10 @@ function resetTraining() {
 
 function saveLog() {
   const goals = JSON.parse(localStorage.getItem("goals") || "{}");
-  
   const today = getLocalDateString();
   const logs = JSON.parse(localStorage.getItem("logs") || "{}");
   if (!Array.isArray(logs[today])) {
     logs[today] = [];
-  
   }
   logs[today].push(setCount);
   localStorage.setItem("logs", JSON.stringify(logs));
@@ -92,7 +89,6 @@ function saveLog() {
   console.log("[DEBUG] setCount:", localStorage.getItem("setCount"));
   console.log("[DEBUG] setGoal:", localStorage.getItem("setGoal"));
   console.log("[DEBUG] logs:", logs);
-   
 }
 
 function updateStats() {
@@ -168,7 +164,6 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("[DEBUG] DOMContentLoaded logs:", localStorage.getItem("logs"));
   setCount = parseInt(localStorage.getItem("setCount")) || 25;
   setGoal = parseInt(localStorage.getItem("setGoal")) || 2;
-  setGoal = parseInt(localStorage.getItem("setGoal")) || 2;
   updateStats();
   const logo = document.getElementById("logo-image");
   if (logo && document.getElementById("training-screen").style.display !== "none") logo.style.display = "none";
@@ -182,7 +177,6 @@ function updateNicknameDisplay() {
     el.textContent = nickname + " さん";
   }
 }
-
 
 function updateGoalBar() {
   const logs = JSON.parse(localStorage.getItem("logs") || "{}");
@@ -205,25 +199,39 @@ function updateGoalBar() {
       : "linear-gradient(to right, #4caf50, #8bc34a)";
 }
 
+// ===== バックアップ＆復元機能 =====
 
+// バックアップ（クリックでテキスト出力）
+document.getElementById('show-backup-text').onclick = function() {
+  const keys = ['logs', 'goals', 'memos', 'nickname', 'setCount', 'setGoal'];
+  const backup = {};
+  keys.forEach(key => backup[key] = localStorage.getItem(key));
+  document.getElementById('backup-textarea').value = JSON.stringify(backup, null, 2);
+};
 
-document.getElementById("save-settings").onclick = () => {
-  const nickname = document.getElementById("nickname-input").value;
-  localStorage.setItem("nickname", nickname);
+// コピー
+document.getElementById('copy-backup-btn').onclick = function() {
+  const textarea = document.getElementById('backup-textarea');
+  textarea.select();
+  document.execCommand('copy');
+  alert('クリップボードにコピーしました！\nメモ帳などに貼り付けて保存してください。');
+};
 
-  const setCountValue = parseInt(document.getElementById("set-count-input").value);
-  if (!isNaN(setCountValue)) {
-    setCount = setCountValue;
-    localStorage.setItem("setCount", setCountValue);
+// 復元
+document.getElementById('import-restore-btn').onclick = function() {
+  const text = document.getElementById('restore-textarea').value;
+  try {
+    const backup = JSON.parse(text);
+    if (!window.confirm('現在のデータを上書きします。\n本当に復元してもよいですか？')) return;
+    Object.keys(backup).forEach(key => {
+      if (backup[key] !== undefined && backup[key] !== null) {
+        localStorage.setItem(key, backup[key]);
+      }
+    });
+    document.getElementById('restore-msg').textContent = 'データを復元しました！（再読み込み推奨）';
+    setTimeout(() => { document.getElementById('restore-msg').textContent = ''; }, 3000);
+  } catch(e) {
+    document.getElementById('restore-msg').textContent = '復元失敗：内容をご確認ください。';
+    setTimeout(() => { document.getElementById('restore-msg').textContent = ''; }, 3000);
   }
-
-  const goalValue = parseInt(document.getElementById("set-goal-input").value);
-  if (!isNaN(goalValue)) {
-    setGoal = goalValue;
-    localStorage.setItem("setGoal", goalValue);
-  }
-
-  updateNicknameDisplay();
-  updateStats();
-  document.getElementById("settings-modal").style.display = "none";
 };
