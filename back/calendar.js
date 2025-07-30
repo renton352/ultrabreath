@@ -16,6 +16,8 @@ function renderCalendar() {
   const logs = JSON.parse(localStorage.getItem("logs") || "{}");
   const goals = JSON.parse(localStorage.getItem("goals") || "{}");
   const setCount = parseInt(localStorage.getItem("setCount")) || 25;
+  let memos = {};
+  try { memos = JSON.parse(localStorage.getItem("memos") || "{}"); } catch(e) { memos = {}; }
 
   document.getElementById("month-label").textContent = `${year}年${month + 1}月`;
 
@@ -75,21 +77,29 @@ function renderCalendar() {
       else if (count === min) cell.classList.add("min-value");
     }
 
-    let icon = "";
+    let icons = "";
+
+    // 最高値
+    if (count > 0 && count === max) icons += "🌟";
+    // 目標判定
     const entries = Array.isArray(logs[dateStr]) ? logs[dateStr] : [];
     const sets = entries.length;
     if (goal !== null && sets > 0) {
       if (sets >= goal) {
         cell.classList.add("goal-success");
-        icon = '<span class="goal-icon">👑</span>';
+        icons += "👑";
       } else {
         cell.classList.add("goal-failed");
+        icons += "😔";
       }
     }
+    // メモあり
+    if ((memos[dateStr] || "").trim().length > 0) icons += "✏";
 
-    cell.innerHTML = `<strong>${d}</strong><br>${count > 0 ? count + "回" : "-"}${icon}`;
+    cell.innerHTML = `<strong>${d}</strong><br>${count > 0 ? count + "回" : "-"}<br>${icons}`;
     calendar.appendChild(cell);
 
+    // モーダルイベントは変更なし（以下略）
     cell.addEventListener("click", () => {
       if (!logs[dateStr]) return;
       const modal = document.getElementById("log-modal");
@@ -122,11 +132,13 @@ function renderCalendar() {
         else timeBuckets["深夜"]++;
       });
 
-      console.log(`[DEBUG] 日付: ${dateStr}`);
-      console.log(`[DEBUG] セット数: ${sets}`);
-      console.log(`[DEBUG] 合計回数: ${total}`);
-      console.log(`[DEBUG] 実施時刻:`, times);
-      console.log(`[DEBUG] 時間帯集計:`, timeBuckets);
+      let memos = {};
+      try {
+        memos = JSON.parse(localStorage.getItem("memos") || "{}");
+      } catch (e) {
+        memos = {};
+      }
+      const memoText = memos[dateStr] || "";
 
       const timeDistText = Object.entries(timeBuckets)
         .filter(([_, v]) => v > 0)
@@ -134,16 +146,36 @@ function renderCalendar() {
         .join("<br>");
       const timeDistHTML = timeDistText ? `<li>時間帯別:<br>${timeDistText}</li>` : "";
 
-      label.textContent = `${dateStr} の詳細`;
       content.innerHTML = `
-        <ul>
+        <ul style="list-style:none; padding:0; margin-bottom: 10px;">
           <li>合計呼吸回数: ${total}回</li>
           <li>セット数: ${sets}</li>
           <li>目標達成率: ${percent}%</li>
-          ${times.length ? `<li>実施時刻: ${times.join(", ")}</li>` : ""}
           ${timeDistHTML}
-        </ul>`;
+        </ul>
+        <div style="margin-top:12px; text-align:left;">
+          <label for="memo-area" style="font-weight:bold;">📝 今日のメモ</label>
+          <textarea id="memo-area" rows="3" style="width:100%; margin:8px 0 4px; border-radius:8px; border:1px solid #ccc; padding:6px; font-size:1em; box-sizing: border-box;">${memoText}</textarea>
+          <button id="save-memo-btn" style="margin-right: 8px;">保存</button>
+          <span id="memo-saved-msg" style="color: #2e7d32; font-size:0.9em;"></span>
+        </div>
+      `;
+      label.textContent = `${dateStr} の詳細`;
       modal.showModal();
+
+      setTimeout(() => {
+        const saveBtn = document.getElementById("save-memo-btn");
+        const memoArea = document.getElementById("memo-area");
+        const msg = document.getElementById("memo-saved-msg");
+        if (saveBtn && memoArea) {
+          saveBtn.onclick = () => {
+            memos[dateStr] = memoArea.value;
+            localStorage.setItem("memos", JSON.stringify(memos));
+            msg.textContent = "保存しました！";
+            setTimeout(() => { msg.textContent = ""; }, 1200);
+          };
+        }
+      }, 20);
     });
   }
 }

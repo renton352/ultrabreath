@@ -15,6 +15,7 @@
       <button class="main-button" onclick="location.href='training.html'">▶️ 呼吸トレーニングを開始</button>
       <div class="settings-button-wrapper">
         <button id="settings-button">⚙️ 設定</button>
+        <button id="open-backup-modal" class="main-button">📦 データ管理</button>
       </div>
     </div>
 
@@ -27,65 +28,28 @@
       <button class="main-button" id="save-settings">保存</button>
       <button class="main-button" id="close-settings">閉じる</button>
     </div>
+
+    <!-- データ管理モーダル -->
+	<div id="backup-modal" class="settings-modal"
+	  style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:1000;">
+	  <h2>データ管理</h2>
+      <div style="margin-bottom:14px;">
+        <button class="main-button" id="show-backup-text">バックアップをコピー</button>
+        <textarea id="backup-textarea" style="width:100%;height:120px;margin-top:8px;" readonly></textarea>
+        <button id="copy-backup-btn" class="main-button" style="margin-bottom:8px;">コピー</button>
+        <div style="font-size:0.95em;">※コピーを押したらメモ帳やLINEの自分トークなどに貼り付けて保存してください。</div>
+      </div>
+      <div style="margin-top:14px;">
+        <div style="margin-bottom:4px;font-weight:bold;">▼ テキストで復元</div>
+        <textarea id="restore-textarea" style="width:100%;height:120px;margin-top:8px;" placeholder="ここにバックアップ内容を貼り付け"></textarea>
+        <button id="import-restore-btn" class="main-button" style="margin-top:8px;">データを復元</button>
+        <span id="restore-msg" style="font-size:0.92em;color:#2e7d32; margin-left:8px;"></span>
+        <div style="font-size:0.85em; color:#666; margin-top:6px;">※復元すると現在のデータが上書きされます。</div>
+      </div>
+      <button class="main-button" id="close-backup-modal" style="margin-top:18px;">閉じる</button>
+    </div>
   </div>
 
-<script>
-  document.getElementById("settings-button").onclick = () => {
-    document.getElementById("settings-modal").style.display = "block";
-    document.getElementById("nickname-input").value = localStorage.getItem("nickname") || "";
-    document.getElementById("set-count-input").value = localStorage.getItem("setCount") || 25;
-    document.getElementById("set-goal-input").value = localStorage.getItem("setGoal") || 2;
-  };
-
-  document.getElementById("close-settings").onclick = () => {
-    document.getElementById("settings-modal").style.display = "none";
-  };
-
-  document.getElementById("save-settings").onclick = () => {
-    const nickname = document.getElementById("nickname-input").value;
-    const setCountValue = parseInt(document.getElementById("set-count-input").value);
-    const setGoalValue = parseInt(document.getElementById("set-goal-input").value);
-    localStorage.setItem("nickname", nickname);
-    localStorage.setItem("setCount", setCountValue);
-    localStorage.setItem("setGoal", setGoalValue);
-
-    const bgInput = document.getElementById("calendar-bg-input");
-    const file = bgInput.files[0];
-    if (file) {
-      const img = new Image();
-      const reader = new FileReader();
-      reader.onload = function (event) {
-        img.onload = function () {
-          const canvas = document.createElement("canvas");
-          const maxSize = 1280;
-          let width = img.width;
-          let height = img.height;
-
-          if (width > height && width > maxSize) {
-            height *= maxSize / width;
-            width = maxSize;
-          } else if (height > maxSize) {
-            width *= maxSize / height;
-            height = maxSize;
-          }
-
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext("2d");
-          ctx.drawImage(img, 0, 0, width, height);
-
-          const compressed = canvas.toDataURL("image/jpeg", 0.8);
-          localStorage.setItem("calendarBackground", compressed);
-          sessionStorage.setItem("calendarBackground", compressed);
-        };
-        img.src = event.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-
-    alert("設定を保存しました");
-    document.getElementById("settings-modal").style.display = "none";
-  };
-</script>
+<script src="main.js"></script>
 </body>
 </html>
