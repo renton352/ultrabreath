@@ -16,6 +16,8 @@ function renderCalendar() {
   const logs = JSON.parse(localStorage.getItem("logs") || "{}");
   const goals = JSON.parse(localStorage.getItem("goals") || "{}");
   const setCount = parseInt(localStorage.getItem("setCount")) || 25;
+  let memos = {};
+  try { memos = JSON.parse(localStorage.getItem("memos") || "{}"); } catch(e) { memos = {}; }
 
   document.getElementById("month-label").textContent = `${year}年${month + 1}月`;
 
@@ -75,22 +77,29 @@ function renderCalendar() {
       else if (count === min) cell.classList.add("min-value");
     }
 
-    let icon = "";
+    let icons = "";
+
+    // 最高値
+    if (count > 0 && count === max) icons += "🌟";
+    // 目標判定
     const entries = Array.isArray(logs[dateStr]) ? logs[dateStr] : [];
     const sets = entries.length;
     if (goal !== null && sets > 0) {
       if (sets >= goal) {
         cell.classList.add("goal-success");
-        icon = '<span class="goal-icon">👑</span>';
+        icons += "👑";
       } else {
         cell.classList.add("goal-failed");
+        icons += "😔";
       }
     }
+    // メモあり
+    if ((memos[dateStr] || "").trim().length > 0) icons += "✏";
 
-    cell.innerHTML = `<strong>${d}</strong><br>${count > 0 ? count + "回" : "-"}${icon}`;
+    cell.innerHTML = `<strong>${d}</strong><br>${count > 0 ? count + "回" : "-"}<br>${icons}`;
     calendar.appendChild(cell);
 
-    // ------ ここからメモ欄追加 ------
+    // モーダルイベントは変更なし（以下略）
     cell.addEventListener("click", () => {
       if (!logs[dateStr]) return;
       const modal = document.getElementById("log-modal");
@@ -168,7 +177,6 @@ function renderCalendar() {
         }
       }, 20);
     });
-    // ------ ここまでメモ欄追加 ------
   }
 }
 
