@@ -223,7 +223,7 @@ function updateCertificateButton() {
   if (!btn) return;
 
   // 今月 または 未来の月はボタン非表示
-  if (y > thisYear || (y === thisYear && m === thisMonth)) {
+  if (y > thisYear || (y === thisYear && m >= thisMonth)) {
     btn.style.display = "none";
   } else {
     btn.style.display = "block";
