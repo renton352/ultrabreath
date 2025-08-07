@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>•\²ó</title>
+  <title>è¡¨å½°çŠ¶</title>
   <link rel="stylesheet" href="style.css">
   <style>
     .certificate-container {
@@ -35,26 +35,26 @@
 </head>
 <body>
   <div class="certificate-container">
-    <div class="certificate-title">•\²ó</div>
+    <div class="certificate-title">è¡¨å½°çŠ¶</div>
     <div id="certificate-main" class="certificate-body"></div>
-    <div class="certificate-footer"><button onclick="history.back()">© ƒJƒŒƒ“ƒ_[‚Ö–ß‚é</button></div>
+    <div class="certificate-footer"><button onclick="history.back()">â† ã‚«ãƒ¬ãƒ³ãƒ€ãƒ¼ã¸æˆ»ã‚‹</button></div>
   </div>
   <script>
-    // ƒNƒGƒŠæ“¾
+    // ã‚¯ã‚¨ãƒªå–å¾—
     function getParam(name) {
       return new URLSearchParams(window.location.search).get(name);
     }
     const year = parseInt(getParam("year"), 10);
     const month = parseInt(getParam("month"), 10);
 
-    // ƒ†[ƒU–¼æ“¾
-    const nickname = localStorage.getItem("nickname") || "‚ ‚È‚½";
-    // ƒƒOæ“¾
+    // ãƒ¦ãƒ¼ã‚¶åå–å¾—
+    const nickname = localStorage.getItem("nickname") || "ã‚ãªãŸ";
+    // ãƒ­ã‚°å–å¾—
     const logs = JSON.parse(localStorage.getItem("logs") || "{}");
-    // ƒS[ƒ‹î•ñ
+    // ã‚´ãƒ¼ãƒ«æƒ…å ±
     const goals = JSON.parse(localStorage.getItem("goals") || "{}");
 
-    // ‚»‚ÌŒ‚Ì“ú•t•¶š—ñˆê——
+    // ãã®æœˆã®æ—¥ä»˜æ–‡å­—åˆ—ä¸€è¦§
     const days = [];
     const first = new Date(year, month - 1, 1);
     const last = new Date(year, month, 0);
@@ -65,7 +65,7 @@
       days.push(ymd);
     }
 
-    // WŒv
+    // é›†è¨ˆ
     let total = 0, max = 0, min = null, achieved = 0, daysWithData = 0;
     for (const ymd of days) {
       const arr = logs[ymd];
@@ -75,25 +75,25 @@
         if (min === null || cnt < min) min = cnt;
         if (cnt > max) max = cnt;
         daysWithData++;
-        // ƒS[ƒ‹’B¬”
+        // ã‚´ãƒ¼ãƒ«é”æˆæ•°
         const goal = goals[ymd];
         if (goal && arr.length >= goal) achieved++;
       }
     }
     const avg = daysWithData ? Math.round(total / daysWithData) : 0;
 
-    // ƒƒbƒZ[ƒW‘g—§
+    // ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸çµ„ç«‹
     const msg = `
-      <p>${nickname} ‚³‚ñ<br>
-      <b>${year}”N${month}Œ</b>‚Ì<br>ŒÄ‹zƒgƒŒ[ƒjƒ“ƒO‚Ì¬‰Ê‚ğ‚±‚±‚É•\²‚µ‚Ü‚·B</p>
+      <p>${nickname} ã•ã‚“<br>
+      <b>${year}å¹´${month}æœˆ</b>ã®<br>å‘¼å¸ãƒˆãƒ¬ãƒ¼ãƒ‹ãƒ³ã‚°ã®æˆæœã‚’ã“ã“ã«è¡¨å½°ã—ã¾ã™ã€‚</p>
       <ul style="text-align:left; display:inline-block; margin:0 auto;">
-        <li>‡Œv‰ñ”F<b>${total} ‰ñ</b></li>
-        <li>•½‹Ï‰ñ”F<b>${avg} ‰ñ^“ú</b></li>
-        <li>Å‘½‰ñ”F<b>${max} ‰ñ</b></li>
-        <li>Å­‰ñ”F<b>${min !== null ? min : "-" } ‰ñ</b></li>
-        <li>–Ú•W’B¬“ú”F<b>${achieved} “ú</b></li>
+        <li>åˆè¨ˆå›æ•°ï¼š<b>${total} å›</b></li>
+        <li>å¹³å‡å›æ•°ï¼š<b>${avg} å›ï¼æ—¥</b></li>
+        <li>æœ€å¤šå›æ•°ï¼š<b>${max} å›</b></li>
+        <li>æœ€å°‘å›æ•°ï¼š<b>${min !== null ? min : "-" } å›</b></li>
+        <li>ç›®æ¨™é”æˆæ—¥æ•°ï¼š<b>${achieved} æ—¥</b></li>
       </ul>
-      <p style="margin-top:20px;">Œp‘±‚µ‚ÄŠæ’£‚Á‚½‚±‚Æ‚ğ]‚¦‚Ü‚·I<br>‚±‚ê‚©‚ç‚àŒ’N‚Ã‚­‚è‚ğ‰‰‡‚µ‚Ä‚¢‚Ü‚·B</p>
+      <p style="margin-top:20px;">ç¶™ç¶šã—ã¦é ‘å¼µã£ãŸã“ã¨ã‚’è®ƒãˆã¾ã™ï¼<br>ã“ã‚Œã‹ã‚‰ã‚‚å¥åº·ã¥ãã‚Šã‚’å¿œæ´ã—ã¦ã„ã¾ã™ã€‚</p>
     `;
     document.getElementById("certificate-main").innerHTML = msg;
   </script>
