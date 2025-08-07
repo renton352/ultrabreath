@@ -222,8 +222,8 @@ function updateCertificateButton() {
   const btn = document.getElementById("show-certificate-btn");
   if (!btn) return;
 
-  // 今月 or 未来の月はボタン非表示
-  if (y > thisYear || (y === thisYear && m >= thisMonth)) {
+  // 今月 または 未来の月はボタン非表示
+  if (y > thisYear || (y === thisYear && m === thisMonth)) {
     btn.style.display = "none";
   } else {
     btn.style.display = "block";
