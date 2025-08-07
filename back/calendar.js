@@ -99,7 +99,7 @@ function renderCalendar() {
     cell.innerHTML = `<strong>${d}</strong><br>${count > 0 ? count + "回" : "-"}<br>${icons}`;
     calendar.appendChild(cell);
 
-    // モーダルイベントは変更なし（以下略）
+    // モーダルイベント
     cell.addEventListener("click", () => {
       if (!logs[dateStr]) return;
       const modal = document.getElementById("log-modal");
@@ -192,6 +192,16 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   renderCalendar();
+
+  // ▼ 「表彰状を見る」ボタンのクリックでその月のcertificate.htmlへ遷移
+  const certBtn = document.getElementById("show-certificate-btn");
+  if (certBtn) {
+    certBtn.onclick = () => {
+      const y = current.getFullYear();
+      const m = current.getMonth() + 1;
+      location.href = `certificate.html?year=${y}&month=${m}`;
+    };
+  }
 });
 
 function resetBackground() {

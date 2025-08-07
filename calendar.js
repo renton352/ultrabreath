@@ -178,6 +178,9 @@ function renderCalendar() {
       }, 20);
     });
   }
+
+  // カレンダー描画が完了したあとにボタン制御を呼ぶ
+  updateCertificateButton();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -208,4 +211,21 @@ function resetBackground() {
   localStorage.removeItem("calendarBackground");
   sessionStorage.removeItem("calendarBackground");
   document.body.style.setProperty("background-image", "none", "important");
+}
+
+function updateCertificateButton() {
+  const y = current.getFullYear();
+  const m = current.getMonth() + 1; // 0始まりなので+1
+  const today = new Date();
+  const thisYear = today.getFullYear();
+  const thisMonth = today.getMonth() + 1;
+  const btn = document.getElementById("show-certificate-btn");
+  if (!btn) return;
+
+  // 今月 or 未来の月はボタン非表示
+  if (y > thisYear || (y === thisYear && m >= thisMonth)) {
+    btn.style.display = "none";
+  } else {
+    btn.style.display = "block";
+  }
 }
