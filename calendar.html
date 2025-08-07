@@ -19,9 +19,10 @@
     <h1>呼吸カレンダー</h1>
     <div class="nav">
       <button id="prev-month">← 前月</button>
-      <span id="month-label">YYYY年MM月</span>
+      <span id="month-label" style="min-width:6em;display:inline-block;">YYYY年MM月</span>
+      <button id="next-month">次月 →</button>
     </div>
-    <button id="show-certificate-btn" style="margin-top:14px;">表彰状を見る</button>
+    <button id="show-certificate-btn" style="margin-top:14px; display:block; margin-left:auto; margin-right:auto;">表彰状を見る</button>
     <div id="average-label" style="margin-bottom: 10px; font-weight: bold;"></div>
     <div id="calendar"></div>
     <label>月間最高値:🌟　メモあり:✏<br>
@@ -38,7 +39,6 @@
       }
     });
   </script>
-
   <dialog id="log-modal">
     <h3 id="modal-date-label"></h3>
     <div id="modal-log-content"></div>
