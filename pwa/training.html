@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>呼吸トレーニング</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="img/icon-192.png">
+</head>
+<body>
+  <div class="container">
+    <h1 id="top-title">ウルトラブレス</h1>
+    <img src="img/ultrabreath.jpg" alt="Ultrabreath ロゴ" id="logo-image" />
+
+    <div id="training-screen">
+      <div id="nfc-banner" style="display:none; background:#e8f5e9; color:#2e7d32; padding:8px; border-radius:6px; margin:8px 0;">
+        NFCから起動しました。準備OK！
+      </div>
+
+      <p id="streak-info">今日で0日連続です！</p>
+      <div id="character">
+        <img alt="ブレス先生" id="character-image" src="img/normal.png" />
+        <div id="nickname-display" style="font-weight: bold; font-size: 1.1em; margin: 6px;"></div>
+        <p id="speech">はじめましょうか、深呼吸ですよ。</p>
+      </div>
+      <div>
+        <p>呼吸回数：<span id="breath-count">0</span></p>
+        <div id="button-group">
+          <button class="main-button" id="breathe-button" onclick="countBreath()">吸った！</button>
+          <button class="main-button" id="back-button" onclick="goBack()">← トップ画面に戻る</button>
+          <button class="main-button" id="retry-button" style="display: none;" onclick="resetTraining()">もう一度</button>
+        </div>
+      </div>
+
+      <div id="log">
+        <h2>記録</h2>
+        <p>今日の呼吸回数：<span id="today-count">0</span></p>
+        <p>今日のセット回数：<span id="today-set">0</span> セット</p>
+        <p>最終実施日：<span id="last-date">なし</span></p>
+      </div>
+
+      <div id="goal-progress-container" style="margin-top: 16px;">
+        <p style="margin-bottom: 6px;">🎯 今日の目標達成度</p>
+        <div id="goal-bar-bg" style="width: 100%; max-width: 320px; height: 20px; background: #ddd; border-radius: 10px; margin: auto;">
+          <div id="goal-bar" style="height: 100%; width: 0%; background: linear-gradient(to right, #4caf50, #8bc34a); border-radius: 10px; transition: width 0.6s ease;"></div>
+        </div>
+        <p id="goal-percent" style="margin-top: 6px;">0%</p>
+      </div>
+      <button class="main-button" id="send-mail-btn" style="margin-bottom: 10px;">今日の記録をメールで送る</button>
+      <button class="main-button" onclick="location.href='calendar.html'">カレンダーを見る</button>
+    </div>
+  </div>
+
+  <script src="training.js"></script>
+  <script>
+    function goBack() {
+      location.href = 'index.html';
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      startTraining();
+    });
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('./sw.js').catch(function(e){ console.log('SW reg failed', e); });
+      });
+    }
+  </script>
+
+  <script>
+    (function(){
+      const params = new URLSearchParams(location.search);
+      if (params.get('via') === 'nfc') {
+        const b = document.getElementById('nfc-banner');
+        if (b) b.style.display = 'block';
+      }
+    })();
+  </script>
+
+</body>
+</html>

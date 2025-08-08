@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>表彰状</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .certificate-container {
+      max-width: 420px;
+      margin: 40px auto;
+      padding: 24px;
+      background: #fffbe8;
+      border: 4px solid #ddb14a;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(180,140,40,0.08);
+      text-align: center;
+    }
+    .certificate-title {
+      font-size: 2em;
+      margin-bottom: 20px;
+      color: #b38823;
+      letter-spacing: 0.06em;
+    }
+    .certificate-body {
+      font-size: 1.15em;
+      margin-bottom: 24px;
+    }
+    .certificate-footer {
+      font-size: 1em;
+      margin-top: 24px;
+      color: #888;
+    }
+  </style>
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="img/icon-192.png">
+</head>
+<body>
+  <div class="certificate-container">
+    <div class="certificate-title">表彰状</div>
+    <div id="certificate-main" class="certificate-body"></div>
+    <div class="certificate-footer"><button onclick="history.back()">← カレンダーへ戻る</button></div>
+  </div>
+  <script>
+    // クエリ取得
+    function getParam(name) {
+      return new URLSearchParams(window.location.search).get(name);
+    }
+    const year = parseInt(getParam("year"), 10);
+    const month = parseInt(getParam("month"), 10);
+
+    // ユーザ名取得
+    const nickname = localStorage.getItem("nickname") || "あなた";
+    // ログ取得
+    const logs = JSON.parse(localStorage.getItem("logs") || "{}");
+    // ゴール情報
+    const goals = JSON.parse(localStorage.getItem("goals") || "{}");
+
+    // その月の日付文字列一覧
+    const days = [];
+    const first = new Date(year, month - 1, 1);
+    const last = new Date(year, month, 0);
+    for (let d = 1; d <= last.getDate(); d++) {
+      const dt = new Date(year, month - 1, d);
+      dt.setHours(0,0,0,0);
+      const ymd = dt.toISOString().slice(0,10);
+      days.push(ymd);
+    }
+
+    // 集計
+    let total = 0, max = 0, min = null, achieved = 0, daysWithData = 0;
+    for (const ymd of days) {
+      const arr = logs[ymd];
+      if (Array.isArray(arr) && arr.length > 0) {
+        const cnt = arr.reduce((a,b)=>typeof b==="number"?a+b:a+(b.count||0),0);
+        total += cnt;
+        if (min === null || cnt < min) min = cnt;
+        if (cnt > max) max = cnt;
+        daysWithData++;
+        // ゴール達成数
+        const goal = goals[ymd];
+        if (goal && arr.length >= goal) achieved++;
+      }
+    }
+    const avg = daysWithData ? Math.round(total / daysWithData) : 0;
+
+    // メッセージ組立
+    const msg = `
+      <p>${nickname} さん<br>
+      <b>${year}年${month}月</b>の<br>呼吸トレーニングの成果をここに表彰します。</p>
+      <ul style="text-align:left; display:inline-block; margin:0 auto;">
+        <li>合計回数：<b>${total} 回</b></li>
+        <li>平均回数：<b>${avg} 回／日</b></li>
+        <li>最多回数：<b>${max} 回</b></li>
+        <li>最少回数：<b>${min !== null ? min : "-" } 回</b></li>
+        <li>目標達成日数：<b>${achieved} 日</b></li>
+      </ul>
+      <p style="margin-top:20px;">継続して頑張ったことを讃えます！<br>これからも健康づくりを応援しています。</p>
+    `;
+    document.getElementById("certificate-main").innerHTML = msg;
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('./sw.js').catch(function(e){ console.log('SW reg failed', e); });
+      });
+    }
+  </script>
+</body>
+</html>

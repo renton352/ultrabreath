@@ -1,0 +1,88 @@
+body {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.calendar-container {
+  max-width: 400px;
+  margin: 80px auto;
+  background: rgba(255, 255, 255, 0.7); /* 透明度のある白背景に変更 */
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+}
+.nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+#calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-top: 10px;
+}
+.day {
+  padding: 8px;
+  border: 1px solid #ccc;
+  min-height: 40px;
+  font-size: 0.9em;
+}
+.day.today {
+  background-color: #def;
+  border-color: #36a2eb;
+}
+.day.muted {
+  color: #bbb;
+}
+
+.max-value {
+  background-color: #87cefa !important; /* 青系ハイライト */
+}
+
+.min-value {
+  background-color: #ffcccc !important; /* 赤系ハイライト */
+}
+
+}
+
+
+.goal-icon {
+  display: block;
+  font-size: 18px;
+  margin-top: 2px;
+  line-height: 1;
+}
+.goal-success .goal-icon {
+  color: #2e7d32;
+}
+.goal-failed .goal-icon {
+  color: #c62828;
+}
+
+
+dialog#log-modal {
+  width: 300px;
+  padding: 20px;
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.settings-modal {
+  width: 90vw;
+  max-width: 400px;
+  max-height: 95vh;          /* 画面の高さの95%以内に制限 */
+  overflow-y: auto;          /* 必要に応じてスクロールバー表示 */
+  padding: 16px;
+  box-sizing: border-box;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}

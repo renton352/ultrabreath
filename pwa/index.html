@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ウルトラブレス トップ</title>
+  <link rel="stylesheet" href="style.css">
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="img/icon-192.png">
+</head>
+<body>
+  <div class="container">
+    <h1 id="top-title">ウルトラブレス</h1>
+    <img src="img/ultrabreath.jpg" alt="Ultrabreath ロゴ" id="logo-image" />
+
+    <div id="genre-selection">
+      <button class="main-button" onclick="location.href='training.html'">▶️ 呼吸トレーニングを開始</button>
+      <div class="settings-button-wrapper">
+        <button id="settings-button">⚙️ 設定</button>
+        <button id="open-backup-modal" class="main-button">📦 データ管理</button>
+      </div>
+    </div>
+
+    <div id="settings-modal" class="settings-modal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:1000;">
+      <h2>設定</h2>
+      <label>ニックネーム:<br><input type="text" id="nickname-input" style="width: 100%; margin-bottom: 10px; font-size: 22px;" /></label><br/>
+      <label>1セットの回数:<br><input type="number" id="set-count-input" min="1" style="width: 100%; margin-bottom: 10px; font-size: 22px;" /></label><br/>
+      <label>1日のセット目標数:<br><input type="number" id="set-goal-input" min="1" style="width: 100%; margin-bottom: 10px; font-size: 22px;" /></label><br/>
+	<label>メール送信先アドレス:<br>
+	  <input type="email" id="email-address-input" style="width: 100%; margin-bottom: 10px; font-size: 22px;" />
+	</label><br/>
+      <label>カレンダー背景画像:<br><input type="file" id="calendar-bg-input" accept="image/*" style="margin-bottom: 10px; font-size: 22px;"/></label><br/>
+      <button class="main-button" id="save-settings">保存</button>
+      <button class="main-button" id="close-settings">閉じる</button>
+    </div>
+
+    <!-- データ管理モーダル -->
+	<div id="backup-modal" class="settings-modal"
+	  style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:1000;">
+	  <h2>データ管理</h2>
+      <div style="margin-bottom:14px;">
+        <button class="main-button" id="show-backup-text">バックアップをコピー</button>
+        <textarea id="backup-textarea" style="width:100%;height:120px;margin-top:8px;" readonly></textarea>
+        <button id="copy-backup-btn" class="main-button" style="margin-bottom:8px;">コピー</button>
+        <div style="font-size:0.95em;">※コピーを押したらメモ帳やLINEの自分トークなどに貼り付けて保存してください。</div>
+      </div>
+      <div style="margin-top:14px;">
+        <div style="margin-bottom:4px;font-weight:bold;">▼ テキストで復元</div>
+        <textarea id="restore-textarea" style="width:100%;height:120px;margin-top:8px;" placeholder="ここにバックアップ内容を貼り付け"></textarea>
+        <button id="import-restore-btn" class="main-button" style="margin-top:8px;">データを復元</button>
+        <span id="restore-msg" style="font-size:0.92em;color:#2e7d32; margin-left:8px;"></span>
+        <div style="font-size:0.85em; color:#666; margin-top:6px;">※復元すると現在のデータが上書きされます。</div>
+      </div>
+      <button class="main-button" id="close-backup-modal" style="margin-top:18px;">閉じる</button>
+    </div>
+  </div>
+
+<script src="main.js"></script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('./sw.js').catch(function(e){ console.log('SW reg failed', e); });
+      });
+    }
+  </script>
+</body>
+</html>

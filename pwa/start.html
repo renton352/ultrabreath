@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="img/icon-192.png">
+  <link rel="manifest" href="manifest.json">
+  <title>起動中…</title>
+  <style>body{font-family:sans-serif;text-align:center;padding:40px}</style>
+</head>
+<body>
+  <p>起動しています…</p>
+  <script>
+    try { localStorage.setItem('lastLaunchVia', 'nfc'); } catch (e) {}
+    location.replace('training.html?via=nfc');
+  </script>
+</body>
+</html>
