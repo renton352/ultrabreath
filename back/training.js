@@ -155,3 +155,26 @@ function updateGoalBar(todaySets) {
       ? "linear-gradient(to right, gold, orange)"
       : "linear-gradient(to right, #4caf50, #8bc34a)";
 }
+
+document.getElementById("send-mail-btn").onclick = function() {
+  const today = (new Date()).toISOString().slice(0,10);
+  const logs = JSON.parse(localStorage.getItem("logs") || "{}");
+  const goals = JSON.parse(localStorage.getItem("goals") || "{}");
+  const memos = JSON.parse(localStorage.getItem("memos") || "{}");
+  const nickname = localStorage.getItem("nickname") || "あなた";
+  const toAddress = localStorage.getItem("mailAddress") || "";
+
+  // 今日の記録
+  const todayLogs = Array.isArray(logs[today]) ? logs[today] : [];
+  const todayCount = todayLogs.reduce((sum, val) => typeof val === "number" ? sum+val : sum+(val.count||0), 0);
+  const sets = todayLogs.length;
+  const goal = goals[today] || "-";
+  const memo = memos[today] || "";
+
+  let body = `${nickname} さんの今日の呼吸トレーニング記録\n`;
+  body += `日付: ${today}\n合計回数: ${todayCount}回\nセット数: ${sets}\n目標セット数: ${goal}\n`;
+  if (memo) body += `メモ: ${memo}\n`;
+
+  const mailto = `mailto:${encodeURIComponent(toAddress)}?subject=${encodeURIComponent("ウルトラブレス 今日の記録（"+today+"）")}&body=${encodeURIComponent(body)}`;
+  window.location.href = mailto;
+};
