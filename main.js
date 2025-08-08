@@ -178,6 +178,7 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("nickname-input").value = localStorage.getItem("nickname") || "";
     document.getElementById("set-count-input").value = localStorage.getItem("setCount") || 25;
     document.getElementById("set-goal-input").value = localStorage.getItem("setGoal") || 2;
+    document.getElementById("email-address-input").value = localStorage.getItem("mailAddress") || "";
   };
 
   document.getElementById("close-settings").onclick = function() {
@@ -188,9 +189,11 @@ document.addEventListener("DOMContentLoaded", function() {
     const nickname = document.getElementById("nickname-input").value;
     const setCountValue = parseInt(document.getElementById("set-count-input").value);
     const setGoalValue = parseInt(document.getElementById("set-goal-input").value);
+    const emailAddress = document.getElementById("email-address-input").value;
     localStorage.setItem("nickname", nickname);
     localStorage.setItem("setCount", setCountValue);
     localStorage.setItem("setGoal", setGoalValue);
+    localStorage.setItem("mailAddress", emailAddress);
 
     const bgInput = document.getElementById("calendar-bg-input");
     const file = bgInput.files[0];
