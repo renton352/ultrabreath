@@ -16,7 +16,7 @@
     }
   }
 
-  // 配列の合計を安全に計算（数値化 + 無効値除外）
+  // 配列の合計を安全に計算
   function safeSum(arr) {
     return (Array.isArray(arr) ? arr : [])
       .map(v => Number(v))
@@ -30,45 +30,69 @@
     return Number.isFinite(v) && v > 0 && v < 60 ? v : 4;
   }
 
-  // 合計値など（数値化＆不正値除去でNaN防止）
-  function computeStats(rawLogs) {
-    const logs = rawLogs || {};
+  // 基本統計
+  function computeStats(logs) {
     let totalBreaths = 0;
     let totalSessions = 0;
-
     Object.values(logs).forEach(arr => {
       if (Array.isArray(arr)) {
-        const nums = arr
-          .map(v => Number(v))
-          .filter(n => Number.isFinite(n) && n >= 0);
+        const nums = arr.map(v => Number(v)).filter(n => Number.isFinite(n) && n >= 0);
         totalSessions += nums.length;
         totalBreaths += nums.reduce((a, b) => a + b, 0);
       }
     });
-
-    // ストリーク（今日から遡って連続日数）
+    // 継続記録（今日から遡って連続）
     const today = new Date(); today.setHours(0, 0, 0, 0);
     let streak = 0;
     for (let i = 0; i < 365; i++) {
       const d = new Date(today);
       d.setDate(today.getDate() - i);
-      const k = getLocalDateString(d);
-      const arr = logs[k];
-      const nums = Array.isArray(arr)
-        ? arr.map(v => Number(v)).filter(n => Number.isFinite(n) && n > 0)
-        : [];
+      const key = getLocalDateString(d);
+      const arr = logs[key];
+      const nums = Array.isArray(arr) ? arr.map(Number).filter(n => n > 0) : [];
       if (nums.length > 0) streak++; else break;
     }
-
     const secondsPerBreath = getSecondsPerBreath();
     const totalMinutes = Math.round((totalBreaths * secondsPerBreath) / 60);
-
     return { totalBreaths, totalSessions, streak, totalMinutes };
+  }
+
+  // 最長継続日数
+  function computeLongestStreak(logs) {
+    const days = Object.keys(logs).sort();
+    const has = d => Array.isArray(logs[d]) && logs[d].some(v => Number(v) > 0);
+    let longest = 0, current = 0, prev = null;
+    for (const d of days) {
+      if (!has(d)) continue;
+      if (!prev) { current = 1; prev = d; longest = 1; continue; }
+      const p = new Date(prev), c = new Date(d);
+      p.setDate(p.getDate() + 1);
+      if (p.toDateString() === c.toDateString()) {
+        current += 1;
+      } else {
+        current = 1;
+      }
+      prev = d;
+      longest = Math.max(longest, current);
+    }
+    return longest;
+  }
+
+  // 平均呼吸/セッション
+  function computeAvgPerSession(logs) {
+    let breaths = 0, sessions = 0;
+    Object.values(logs).forEach(arr => {
+      if (!Array.isArray(arr)) return;
+      const nums = arr.map(Number).filter(n => Number.isFinite(n) && n >= 0);
+      breaths += nums.reduce((a, b) => a + b, 0);
+      sessions += nums.length;
+    });
+    return sessions ? Math.round(breaths / sessions) : 0;
   }
 
   // ===== Calendar rendering =====
   let current = new Date();
-  let mode = localStorage.getItem("calendarViewMode") || "detail"; // "simple" | "detail"
+  let mode = localStorage.getItem("calendarViewMode") || "detail";
 
   function renderCalendar() {
     const calendar = document.getElementById("calendar");
@@ -81,77 +105,72 @@
     // 月ラベル
     document.getElementById("month-label").textContent = `${year}年${month + 1}月`;
 
-    // 上部カード数値
+    // 統計
     const stats = computeStats(logs);
-    const streakEl = document.getElementById("streak-card");
-    const minEl = document.getElementById("total-minutes-card");
-    const sessEl = document.getElementById("total-sessions-card");
-    if (streakEl) streakEl.textContent = `${stats.streak} 日`;
-    if (minEl) minEl.textContent = `${stats.totalMinutes} 分`;
-    if (sessEl) sessEl.textContent = `${stats.totalSessions} 回`;
+    const longest = computeLongestStreak(logs);
+    const avgPerSession = computeAvgPerSession(logs);
 
-    // カレンダー準備
+    document.getElementById("streak-card").textContent = `${stats.streak} 日`;
+    document.getElementById("total-minutes-card").textContent = `${stats.totalMinutes} 分`;
+    document.getElementById("total-sessions-card").textContent = `${stats.totalSessions} 回`;
+    const longestEl = document.getElementById("longest-streak-card");
+    if (longestEl) longestEl.textContent = `${longest} 日`;
+
+    const avgEl = document.getElementById("average-label");
+    if (avgEl) avgEl.textContent = `平均：${avgPerSession}回／セッション`;
+
+    // カレンダー描画
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
     const startDay = firstDay.getDay();
     const totalDays = lastDay.getDate();
 
-    // 曜日ヘッダ
-    const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
+    const weekdays = ["日","月","火","水","木","金","土"];
     for (const w of weekdays) {
       const cell = document.createElement("div");
       cell.className = "day muted";
       cell.textContent = w;
       calendar.appendChild(cell);
     }
-
-    // 先行空白
-    for (let i = 0; i < startDay; i++) {
-      const cell = document.createElement("div");
-      cell.className = "day muted";
+    for (let i=0;i<startDay;i++) {
+      const cell=document.createElement("div");
+      cell.className="day muted";
       calendar.appendChild(cell);
     }
 
-    // 各日の合計（安全に集計）
     const valuesByDate = {};
-    for (let d = 1; d <= totalDays; d++) {
-      const date = new Date(year, month, d);
-      date.setHours(0, 0, 0, 0);
-      const key = getLocalDateString(date);
-      valuesByDate[key] = safeSum(logs[key]);
+    for (let d=1; d<=totalDays; d++) {
+      const date=new Date(year,month,d);
+      date.setHours(0,0,0,0);
+      const key=getLocalDateString(date);
+      valuesByDate[key] = safeSum(getLogs()[key]);
     }
 
     const allValues = Object.values(valuesByDate);
     const max = allValues.length ? Math.max(...allValues) : 0;
     const min = allValues.length ? Math.min(...allValues) : 0;
-    const sum = safeSum(allValues);
-    const average = allValues.length ? Math.floor(sum / allValues.length) : 0;
-    const avgEl = document.getElementById("average-label");
-    if (avgEl) avgEl.textContent = `平均：${average}回／日`;
 
-    // 当日
-    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const today=new Date(); today.setHours(0,0,0,0);
 
-    // 日セル
-    for (let d = 1; d <= totalDays; d++) {
-      const dateObj = new Date(year, month, d);
-      dateObj.setHours(0, 0, 0, 0);
-      const dateStr = getLocalDateString(dateObj);
+    for (let d=1; d<=totalDays; d++) {
+      const dateObj=new Date(year,month,d);
+      dateObj.setHours(0,0,0,0);
+      const dateStr=getLocalDateString(dateObj);
       const count = valuesByDate[dateStr] || 0;
 
-      const cell = document.createElement("div");
-      cell.className = "day";
-      if (dateObj.getTime() === today.getTime()) cell.classList.add("today");
+      const cell=document.createElement("div");
+      cell.className="day";
+      if (dateObj.getTime()===today.getTime()) cell.classList.add("today");
 
-      if (mode === "detail") {
-        if (count > 0) {
-          if (count === max) cell.classList.add("max-value");
-          else if (count === min) cell.classList.add("min-value");
+      if (mode==="detail") {
+        if (count>0) {
+          if (count===max) cell.classList.add("max-value");
+          else if (count===min) cell.classList.add("min-value");
         }
-        cell.innerHTML = `<strong>${d}</strong><br>${count > 0 ? count + "回" : "-"}`;
+        cell.innerHTML=`<strong>${d}</strong><br>${count>0?count+"回":"-"}`;
       } else {
-        const dot = count > 0 ? '<span class="dot"></span>' : '&nbsp;';
-        cell.innerHTML = `<strong>${d}</strong><br>${dot}`;
+        const dot = count>0 ? '<span class="dot"></span>' : '&nbsp;';
+        cell.innerHTML=`<strong>${d}</strong><br>${dot}`;
       }
 
       calendar.appendChild(cell);
@@ -161,38 +180,35 @@
   // ===== Init & Events =====
   document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("prev-month").addEventListener("click", () => {
-      current.setMonth(current.getMonth() - 1);
+      current.setMonth(current.getMonth()-1);
       renderCalendar();
     });
     document.getElementById("next-month").addEventListener("click", () => {
-      current.setMonth(current.getMonth() + 1);
+      current.setMonth(current.getMonth()+1);
       renderCalendar();
     });
 
-    // モード切替（保持）
-    const radios = document.querySelectorAll('input[name="mode"]');
-    radios.forEach(r => {
-      r.checked = (r.value === mode);
-      r.addEventListener("change", (e) => {
-        mode = e.target.value;
-        localStorage.setItem("calendarViewMode", mode);
+    const radios=document.querySelectorAll('input[name="mode"]');
+    radios.forEach(r=>{
+      r.checked=(r.value===mode);
+      r.addEventListener("change", e=>{
+        mode=e.target.value;
+        localStorage.setItem("calendarViewMode",mode);
         renderCalendar();
       });
     });
 
-    // ボタン
-    document.getElementById("reset-bg").addEventListener("click", () => {
+    document.getElementById("reset-bg").addEventListener("click",()=>{
       localStorage.removeItem("calendarBackground");
       sessionStorage.removeItem("calendarBackground");
-      document.body.style.setProperty("background-image", "none", "important");
+      document.body.style.setProperty("background-image","none","important");
     });
-    document.getElementById("back-btn").addEventListener("click", () => {
-      location.href = "index.html";
+    document.getElementById("back-btn").addEventListener("click",()=>{
+      location.href="index.html";
     });
 
-    // 初期フォールバック（なければ4秒をセットしておくと更に安心）
     if (!localStorage.getItem("secondsPerBreath")) {
-      localStorage.setItem("secondsPerBreath", "4");
+      localStorage.setItem("secondsPerBreath","4");
     }
 
     renderCalendar();

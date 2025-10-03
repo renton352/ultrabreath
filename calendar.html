@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>呼吸アクティビティ</title>
+  <title>呼吸の記録</title>
   <link rel="stylesheet" href="calendar.css" />
   <style>
     body {
@@ -16,22 +16,27 @@
 </head>
 <body>
   <div class="calendar-container">
-    <h1 style="margin:6px 0 10px;">アクティビティ</h1>
+    <h1 style="margin:6px 0 10px;">呼吸の記録</h1>
 
-    <!-- 上部カード（Airofit風） -->
+    <!-- 上部カード（Ultrabreathオリジナル） -->
     <div class="stats-row">
       <div class="stat-card">
-        <div class="stat-title">現在のストリーク</div>
+        <div class="stat-title">継続記録</div>
         <div class="stat-value" id="streak-card">0 日</div>
       </div>
       <div class="stat-card">
-        <div class="stat-title">合計時間</div>
+        <div class="stat-title">深呼吸時間</div>
         <div class="stat-value" id="total-minutes-card">0 分</div>
       </div>
       <div class="stat-card">
-        <div class="stat-title">合計セッション</div>
+        <div class="stat-title">セッション合計</div>
         <div class="stat-value" id="total-sessions-card">0 回</div>
       </div>
+    </div>
+
+    <div class="stat-card" style="margin:8px 0">
+      <div class="stat-title">最長継続</div>
+      <div class="stat-value" id="longest-streak-card">0 日</div>
     </div>
 
     <!-- 月ナビ -->
@@ -44,8 +49,8 @@
     <!-- 表示モード切替 -->
     <div class="mode-toggle">
       表示モード：
-      <label><input type="radio" name="mode" value="simple"> シンプル</label>
-      <label style="margin-left:8px;"><input type="radio" name="mode" value="detail" checked> 詳細</label>
+      <label><input type="radio" name="mode" value="simple"> スタンプ</label>
+      <label style="margin-left:8px;"><input type="radio" name="mode" value="detail" checked> こまかく</label>
     </div>
 
     <div id="average-label" style="margin-bottom: 8px; font-weight: bold;"></div>
