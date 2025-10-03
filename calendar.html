@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>呼吸カレンダー</title>
-  <link rel="stylesheet" href="calendar.css">
+  <title>呼吸アクティビティ</title>
+  <link rel="stylesheet" href="calendar.css" />
   <style>
     body {
       background-size: cover;
@@ -16,33 +16,53 @@
 </head>
 <body>
   <div class="calendar-container">
-    <h1>呼吸カレンダー</h1>
+    <h1 style="margin:6px 0 10px;">アクティビティ</h1>
+
+    <!-- 上部カード（Airofit風） -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-title">現在のストリーク</div>
+        <div class="stat-value" id="streak-card">0 日</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-title">合計時間</div>
+        <div class="stat-value" id="total-minutes-card">0 分</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-title">合計セッション</div>
+        <div class="stat-value" id="total-sessions-card">0 回</div>
+      </div>
+    </div>
+
+    <!-- 月ナビ -->
     <div class="nav">
       <button id="prev-month">← 前月</button>
-      <span id="month-label" style="min-width:6em;display:inline-block;">YYYY年MM月</span>
+      <span id="month-label">YYYY年MM月</span>
       <button id="next-month">次月 →</button>
     </div>
-    <button id="show-certificate-btn" style="margin-top:2px; display:block; margin-left:auto; margin-right:auto;">表彰状を見る</button>
-    <div id="average-label" style="margin-bottom: 10px; font-weight: bold;"></div>
+
+    <!-- 表示モード切替 -->
+    <div class="mode-toggle">
+      表示モード：
+      <label><input type="radio" name="mode" value="simple"> シンプル</label>
+      <label style="margin-left:8px;"><input type="radio" name="mode" value="detail" checked> 詳細</label>
+    </div>
+
+    <div id="average-label" style="margin-bottom: 8px; font-weight: bold;"></div>
     <div id="calendar"></div>
-    <label>月間最高値:🌟　メモあり:✏<br>
-    <label>目標クリア:👑　目標未クリア:😔<br>
-    <button onclick="resetBackground()">背景をリセット</button>
-    <button onclick="location.href='index.html'">← トップに戻る</button>
+
+    <div class="actions">
+      <button id="reset-bg">背景をリセット</button>
+      <button id="back-btn">← トップに戻る</button>
+    </div>
   </div>
+
   <script src="calendar.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const bg = sessionStorage.getItem("calendarBackground") || localStorage.getItem("calendarBackground");
-      if (bg) {
-        document.body.style.backgroundImage = `url('${bg}')`;
-      }
+      if (bg) document.body.style.backgroundImage = `url('${bg}')`;
     });
   </script>
-  <dialog id="log-modal">
-    <h3 id="modal-date-label"></h3>
-    <div id="modal-log-content"></div>
-    <button onclick="document.getElementById('log-modal').close()">閉じる</button>
-  </dialog>
 </body>
 </html>
