@@ -16,11 +16,18 @@
     }
   }
 
+  // 配列の合計を安全に計算（数値化 + 無効値除外）
+  function safeSum(arr) {
+    return (Array.isArray(arr) ? arr : [])
+      .map(v => Number(v))
+      .filter(n => Number.isFinite(n) && n >= 0)
+      .reduce((a, b) => a + b, 0);
+  }
+
   // 1呼吸あたりの秒数（未設定なら4秒）
   function getSecondsPerBreath() {
-    const v = parseInt(localStorage.getItem("secondsPerBreath"));
-    if (!isNaN(v) && v > 0 && v < 60) return v;
-    return 4;
+    const v = Number(localStorage.getItem("secondsPerBreath"));
+    return Number.isFinite(v) && v > 0 && v < 60 ? v : 4;
   }
 
   // 合計値など（数値化＆不正値除去でNaN防止）
@@ -105,31 +112,25 @@
       calendar.appendChild(cell);
     }
 
-    // 各日の合計（数値化＆不正値除去）
+    // 各日の合計（安全に集計）
     const valuesByDate = {};
     for (let d = 1; d <= totalDays; d++) {
       const date = new Date(year, month, d);
       date.setHours(0, 0, 0, 0);
       const key = getLocalDateString(date);
-      const arr = logs[key];
-      const nums = Array.isArray(arr)
-        ? arr.map(v => Number(v)).filter(n => Number.isFinite(n) && n >= 0)
-        : [];
-      const total = nums.reduce((s, v) => s + v, 0);
-      valuesByDate[key] = total;
+      valuesByDate[key] = safeSum(logs[key]);
     }
 
     const allValues = Object.values(valuesByDate);
     const max = allValues.length ? Math.max(...allValues) : 0;
     const min = allValues.length ? Math.min(...allValues) : 0;
-    const sum = allValues.reduce((a, b) => a + b, 0);
+    const sum = safeSum(allValues);
     const average = allValues.length ? Math.floor(sum / allValues.length) : 0;
     const avgEl = document.getElementById("average-label");
     if (avgEl) avgEl.textContent = `平均：${average}回／日`;
 
     // 当日
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const today = new Date(); today.setHours(0, 0, 0, 0);
 
     // 日セル
     for (let d = 1; d <= totalDays; d++) {
@@ -188,6 +189,11 @@
     document.getElementById("back-btn").addEventListener("click", () => {
       location.href = "index.html";
     });
+
+    // 初期フォールバック（なければ4秒をセットしておくと更に安心）
+    if (!localStorage.getItem("secondsPerBreath")) {
+      localStorage.setItem("secondsPerBreath", "4");
+    }
 
     renderCalendar();
   });
