@@ -1,195 +1,168 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Ultrabreath トレーニング</title>
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    :root{
-      --base: 18px;
-      --md: 16px;
-      --lg: 20px;
-      --xl: 24px;
-      --radius: 14px;
-      --safe-bottom: env(safe-area-inset-bottom);
-    }
-    body {
-      margin: 0;
-      font-family: "Noto Sans JP", sans-serif;
-      font-size: var(--base);
-      background: #f2f7ff;
-      display: flex;
-      flex-direction: column;
-      min-height: 100svh;
-      box-sizing: border-box;
-      padding-bottom: calc(70px + var(--safe-bottom)); /* フッター分の余白 */
-    }
+body {
+  font-family: "Noto Sans JP", sans-serif;
+  background: #f0f8ff;
+  text-align: center;
+  margin: 0;
+  padding: 8px;
+  font-size: 18px;
+  line-height: 1.6;
+}
 
-    .screen {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 14px;
-      box-sizing: border-box;
-      text-align: center;
-    }
+.container {
+  width: 100%;
+  max-width: 480px;
+  margin: auto;
+  padding: 0 10px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 0 16px rgba(0,0,0,0.1);
+}
 
-    /* ---- 各パーツ ---- */
-    .banner {
-      font-weight: 800;
-      color: #1a66ff;
-      background: #eef4ff;
-      border: 1px solid #d9e6ff;
-      border-radius: var(--radius);
-      padding: 8px 12px;
-    }
+/* 見出し */
+#top-title {
+  font-size: 1.8em;
+  margin: 12px 0 4px;
+  color: #0044cc;
+  font-weight: 800;
+}
 
-    .info-row {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-      flex-wrap: wrap;
-      font-size: var(--md);
-    }
-    .pill {
-      background: #fff;
-      border: 1px solid #e6eaf2;
-      border-radius: 999px;
-      padding: 6px 10px;
-      box-shadow: 0 4px 14px rgba(0,0,0,.05);
-      white-space: nowrap;
-    }
+/* ロゴ */
+#logo-image {
+  max-width: 240px;
+  width: 100%;
+  height: auto;
+  margin: 16px auto;
+  display: block;
+}
 
-    .circle {
-      width: min(70vw, 320px);
-      height: min(70vw, 320px);
-      border-radius: 50%;
-      border: 12px solid #e6f0ff;
-      display: grid;
-      place-items: center;
-      position: relative;
-      background: radial-gradient(140px 44px at 60% 30%, rgba(20,89,255,0.06), transparent);
-      margin: 10px 0;
-    }
-    .circle::after {
-      content: "";
-      position: absolute;
-      inset: -12px;
-      border-radius: 50%;
-      border: 12px solid transparent;
-      border-top-color: #1a66ff;
-      transform: rotate(calc(var(--deg, 0) * 1deg));
-      transition: transform .3s ease;
-    }
-    .progress-num {
-      font-size: var(--xl);
-      font-weight: 800;
-    }
+/* ボタン */
+button {
+  font-size: 1.1em;
+  margin: 6px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+}
 
-    .main-btn {
-      width: min(86vw, 380px);
-      height: 56px;
-      border: none;
-      border-radius: var(--radius);
-      background: #1a66ff;
-      color: #fff;
-      font-size: var(--lg);
-      font-weight: 700;
-      box-shadow: 0 10px 22px rgba(26,102,255,.25);
-    }
-    .main-btn:disabled { opacity: 0.5; }
+button.main-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  width: 90%;
+  max-width: 320px;
+  font-size: 1.2em;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
 
-    .line {
-      font-size: var(--md);
-      color: #222;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      background: #fff;
-      border: 1px solid #eef1f6;
-      border-radius: var(--radius);
-      padding: 8px 12px;
-      max-width: 90%;
-      margin-top: 8px;
-    }
-    .avatar {
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
+button.main-button:hover {
+  background-color: #005fc9;
+}
 
-    /* ---- フッター固定 ---- */
-    .footer-wrap {
-      position: fixed;
-      bottom: 0;
-      left: 0; right: 0;
-      background: #f2f7ff;
-      border-top: 1px solid #e6eaf2;
-      padding: 8px 14px calc(8px + var(--safe-bottom));
-      display: flex;
-      justify-content: center;
-      box-sizing: border-box;
-    }
-    .footer {
-      width: min(700px, 100%);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-    .sub-btn {
-      height: 48px;
-      border-radius: var(--radius);
-      border: 1px solid #e6eaf2;
-      background: #fff;
-      font-weight: 700;
-      font-size: var(--md);
-      box-shadow: 0 4px 12px rgba(0,0,0,.06);
-    }
+/* 設定ボタン */
+.settings-button-wrapper {
+  text-align: center;
+  margin-top: 10px;
+}
+#settings-button {
+  background-color: #ddd;
+  color: #333;
+  border: 1px solid #aaa;
+  font-weight: 600;
+}
 
-    /* 小さい端末ではコンパクト化 */
-    @media (max-height: 700px) {
-      .circle { width: min(60vw, 260px); height: min(60vw, 260px); }
-      .main-btn { height: 48px; font-size: 18px; }
-      .banner { font-size: 16px; }
-    }
-  </style>
-</head>
-<body>
-  <div class="screen">
-    <div class="banner" id="banner">🌟 今日で0日連続！</div>
+/* キャラ */
+#character img {
+  width: 120px;
+  height: auto;
+  margin-bottom: 8px;
+}
+#speech {
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
 
-    <div class="info-row">
-      <div class="pill">📅 <span id="sum-today">0</span>回</div>
-      <div class="pill">🎯 残り <span id="remain">0</span></div>
-      <div class="pill">👣 <span id="streak-day">0</span>日</div>
-    </div>
+/* ストリーク */
+#streak-info {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #2d88ff;
+  margin-bottom: 8px;
+}
 
-    <div>
-      <div class="circle" id="circle" style="--deg:0;">
-        <div class="progress-num"><span id="progress">0</span>/<span id="target">10</span></div>
-      </div>
-      <button id="breath-btn" class="main-btn">吸った！</button>
-    </div>
+/* トレーニング画面 */
+#training-screen {
+  min-height: 400px;
+  padding-bottom: 12px;
+}
+#retry-button {
+  display: block;
+  margin: 8px auto;
+  background-color: #def;
+  border: 1px solid #79a;
+  padding: 10px 20px;
+  font-size: 1.1em;
+  border-radius: 6px;
+  cursor: pointer;
+}
 
-    <div class="line">
-      <img src="img/normal.png" alt="avatar" class="avatar" />
-      <span id="one-line">ゆっくりいきましょう</span>
-    </div>
-  </div>
+/* ログ */
+#log {
+  background: #f8faff;
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin: 12px auto;
+  font-size: 1em;
+  text-align: left;
+}
+#log h2 {
+  margin: 6px 0;
+  font-size: 1.2em;
+  color: #003399;
+}
 
-  <div class="footer-wrap">
-    <div class="footer">
-      <button class="sub-btn" id="to-calendar">📊 カレンダー</button>
-      <button class="sub-btn" id="send-mail-btn">📨 記録送信</button>
-    </div>
-  </div>
+/* モーダル */
+.settings-modal {
+  width: 90vw;
+  max-width: 400px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  text-align: left;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  z-index: 1000;
+  box-sizing: border-box;
+}
+.settings-modal input {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 8px;
+  font-size: 1.1em;
+}
 
-  <script defer src="training.js?v=20251003c"></script>
-</body>
-</html>
+/* メディア調整 */
+@media screen and (max-width: 480px) {
+  body { font-size: 18px; }
+  #speech, #streak-info, #log p, #log h2 { font-size: 1.1em; }
+  #character img { width: 100px; }
+  button.main-button { font-size: 1.1em; padding: 10px; }
+}
+
+/* 共通装飾 */
+#back-button {
+  background-color: #eee;
+  border: 1px solid #aaa;
+  color: #222;
+}
+
+canvas {
+  width: 100% !important;
+  height: auto !important;
+  max-width: 100%;
+  margin-top: 16px;
+}
