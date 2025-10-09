@@ -50,7 +50,7 @@ function hardBindUI() {
   $("send-mail-btn")?.addEventListener("click", sendTodayByMail);
 
   // スクロール抑制（1画面完結）
-  document.documentElement.style.overflow = "hidden";
+
   console.log("[Ultrabreath] UI bound.");
 }
 
