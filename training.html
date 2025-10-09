@@ -2,59 +2,131 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>呼吸トレーニング</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ultrabreath トレーニング</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* --- コンパクト版レイアウト（1画面完結） --- */
+    body, html { height: 100%; }
+    .screen {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto auto;
+      gap: 10px;
+      place-items: center;
+      padding: 12px 14px;
+    }
+    .banner {
+      font-weight: 700;
+      color: #1a66ff;
+      background: #eef4ff;
+      border: 1px solid #d9e6ff;
+      border-radius: 12px;
+      padding: 6px 10px;
+    }
+    .info-row {
+      display: grid;
+      grid-template-columns: repeat(3, auto);
+      gap: 8px;
+      font-size: 13px;
+      align-items: center;
+    }
+    .pill {
+      background: #fff;
+      border: 1px solid #e6eaf2;
+      border-radius: 999px;
+      padding: 6px 10px;
+      box-shadow: 0 4px 14px rgba(0,0,0,.04);
+      white-space: nowrap;
+    }
+    /* 呼吸サークル */
+    .circle {
+      width: min(64vw, 280px);
+      height: min(64vw, 280px);
+      border-radius: 50%;
+      border: 10px solid #e6f0ff;
+      display: grid;
+      place-items: center;
+      position: relative;
+      background: radial-gradient(120px 40px at 60% 30%, rgba(20,89,255,0.06), transparent);
+    }
+    .circle::after { /* 進捗リング（簡易） */
+      content: "";
+      position: absolute;
+      inset: -10px;
+      border-radius: 50%;
+      border: 10px solid transparent;
+      border-top-color: #1a66ff;
+      transform: rotate(calc(var(--deg, 0) * 1deg));
+      transition: transform .3s ease;
+    }
+    .progress-num { font-size: 28px; font-weight: 800; }
+    .main-btn {
+      margin-top: 8px;
+      width: min(80vw, 360px);
+      height: 48px;
+      border: none;
+      border-radius: 12px;
+      background: #1a66ff;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 700;
+      box-shadow: 0 8px 18px rgba(26,102,255,.25);
+    }
+    .main-btn:disabled { opacity: .5; }
+    /* ひとこと（キャラは控えめ・アイコンだけ） */
+    .line {
+      font-size: 13px;
+      color: #333;
+      display: flex; align-items: center; gap: 6px;
+      background: #fff; border:1px solid #eef1f6; border-radius: 10px;
+      padding: 6px 10px;
+    }
+    .avatar {
+      width: 24px; height: 24px; border-radius: 50%; object-fit: cover;
+    }
+    .footer {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%;
+    }
+    .sub-btn {
+      height: 40px; border-radius: 10px; border:1px solid #e6eaf2; background:#fff;
+      font-weight: 600;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1 id="top-title">ウルトラブレス</h1>
-    <img src="img/ultrabreath.jpg" alt="Ultrabreath ロゴ" id="logo-image" />
+  <div class="screen" id="screen">
+    <!-- ステータス -->
+    <div class="banner" id="banner">🌟 今日で0日連続！</div>
 
-    <div id="training-screen">
-      <p id="streak-info">今日で0日連続です！</p>
-      <div id="character">
-        <img alt="ブレス先生" id="character-image" src="img/normal.png" />
-        <div id="nickname-display" style="font-weight: bold; font-size: 1.1em; margin: 6px;"></div>
-        <p id="speech">はじめましょうか、深呼吸ですよ。</p>
-      </div>
-      <div>
-        <p>呼吸回数：<span id="breath-count">0</span></p>
-        <div id="button-group">
-          <button class="main-button" id="breathe-button" onclick="countBreath()">吸った！</button>
-          <button class="main-button" id="back-button" onclick="goBack()">← トップ画面に戻る</button>
-          <button class="main-button" id="retry-button" style="display: none;" onclick="resetTraining()">もう一度</button>
-        </div>
-      </div>
+    <!-- 今日の概要（3ピル） -->
+    <div class="info-row">
+      <div class="pill">📅 <span id="sum-today">0</span>回</div>
+      <div class="pill">🎯 残り <span id="remain">0</span></div>
+      <div class="pill">👣 <span id="streak-day">0</span>日</div>
+    </div>
 
-      <div id="log">
-        <h2>記録</h2>
-        <p>今日の呼吸回数：<span id="today-count">0</span></p>
-        <p>今日のセット回数：<span id="today-set">0</span> セット</p>
-        <p>最終実施日：<span id="last-date">なし</span></p>
+    <!-- 呼吸アクションエリア -->
+    <div style="display:grid; place-items:center; gap:10px;">
+      <div class="circle" id="circle" style="--deg:0">
+        <div class="progress-num"><span id="progress">0</span>/<span id="target">10</span></div>
       </div>
+      <button id="breath-btn" class="main-btn">吸った！</button>
+    </div>
 
-      <div id="goal-progress-container" style="margin-top: 16px;">
-        <p style="margin-bottom: 6px;">🎯 今日の目標達成度</p>
-        <div id="goal-bar-bg" style="width: 100%; max-width: 320px; height: 20px; background: #ddd; border-radius: 10px; margin: auto;">
-          <div id="goal-bar" style="height: 100%; width: 0%; background: linear-gradient(to right, #4caf50, #8bc34a); border-radius: 10px; transition: width 0.6s ease;"></div>
-        </div>
-        <p id="goal-percent" style="margin-top: 6px;">0%</p>
-      </div>
-      <button class="main-button" id="send-mail-btn" style="margin-bottom: 10px;">今日の記録をメールで送る</button>
-      <button class="main-button" onclick="location.href='calendar.html'">カレンダーを見る</button>
+    <!-- ひとこと（親しみだけ） -->
+    <div class="line">
+      <img src="img/normal.png" alt="avatar" class="avatar" />
+      <span id="one-line">ゆっくりいきましょう</span>
+    </div>
+
+    <!-- フッター -->
+    <div class="footer">
+      <button class="sub-btn" id="to-calendar">📊 カレンダー</button>
+      <button class="sub-btn" id="send-mail-btn">📨 記録送信</button>
     </div>
   </div>
 
   <script src="training.js"></script>
-  <script>
-    function goBack() {
-      location.href = 'index.html';
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      startTraining();
-    });
-  </script>
 </body>
 </html>

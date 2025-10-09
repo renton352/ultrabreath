@@ -1,3 +1,4 @@
+// ===== 共通ユーティリティ =====
 function getLocalDateString(date = new Date()) {
   date.setHours(0, 0, 0, 0);
   const y = date.getFullYear();
@@ -5,176 +6,162 @@ function getLocalDateString(date = new Date()) {
   const d = ("0" + date.getDate()).slice(-2);
   return `${y}-${m}-${d}`;
 }
-
-let count = 0;
-let setCount = 25;
-let setGoal = 2;
-
-function startTraining() {
-  console.log("[DEBUG] training started");
-  setCount = parseInt(localStorage.getItem("setCount")) || 25;
-  setGoal = parseInt(localStorage.getItem("setGoal")) || 2;
-  console.log("[DEBUG] setCount:", setCount, "setGoal:", setGoal);
-  document.getElementById("training-screen").style.display = "block";
-  const logo = document.getElementById("logo-image");
-  if (logo) logo.style.display = "none";
-  const title = document.getElementById("top-title");
-  if (title) title.style.display = "none";
-  document.getElementById("speech").textContent = "はじめましょうか、深呼吸ですよ。";
-  document.getElementById("character-image").src = "img/normal.png";
-  count = 0;
-  document.getElementById("breath-count").textContent = `${count} / ${setCount}`;
-  document.getElementById("breathe-button").disabled = false;
-  document.getElementById("retry-button").style.display = "none";
-  updateNicknameDisplay();
-  updateStats();
+function getLogs() {
+  try { return JSON.parse(localStorage.getItem("logs") || "{}"); }
+  catch { return {}; }
+}
+function setLogs(obj) {
+  localStorage.setItem("logs", JSON.stringify(obj || {}));
 }
 
-function countBreath() {
-  console.log("[DEBUG] countBreath:", count + 1);
-  count++;
-  document.getElementById("breath-count").textContent = `${count} / ${setCount}`;
+// ===== パラメータ（ローカル設定と連動） =====
+let setCount = parseInt(localStorage.getItem("setCount")) || 10; // 1回の目標呼吸数
+let setGoal  = parseInt(localStorage.getItem("setGoal"))  || 2;  // 1日の目標セット数
+let count = 0; // 今セット内の進捗
 
+// ===== 画面要素 =====
+const el = (id) => document.getElementById(id);
+const progressEl = el("progress");
+const targetEl   = el("target");
+const remainEl   = el("remain");
+const sumTodayEl = el("sum-today");
+const streakDayEl= el("streak-day");
+const bannerEl   = el("banner");
+const oneLineEl  = el("one-line");
+const circleEl   = el("circle");
+const breathBtn  = el("breath-btn");
+
+// ===== 初期化 =====
+function init() {
+  // 初期ターゲット表示
+  targetEl.textContent = setCount;
+  progressEl.textContent = 0;
+
+  // 今日の統計反映
+  refreshSummary();
+
+  // ボタン動作
+  breathBtn.onclick = onBreath;
+  el("to-calendar").onclick = () => location.href = "calendar.html";
+  el("send-mail-btn").onclick = sendTodayByMail;
+
+  // 画面サイズ内に収める（1画面完結）
+  document.documentElement.style.overflow = "hidden";
+}
+
+// ===== 呼吸カウント =====
+function onBreath() {
+  count = Math.min(setCount, count + 1);
+  progressEl.textContent = count;
+
+  // 進捗リング角度を更新
+  const deg = Math.round((count / setCount) * 360);
+  circleEl.style.setProperty("--deg", deg);
+
+  // 途中メッセージ
   if (count === Math.floor(setCount / 2)) {
-    document.getElementById("character-image").src = "img/encourage.png";
-    document.getElementById("speech").textContent = "あと半分です、ゆっくりいきましょう。";
+    oneLineEl.textContent = "半分いきました。いいペース！";
   }
 
-  if (count === setCount) {
-    document.getElementById("character-image").src = "img/happy.png";
-    document.getElementById("speech").textContent = "お疲れさまでした！セット完了です！";
-    document.getElementById("breathe-button").disabled = true;
-    showRetryButton();
-    saveLog();
-    updateStats();
-  }
-}
-
-function showRetryButton() {
-  const btn = document.getElementById("retry-button");
-  if (btn) {
-    btn.style.display = "inline-block";
+  if (count >= setCount) {
+    // セット完了 → ログ保存して次セットへ
+    saveOneSet();
+    oneLineEl.textContent = "セット完了！呼吸を整えて続けます？";
+    breathBtn.disabled = true;
+    setTimeout(() => { // 小休止後に次セットへ
+      count = 0;
+      progressEl.textContent = 0;
+      circleEl.style.setProperty("--deg", 0);
+      breathBtn.disabled = false;
+      refreshSummary();   // 残り・合計などを更新
+    }, 700);
   }
 }
 
-function resetTraining() {
-  count = 0;
-  document.getElementById("breath-count").textContent = `${count} / ${setCount}`;
-  document.getElementById("speech").textContent = "はじめましょうか、深呼吸ですよ。";
-  document.getElementById("character-image").src = "img/normal.png";
-  document.getElementById("breathe-button").disabled = false;
-  const retryBtn = document.getElementById("retry-button");
-  if (retryBtn) retryBtn.style.display = "none";
-}
+// ===== ログ保存（1セット分） =====
+function saveOneSet() {
+  const todayKey = getLocalDateString();
+  const logs = getLogs();
+  if (!Array.isArray(logs[todayKey])) logs[todayKey] = [];
 
-function saveLog() {
-  console.log("[DEBUG] saveLog() called");
+  // 旧データ互換: 数値 or {count, timestamp}
+  const jst = new Date().toLocaleString("sv-SE", { timeZone: "Asia/Tokyo" }).replace(" ", "T");
+  logs[todayKey].push({ count: setCount, timestamp: jst });
+
+  setLogs(logs);
+  // 目標セット数も保存（従来互換）
   const goals = JSON.parse(localStorage.getItem("goals") || "{}");
-  const today = getLocalDateString();
-  const logs = JSON.parse(localStorage.getItem("logs") || "{}");
-
-  if (!Array.isArray(logs[today])) {
-    logs[today] = [];
-  }
-
-  // 新しいエントリ：日本時間タイムスタンプ付き
-  const jstTimestamp = new Date().toLocaleString("sv-SE", { timeZone: "Asia/Tokyo" }).replace(" ", "T");
-  const entry = {
-    count: setCount,
-    timestamp: jstTimestamp
-  };
-
-  logs[today].push(entry);
-  localStorage.setItem("logs", JSON.stringify(logs));
-  console.log("[DEBUG] logs:", logs);
-
-  goals[today] = setGoal;
+  goals[todayKey] = setGoal;
   localStorage.setItem("goals", JSON.stringify(goals));
-  console.log("[DEBUG] goals:", goals);
 }
 
-function updateStats() {
-  const logs = JSON.parse(localStorage.getItem("logs") || "{}");
-  const today = getLocalDateString();
-  const todayLogsRaw = logs[today];
-  const todayLogs = Array.isArray(todayLogsRaw) ? todayLogsRaw : [];
-  const todayCount = todayLogs.reduce((sum, val) => sum + (typeof val === 'number' ? val : val.count || 0), 0);
-  const todaySets = todayLogs.length;
+// ===== サマリー更新（上の3ピル＋バナー） =====
+function refreshSummary() {
+  const todayKey = getLocalDateString();
+  const logs = getLogs();
 
-  const todayCountEl = document.getElementById("today-count");
-  if (todayCountEl) todayCountEl.textContent = todayCount;
+  // 今日の合計回数
+  const arr = Array.isArray(logs[todayKey]) ? logs[todayKey] : [];
+  const toNum = (v) => typeof v === "number" ? v : Number(v?.count || v);
+  const todayTotal = arr.map(toNum).filter(n => Number.isFinite(n) && n >= 0)
+                          .reduce((a,b)=>a+b, 0);
+  sumTodayEl.textContent = todayTotal;
 
-  const todaySetEl = document.getElementById("today-set");
-  if (todaySetEl) todaySetEl.textContent = todaySets;
+  // 残り（今日のセット進捗）
+  const todaySets = arr.length;
+  const remainSets = Math.max(0, setGoal - todaySets);
+  const remainBreaths = Math.max(0, setCount - count);
+  remainEl.textContent = remainSets > 0 ? `${remainSets}セット` : `${remainBreaths}回`;
 
-  const lastDateEl = document.getElementById("last-date");
-  if (lastDateEl) {
-    const lastDate = Object.keys(logs).sort().reverse()[0] || "なし";
-    lastDateEl.textContent = lastDate;
-  }
+  // 継続日数（今日から遡って連続）
+  const streak = computeStreak(logs);
+  streakDayEl.textContent = streak;
+  bannerEl.textContent = `🌟 今日で${streak}日連続！`;
 
-  updateStreak(logs);
-  updateGoalBar(todaySets);
+  // ひとこと
+  if (remainSets <= 0 && count === 0) oneLineEl.textContent = "今日の目標クリア！お見事です👏";
+  else if (count === 0 && todaySets === 0) oneLineEl.textContent = "はじめはゆっくりでOKです";
+  else oneLineEl.textContent = "ナイスペース、続けましょう";
 }
 
-function updateStreak(logs) {
-  const today = new Date();
+function computeStreak(logs) {
+  const today = new Date(); today.setHours(0,0,0,0);
   let streak = 0;
-
-  for (let i = 0; i < 365; i++) {
-    const date = new Date();
-    date.setDate(today.getDate() - i);
-    const dateStr = getLocalDateString(date);
-    if (logs[dateStr] && Array.isArray(logs[dateStr]) && logs[dateStr].length > 0) {
-      streak++;
-    } else {
-      break;
-    }
+  for (let i=0;i<365;i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+    const key = getLocalDateString(d);
+    const arr = logs[key];
+    const has = Array.isArray(arr) && arr.some(v => {
+      const n = (typeof v === "number") ? v : Number(v?.count || v);
+      return Number.isFinite(n) && n > 0;
+    });
+    if (has) streak++; else break;
   }
-
-  document.getElementById("streak-info").textContent = `今日で${streak}日連続です！`;
+  return streak;
 }
 
-function updateNicknameDisplay() {
-  const nickname = localStorage.getItem("nickname") || "";
-  const el = document.getElementById("nickname-display");
-  if (el && nickname) {
-    el.textContent = nickname + " さん";
-  }
-}
-
-function updateGoalBar(todaySets) {
-  const percent = Math.min(100, Math.floor((todaySets / setGoal) * 100));
-  const bar = document.getElementById("goal-bar");
-  const label = document.getElementById("goal-percent");
-  if (!bar || !label) return;
-  bar.style.width = percent + "%";
-  label.textContent = percent + "%";
-  bar.style.background =
-    percent >= 100
-      ? "linear-gradient(to right, gold, orange)"
-      : "linear-gradient(to right, #4caf50, #8bc34a)";
-}
-
-document.getElementById("send-mail-btn").onclick = function() {
-  const today = (new Date()).toISOString().slice(0,10);
-  const logs = JSON.parse(localStorage.getItem("logs") || "{}");
+// ===== メール送信（今日の記録） =====
+function sendTodayByMail() {
+  const today = getLocalDateString();
+  const logs = getLogs();
   const goals = JSON.parse(localStorage.getItem("goals") || "{}");
-  const memos = JSON.parse(localStorage.getItem("memos") || "{}");
   const nickname = localStorage.getItem("nickname") || "あなた";
   const toAddress = localStorage.getItem("mailAddress") || "";
 
-  // 今日の記録
-  const todayLogs = Array.isArray(logs[today]) ? logs[today] : [];
-  const todayCount = todayLogs.reduce((sum, val) => typeof val === "number" ? sum+val : sum+(val.count||0), 0);
-  const sets = todayLogs.length;
-  const goal = goals[today] || "-";
-  const memo = memos[today] || "";
+  const arr = Array.isArray(logs[today]) ? logs[today] : [];
+  const toNum = (v) => typeof v === "number" ? v : Number(v?.count || v);
+  const todayCount = arr.map(toNum).filter(n => Number.isFinite(n) && n >= 0)
+                           .reduce((a,b)=>a+b, 0);
+  const sets = arr.length;
+  const goal = goals[today] || setGoal;
 
   let body = `${nickname} さんの今日の呼吸トレーニング記録\n`;
   body += `日付: ${today}\n合計回数: ${todayCount}回\nセット数: ${sets}\n目標セット数: ${goal}\n`;
-  if (memo) body += `メモ: ${memo}\n`;
 
   const mailto = `mailto:${encodeURIComponent(toAddress)}?subject=${encodeURIComponent("ウルトラブレス 今日の記録（"+today+"）")}&body=${encodeURIComponent(body)}`;
   window.location.href = mailto;
-};
+}
+
+// ===== 起動 =====
+document.addEventListener("DOMContentLoaded", init);
