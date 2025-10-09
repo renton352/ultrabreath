@@ -2,67 +2,49 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ウルトラブレス</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Ultrabreath トレーニング</title>
+  <link rel="icon" href="img/normal.png" type="image/png" />
+  <link rel="stylesheet" href="training.css" />
 </head>
 <body>
-  <div class="container">
-    <h1 id="top-title">ウルトラブレス</h1>
-    <img src="img/ultrabreath.jpg" alt="Ultrabreath ロゴ" id="logo-image" />
+  <main class="screen">
+    <!-- 上部ステータス -->
+    <div class="banner" id="banner">🌟 今日で0日連続！</div>
 
-    <!-- トップ画面 -->
-    <div id="genre-selection">
-      <button class="main-button" onclick="startTraining()">▶️ 呼吸トレーニングを開始</button>
-      <div class="settings-button-wrapper">
-        <button id="settings-button">⚙️ 設定</button>
-      </div>
+    <!-- 3ピル：今日の合計／残り／継続 -->
+    <div class="info-row">
+      <div class="pill">📅 <span id="sum-today">0</span>回</div>
+      <div class="pill">🎯 残り <span id="remain">0</span></div>
+      <div class="pill">👣 <span id="streak-day">0</span>日</div>
     </div>
 
-    <!-- トレーニング画面 -->
-    <div id="training-screen" style="display:none;">
-      <p id="streak-info">今日で0日連続です！</p>
-
-      <div id="character">
-        <img alt="ブレス先生" id="character-image" src="img/normal.png" />
-        <div id="nickname-display" style="font-weight:bold; font-size:1.1em; margin:6px;"></div>
-        <p id="speech">はじめましょうか、深呼吸ですよ。</p>
-      </div>
-
-      <div>
-        <p>呼吸回数：<span id="breath-count">0</span></p>
-        <div id="button-group">
-          <button class="main-button" id="breathe-button" onclick="countBreath()">吸った！</button>
-          <button class="main-button" id="back-button">← トップ画面に戻る</button>
-          <button class="main-button" id="retry-button" style="display:none;" onclick="resetTraining()">もう一度</button>
+    <!-- メインエリア（円UI + ボタン） -->
+    <section class="main-area">
+      <div class="circle" id="circle" style="--deg:0;">
+        <div class="progress-num">
+          <span id="progress">0</span>/<span id="target">10</span>
         </div>
       </div>
+      <button id="breath-btn" class="main-btn">吸った！</button>
+    </section>
 
-      <!-- 記録 -->
-      <div id="log">
-        <h2>記録</h2>
-        <p>今日の呼吸回数：<span id="today-count">0</span></p>
-        <p>今日のセット回数：<span id="today-set">0</span> セット</p>
-        <p>実施日数：<span id="total-days">0</span></p>
-        <p>最終実施日：<span id="last-date">なし</span></p>
-      </div>
-
-      <button class="main-button" onclick="location.href='calendar.html'">カレンダーを見る</button>
+    <!-- ひとこと（親しみだけ） -->
+    <div class="line">
+      <img src="img/normal.png" alt="avatar" class="avatar" />
+      <span id="one-line">ゆっくりいきましょう</span>
     </div>
+  </main>
 
-    <!-- 設定モーダル -->
-    <div id="settings-modal" class="settings-modal" style="display:none;">
-      <h2>設定</h2>
-      <label>ニックネーム:<br><input type="text" id="nickname-input" /></label><br/>
-      <label>1セットの回数:<br><input type="number" id="set-count-input" min="1" /></label><br/>
-      <label>1日のセット目標数:<br><input type="number" id="set-goal-input" min="1" /></label><br/>
-      <label>カレンダー背景画像:<br><input type="file" id="calendar-bg-input" accept="image/*"/></label><br/>
-      <button class="main-button" id="save-settings">保存</button>
-      <button class="main-button" id="close-settings">閉じる</button>
+  <!-- 固定フッター（安全領域対応） -->
+  <div class="footer-wrap">
+    <div class="footer">
+      <button class="sub-btn" id="to-calendar">📊 カレンダー</button>
+      <button class="sub-btn" id="send-mail-btn">📨 記録送信</button>
     </div>
   </div>
 
-  <!-- JS -->
-  <script src="main.js"></script>
+  <!-- JS（前回配布の training.js を使用） -->
+  <script defer src="training.js?v=20251003d"></script>
 </body>
 </html>

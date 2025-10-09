@@ -1,0 +1,64 @@
+:root {
+  --base: 18px;
+  --md: 16px;
+  --lg: 20px;
+  --xl: 24px;
+  --radius: 14px;
+  --safe-bottom: env(safe-area-inset-bottom);
+}
+
+/* 共通設定 */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: "Noto Sans JP", system-ui, sans-serif;
+  font-size: var(--base);
+  color: #111;
+  background: #f2f7ff;
+  padding-bottom: calc(70px + var(--safe-bottom)); /* フッターぶん余白 */
+}
+
+/* 画面全体構成 */
+.screen {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px;
+  text-align: center;
+}
+
+/* 上部ステータスバー */
+.banner {
+  font-weight: 800;
+  color: #1a66ff;
+  background: #eef4ff;
+  border: 1px solid #d9e6ff;
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  width: max-content;
+  max-width: 92%;
+}
+
+/* 情報ピル（今日の回数・残り・継続） */
+.info-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  font-size: var(--md);
+}
+.pill {
+  background: #fff;
+  border: 1px solid #e6eaf2;
+  border-radius: 999px;
+  padding: 6px 10px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .05);
+  white-space: nowrap;
+}
+
+/* 円アニメ＋ボタンエリア */
+.main
