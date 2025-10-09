@@ -5,21 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Ultrabreath トレーニング</title>
   <link rel="icon" href="img/normal.png" type="image/png" />
-  <link rel="stylesheet" href="training.css" />
+  <!-- ここが training.css であることを確認 -->
+  <link rel="stylesheet" href="training.css?v=20251003" />
 </head>
 <body>
   <main class="screen">
     <!-- 上部ステータス -->
     <div class="banner" id="banner">🌟 今日で0日連続！</div>
 
-    <!-- 3ピル：今日の合計／残り／継続 -->
+    <!-- 今日の合計／残り／継続 -->
     <div class="info-row">
       <div class="pill">📅 <span id="sum-today">0</span>回</div>
       <div class="pill">🎯 残り <span id="remain">0</span></div>
       <div class="pill">👣 <span id="streak-day">0</span>日</div>
     </div>
 
-    <!-- メインエリア（円UI + ボタン） -->
+    <!-- 円UI＋ボタン（ここだけが中央に来ます） -->
     <section class="main-area">
       <div class="circle" id="circle" style="--deg:0;">
         <div class="progress-num">
@@ -29,14 +30,14 @@
       <button id="breath-btn" class="main-btn">吸った！</button>
     </section>
 
-    <!-- ひとこと（親しみだけ） -->
+    <!-- ひとこと（小さめ） -->
     <div class="line">
       <img src="img/normal.png" alt="avatar" class="avatar" />
       <span id="one-line">ゆっくりいきましょう</span>
     </div>
   </main>
 
-  <!-- 固定フッター（安全領域対応） -->
+  <!-- フッター：カレンダー／メール送信 -->
   <div class="footer-wrap">
     <div class="footer">
       <button class="sub-btn" id="to-calendar">📊 カレンダー</button>
@@ -44,7 +45,6 @@
     </div>
   </div>
 
-  <!-- JS（前回配布の training.js を使用） -->
   <script defer src="training.js?v=20251003d"></script>
 </body>
 </html>
